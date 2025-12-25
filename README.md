@@ -1,1 +1,1 @@
-# Trubt IOU - Debt and Exspense Tracker
+# Trebt IOU - Debt and Exspense Tracker
