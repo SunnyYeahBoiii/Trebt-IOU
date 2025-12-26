@@ -29,7 +29,7 @@ Since this is a financial app, I should be using postgreSQL for transactions, co
 In total, tech that I should be using is:
 - ReactJS (Frontend)
 - NestJS (Backend)
-- PostgreSQL (Database)
+- PostgreSQL(Database)
 
 ### Design:
 
@@ -37,14 +37,20 @@ Currently working on the design of the web using Figma, the progess can be viewe
 
 [Preview on the current progress.](https://www.figma.com/proto/CZLhPcdSvnKStu2X47k1zo/S%E1%BB%95-th%C6%A1-n%E1%BB%A5-On-Steroid?node-id=0-1&t=VF72d0eYnOOcsK1U-1)
 
-
 ## Development Phase
 
-Currently on Planning Phase, designing UI/UX
+### Database:
+
+![An Overview of TrebtIOU Database](./images/TrebtIOU.drawio.svg)
+
+There exists a Statistic Table to persist the data for the Statistics feature, using datas from the Debt Table.
+
+### Feature:
+- Add/Remove/Edit Bills which manipulates data in the statistic table.
 
 ## Testing Phase
 
-Currently on Planning Phase, designing UI/UX
+Currently on Development Phase
 
 ## Deployment:
 Target: Local development and roommate sharing only—no public hosting needed.
