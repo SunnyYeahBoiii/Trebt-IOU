@@ -12,12 +12,10 @@ PetalsIOU automates this by logging transactions, categorizing debts (IOUs), and
 
   - Dashboard Overview: See real-time totals—e.g., "Roommates owe you 500,000đ", "This month's expenses: 2,300,000đ"—with filters by person or period.
 
-  - Auto-Calculations: Computes balances, generates shareable reports (e.g., "You owe Anh 200k from groceries"), and alerts for overdue debts.
-
-  - Roommate-Friendly: Multi-user view for shared pots, export to CSV/PDF for settling up.
+  - Auto-Calculations: Computes balances, generates shareable reports (e.g., "You owe Phương 200k from groceries"), and alerts for overdue debts.
 
 - Why It Works for You
-Built for everyday Vietnamese students like you at UIT—minimalist UI, no-frills, runs on any browser, stores data locally or via simple backend. Saves hours weekly, turning chaotic roommate finances into a clear "sổ thu nợ" everyone can trust.
+Built for everyday Vietnamese students, stores data locally or via simple backend. Saves hours weekly, turning chaotic roommate finances into a clear "sổ thu nợ" everyone can trust.
 
 
 ## Planning Phase:
