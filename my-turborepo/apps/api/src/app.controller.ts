@@ -1,6 +1,12 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  ValidationPipe,
+} from '@nestjs/common';
 import { DebtsService } from './debts/debts.service';
-import { Bill } from './decorators/bill.decorator';
 import { BillDto } from './dtos/bill.dto';
 import { BillService } from './bills/bill.service';
 import { QueryDto } from './dtos/QueryDto';
@@ -42,8 +48,7 @@ export class AppController {
   @ApiBody({ type: BillDto })
   @ApiResponse({ status: 201, description: 'Bill created successfully' })
   @ApiResponse({ status: 400, description: 'Bad request' })
-  async addBill(@Bill() bill: BillDto) {
-    console.log(bill);
+  async addBill(@Body(new ValidationPipe({ whitelist: true })) bill: BillDto) {
     return await this.bill.addBill(bill);
   }
 
@@ -52,7 +57,7 @@ export class AppController {
   @ApiBody({ type: BillDto })
   @ApiResponse({ status: 200, description: 'Bill updated successfully' })
   @ApiResponse({ status: 404, description: 'Bill not found' })
-  async editBill(@Bill() bill: BillDto) {
+  async editBill(@Body(new ValidationPipe({ whitelist: true })) bill: BillDto) {
     console.log(bill);
     return await this.bill.editBill(bill);
   }
