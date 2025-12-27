@@ -33,6 +33,8 @@ export class EditBillHandler implements ICommandHandler<EditBillCommand , Bill>{
                     creditorId: bill.creditorId,
                     debtorIDs: bill.debtorIDs,
                     totalAmount: bill.totalAmount,
+                    updatedAt: new Date(),
+                    description: bill.description,
                 }
             })
 

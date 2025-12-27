@@ -3527,6 +3527,8 @@ export namespace Prisma {
     billType: $Enums.BillType | null
     debtorIDs: string | null
     creditorId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type BillMaxAggregateOutputType = {
@@ -3536,6 +3538,8 @@ export namespace Prisma {
     billType: $Enums.BillType | null
     debtorIDs: string | null
     creditorId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type BillCountAggregateOutputType = {
@@ -3545,6 +3549,8 @@ export namespace Prisma {
     billType: number
     debtorIDs: number
     creditorId: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -3564,6 +3570,8 @@ export namespace Prisma {
     billType?: true
     debtorIDs?: true
     creditorId?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type BillMaxAggregateInputType = {
@@ -3573,6 +3581,8 @@ export namespace Prisma {
     billType?: true
     debtorIDs?: true
     creditorId?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type BillCountAggregateInputType = {
@@ -3582,6 +3592,8 @@ export namespace Prisma {
     billType?: true
     debtorIDs?: true
     creditorId?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -3678,6 +3690,8 @@ export namespace Prisma {
     billType: $Enums.BillType
     debtorIDs: string
     creditorId: string
+    createdAt: Date
+    updatedAt: Date
     _count: BillCountAggregateOutputType | null
     _avg: BillAvgAggregateOutputType | null
     _sum: BillSumAggregateOutputType | null
@@ -3706,6 +3720,8 @@ export namespace Prisma {
     billType?: boolean
     debtorIDs?: boolean
     creditorId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     creditor?: boolean | UserDefaultArgs<ExtArgs>
     debts?: boolean | Bill$debtsArgs<ExtArgs>
     _count?: boolean | BillCountOutputTypeDefaultArgs<ExtArgs>
@@ -3718,6 +3734,8 @@ export namespace Prisma {
     billType?: boolean
     debtorIDs?: boolean
     creditorId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     creditor?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["bill"]>
 
@@ -3728,6 +3746,8 @@ export namespace Prisma {
     billType?: boolean
     debtorIDs?: boolean
     creditorId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     creditor?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["bill"]>
 
@@ -3738,9 +3758,11 @@ export namespace Prisma {
     billType?: boolean
     debtorIDs?: boolean
     creditorId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type BillOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "description" | "totalAmount" | "billType" | "debtorIDs" | "creditorId", ExtArgs["result"]["bill"]>
+  export type BillOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "description" | "totalAmount" | "billType" | "debtorIDs" | "creditorId" | "createdAt" | "updatedAt", ExtArgs["result"]["bill"]>
   export type BillInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     creditor?: boolean | UserDefaultArgs<ExtArgs>
     debts?: boolean | Bill$debtsArgs<ExtArgs>
@@ -3766,6 +3788,8 @@ export namespace Prisma {
       billType: $Enums.BillType
       debtorIDs: string
       creditorId: string
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["bill"]>
     composites: {}
   }
@@ -4197,6 +4221,8 @@ export namespace Prisma {
     readonly billType: FieldRef<"Bill", 'BillType'>
     readonly debtorIDs: FieldRef<"Bill", 'String'>
     readonly creditorId: FieldRef<"Bill", 'String'>
+    readonly createdAt: FieldRef<"Bill", 'DateTime'>
+    readonly updatedAt: FieldRef<"Bill", 'DateTime'>
   }
     
 
@@ -5778,7 +5804,9 @@ export namespace Prisma {
     totalAmount: 'totalAmount',
     billType: 'billType',
     debtorIDs: 'debtorIDs',
-    creditorId: 'creditorId'
+    creditorId: 'creditorId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type BillScalarFieldEnum = (typeof BillScalarFieldEnum)[keyof typeof BillScalarFieldEnum]
@@ -5900,6 +5928,20 @@ export namespace Prisma {
    * Reference to a field of type 'BillType[]'
    */
   export type ListEnumBillTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BillType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'DateTime'
+   */
+  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+  /**
+   * Reference to a field of type 'DateTime[]'
+   */
+  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
     
 
 
@@ -6048,6 +6090,8 @@ export namespace Prisma {
     billType?: EnumBillTypeFilter<"Bill"> | $Enums.BillType
     debtorIDs?: StringFilter<"Bill"> | string
     creditorId?: StringFilter<"Bill"> | string
+    createdAt?: DateTimeFilter<"Bill"> | Date | string
+    updatedAt?: DateTimeFilter<"Bill"> | Date | string
     creditor?: XOR<UserScalarRelationFilter, UserWhereInput>
     debts?: DebtListRelationFilter
   }
@@ -6059,6 +6103,8 @@ export namespace Prisma {
     billType?: SortOrder
     debtorIDs?: SortOrder
     creditorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     creditor?: UserOrderByWithRelationInput
     debts?: DebtOrderByRelationAggregateInput
     _relevance?: BillOrderByRelevanceInput
@@ -6074,6 +6120,8 @@ export namespace Prisma {
     billType?: EnumBillTypeFilter<"Bill"> | $Enums.BillType
     debtorIDs?: StringFilter<"Bill"> | string
     creditorId?: StringFilter<"Bill"> | string
+    createdAt?: DateTimeFilter<"Bill"> | Date | string
+    updatedAt?: DateTimeFilter<"Bill"> | Date | string
     creditor?: XOR<UserScalarRelationFilter, UserWhereInput>
     debts?: DebtListRelationFilter
   }, "id" | "id">
@@ -6085,6 +6133,8 @@ export namespace Prisma {
     billType?: SortOrder
     debtorIDs?: SortOrder
     creditorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: BillCountOrderByAggregateInput
     _avg?: BillAvgOrderByAggregateInput
     _max?: BillMaxOrderByAggregateInput
@@ -6102,6 +6152,8 @@ export namespace Prisma {
     billType?: EnumBillTypeWithAggregatesFilter<"Bill"> | $Enums.BillType
     debtorIDs?: StringWithAggregatesFilter<"Bill"> | string
     creditorId?: StringWithAggregatesFilter<"Bill"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Bill"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Bill"> | Date | string
   }
 
   export type StatisticWhereInput = {
@@ -6280,6 +6332,8 @@ export namespace Prisma {
     totalAmount: number
     billType: $Enums.BillType
     debtorIDs: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     creditor: UserCreateNestedOneWithoutBillCreditorInInput
     debts?: DebtCreateNestedManyWithoutBillInput
   }
@@ -6291,6 +6345,8 @@ export namespace Prisma {
     billType: $Enums.BillType
     debtorIDs: string
     creditorId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     debts?: DebtUncheckedCreateNestedManyWithoutBillInput
   }
 
@@ -6300,6 +6356,8 @@ export namespace Prisma {
     totalAmount?: FloatFieldUpdateOperationsInput | number
     billType?: EnumBillTypeFieldUpdateOperationsInput | $Enums.BillType
     debtorIDs?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     creditor?: UserUpdateOneRequiredWithoutBillCreditorInNestedInput
     debts?: DebtUpdateManyWithoutBillNestedInput
   }
@@ -6311,6 +6369,8 @@ export namespace Prisma {
     billType?: EnumBillTypeFieldUpdateOperationsInput | $Enums.BillType
     debtorIDs?: StringFieldUpdateOperationsInput | string
     creditorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     debts?: DebtUncheckedUpdateManyWithoutBillNestedInput
   }
 
@@ -6321,6 +6381,8 @@ export namespace Prisma {
     billType: $Enums.BillType
     debtorIDs: string
     creditorId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type BillUpdateManyMutationInput = {
@@ -6329,6 +6391,8 @@ export namespace Prisma {
     totalAmount?: FloatFieldUpdateOperationsInput | number
     billType?: EnumBillTypeFieldUpdateOperationsInput | $Enums.BillType
     debtorIDs?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type BillUncheckedUpdateManyInput = {
@@ -6338,6 +6402,8 @@ export namespace Prisma {
     billType?: EnumBillTypeFieldUpdateOperationsInput | $Enums.BillType
     debtorIDs?: StringFieldUpdateOperationsInput | string
     creditorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StatisticCreateInput = {
@@ -6583,6 +6649,17 @@ export namespace Prisma {
     not?: NestedEnumBillTypeFilter<$PrismaModel> | $Enums.BillType
   }
 
+  export type DateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -6601,6 +6678,8 @@ export namespace Prisma {
     billType?: SortOrder
     debtorIDs?: SortOrder
     creditorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type BillAvgOrderByAggregateInput = {
@@ -6614,6 +6693,8 @@ export namespace Prisma {
     billType?: SortOrder
     debtorIDs?: SortOrder
     creditorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type BillMinOrderByAggregateInput = {
@@ -6623,6 +6704,8 @@ export namespace Prisma {
     billType?: SortOrder
     debtorIDs?: SortOrder
     creditorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type BillSumOrderByAggregateInput = {
@@ -6656,6 +6739,20 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumBillTypeFilter<$PrismaModel>
     _max?: NestedEnumBillTypeFilter<$PrismaModel>
+  }
+
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type StatisticOrderByRelevanceInput = {
@@ -6995,6 +7092,10 @@ export namespace Prisma {
     set?: $Enums.BillType
   }
 
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
+  }
+
   export type UserUpdateOneRequiredWithoutBillCreditorInNestedInput = {
     create?: XOR<UserCreateWithoutBillCreditorInInput, UserUncheckedCreateWithoutBillCreditorInInput>
     connectOrCreate?: UserCreateOrConnectWithoutBillCreditorInInput
@@ -7152,6 +7253,17 @@ export namespace Prisma {
     not?: NestedEnumBillTypeFilter<$PrismaModel> | $Enums.BillType
   }
 
+  export type NestedDateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -7191,12 +7303,28 @@ export namespace Prisma {
     _max?: NestedEnumBillTypeFilter<$PrismaModel>
   }
 
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
   export type BillCreateWithoutCreditorInput = {
     id?: string
     description?: string | null
     totalAmount: number
     billType: $Enums.BillType
     debtorIDs: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     debts?: DebtCreateNestedManyWithoutBillInput
   }
 
@@ -7206,6 +7334,8 @@ export namespace Prisma {
     totalAmount: number
     billType: $Enums.BillType
     debtorIDs: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     debts?: DebtUncheckedCreateNestedManyWithoutBillInput
   }
 
@@ -7341,6 +7471,8 @@ export namespace Prisma {
     billType?: EnumBillTypeFilter<"Bill"> | $Enums.BillType
     debtorIDs?: StringFilter<"Bill"> | string
     creditorId?: StringFilter<"Bill"> | string
+    createdAt?: DateTimeFilter<"Bill"> | Date | string
+    updatedAt?: DateTimeFilter<"Bill"> | Date | string
   }
 
   export type DebtUpsertWithWhereUniqueWithoutCreditorInput = {
@@ -7435,6 +7567,8 @@ export namespace Prisma {
     totalAmount: number
     billType: $Enums.BillType
     debtorIDs: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     creditor: UserCreateNestedOneWithoutBillCreditorInInput
   }
 
@@ -7445,6 +7579,8 @@ export namespace Prisma {
     billType: $Enums.BillType
     debtorIDs: string
     creditorId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type BillCreateOrConnectWithoutDebtsInput = {
@@ -7515,6 +7651,8 @@ export namespace Prisma {
     totalAmount?: FloatFieldUpdateOperationsInput | number
     billType?: EnumBillTypeFieldUpdateOperationsInput | $Enums.BillType
     debtorIDs?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     creditor?: UserUpdateOneRequiredWithoutBillCreditorInNestedInput
   }
 
@@ -7525,6 +7663,8 @@ export namespace Prisma {
     billType?: EnumBillTypeFieldUpdateOperationsInput | $Enums.BillType
     debtorIDs?: StringFieldUpdateOperationsInput | string
     creditorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserUpsertWithoutCreditorInInput = {
@@ -7787,6 +7927,8 @@ export namespace Prisma {
     totalAmount: number
     billType: $Enums.BillType
     debtorIDs: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type DebtCreateManyCreditorInput = {
@@ -7823,6 +7965,8 @@ export namespace Prisma {
     totalAmount?: FloatFieldUpdateOperationsInput | number
     billType?: EnumBillTypeFieldUpdateOperationsInput | $Enums.BillType
     debtorIDs?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     debts?: DebtUpdateManyWithoutBillNestedInput
   }
 
@@ -7832,6 +7976,8 @@ export namespace Prisma {
     totalAmount?: FloatFieldUpdateOperationsInput | number
     billType?: EnumBillTypeFieldUpdateOperationsInput | $Enums.BillType
     debtorIDs?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     debts?: DebtUncheckedUpdateManyWithoutBillNestedInput
   }
 
@@ -7841,6 +7987,8 @@ export namespace Prisma {
     totalAmount?: FloatFieldUpdateOperationsInput | number
     billType?: EnumBillTypeFieldUpdateOperationsInput | $Enums.BillType
     debtorIDs?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type DebtUpdateWithoutCreditorInput = {

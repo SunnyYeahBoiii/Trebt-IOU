@@ -139,7 +139,9 @@ exports.Prisma.BillScalarFieldEnum = {
   totalAmount: 'totalAmount',
   billType: 'billType',
   debtorIDs: 'debtorIDs',
-  creditorId: 'creditorId'
+  creditorId: 'creditorId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.StatisticScalarFieldEnum = {

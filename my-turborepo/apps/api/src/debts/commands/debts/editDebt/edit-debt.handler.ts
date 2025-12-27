@@ -22,7 +22,6 @@ export class EditDebtHandler implements ICommandHandler<EditDebtCommand , boolea
         console.log(debtInfo)
         const oldDebt = await prisma.debt.findFirst({
             where: {
-                creditorId: debtInfo.creditorId,
                 debtorId: debtInfo.debtorId,
                 billId: debtInfo.billId,
             },
@@ -40,6 +39,7 @@ export class EditDebtHandler implements ICommandHandler<EditDebtCommand , boolea
                 ...oldDebt
             },
             data: {
+                creditorId: debtInfo.creditorId,
                 amount: debtInfo.amount,
             }
         })
