@@ -3,12 +3,6 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { EditBillCommand } from './edit-bill.command';
 import { PrismaService } from '@/prisma/prisma.service';
 import { BillService } from '@/bills/bill.service';
-import {
-  instanceToInstance,
-  plainToClass,
-  plainToInstance,
-} from 'class-transformer';
-import { BillDto } from '@/dtos/bill.dto';
 import { Bill } from '@generated/prisma';
 import { DebtsService } from '@/debts/debts.service';
 
@@ -45,7 +39,6 @@ export class EditBillHandler implements ICommandHandler<EditBillCommand, Bill> {
       const debtors = [false, false, false, false, false];
 
       for (const debt of debts) {
-        console.log(debts);
         debtors[parseInt(debt.debtorId)] = true;
         await this.debt.EditDebt(debt, prisma);
       }

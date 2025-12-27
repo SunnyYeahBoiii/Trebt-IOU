@@ -1,10 +1,8 @@
-import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
-import bodyParser from 'body-parser';
 
 import { AppModule } from './app.module';
 
@@ -17,8 +15,6 @@ async function bootstrap() {
 
   // Enable cookie parser for JWT tokens
   app.use(cookieParser());
-  app.use(bodyParser.urlencoded());
-  app.use(bodyParser.json());
   app.set('trust proxy', true);
   // Enable CORS
   app.enableCors({

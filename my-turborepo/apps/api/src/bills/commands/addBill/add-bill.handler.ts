@@ -5,7 +5,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { DebtsService } from '@/debts/debts.service';
 import { BillService } from '@/bills/bill.service';
 import { DebtDto } from '@/dtos/debt.dto';
-import { Bill, Debt } from '@generated/prisma';
+import { Bill } from '@generated/prisma';
 
 @Injectable()
 @CommandHandler(AddBillCommand)

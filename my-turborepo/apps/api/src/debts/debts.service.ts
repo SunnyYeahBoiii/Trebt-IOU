@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, User } from '@generated/prisma';
 import { CommandBus } from '@nestjs/cqrs';
@@ -24,7 +24,7 @@ export class DebtsService {
       const existingUser = await this.prisma.user.create({
         data: {
           id: userId,
-          name: names[userId],
+          name: names[parseInt(userId)],
         },
       });
 
@@ -33,8 +33,6 @@ export class DebtsService {
 
     for (const creditorId of userIds) {
       for (const debtorId of userIds) {
-        console.log(creditorId, debtorId);
-
         await this.prisma.statistic.create({
           data: {
             creditorId,

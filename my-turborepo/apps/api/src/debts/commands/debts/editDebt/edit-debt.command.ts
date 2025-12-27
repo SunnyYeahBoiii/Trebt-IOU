@@ -1,5 +1,4 @@
 import { type DebtDto } from '@/dtos/debt.dto';
-import { PrismaService } from '@/prisma/prisma.service';
 import { Prisma } from '@generated/prisma';
 import { Injectable } from '@nestjs/common';
 import { Command } from '@nestjs/cqrs';

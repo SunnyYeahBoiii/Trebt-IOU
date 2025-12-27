@@ -1,7 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { RemoveDebtCommand } from './remove-debt.command';
-import { Debt } from '@generated/prisma';
 import { PrismaService } from '@/prisma/prisma.service';
 import { StatisticService } from '@/statistics/statistic.service';
 

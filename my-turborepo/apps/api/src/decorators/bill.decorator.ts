@@ -1,9 +1,10 @@
 import { BillDto } from '@/dtos/bill.dto';
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import { Request } from 'express';
 
 export const Bill = createParamDecorator(
   (data: unknown, ctx: ExecutionContext) => {
-    const request = ctx.switchToHttp().getRequest();
+    const request: Request = ctx.switchToHttp().getRequest();
     const bill: BillDto = {
       id: request.body?.id ?? undefined,
       creditorId: request.body?.creditorId,
