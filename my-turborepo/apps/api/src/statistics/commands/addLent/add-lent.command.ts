@@ -1,4 +1,5 @@
 import { Command } from "@nestjs/cqrs";
+import { Prisma } from '@generated/prisma';
 
 
 export class AddLentCommand extends Command<void> {
@@ -6,6 +7,7 @@ export class AddLentCommand extends Command<void> {
         public readonly debtorId: string,
         public readonly creditorId: string,
         public readonly amount: number,
+        public readonly tx?: Prisma.TransactionClient,
     ) {
         super();
     }

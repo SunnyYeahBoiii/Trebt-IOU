@@ -1,5 +1,5 @@
 import { ConflictException, Injectable } from "@nestjs/common";
-import { ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { RemoveDebtCommand } from "./remove-debt.command";
 import { Debt } from "@generated/prisma";
 import { PrismaService } from "@/prisma/prisma.service";
@@ -8,6 +8,7 @@ import { StatisticService } from "@/statistics/statistic.service";
 
 
 @Injectable()
+@CommandHandler(RemoveDebtCommand)
 export class RemoveDebtHandler implements ICommandHandler<RemoveDebtCommand> {
     constructor(
         private prisma: PrismaService,
@@ -16,26 +17,26 @@ export class RemoveDebtHandler implements ICommandHandler<RemoveDebtCommand> {
 
     async execute(command: RemoveDebtCommand): Promise<boolean | null> {
         const newDebtDto = command.debtDto;
+        const prisma = command.tx ?? this.prisma
 
-        const trans = this.prisma.$transaction(async (prisma) => {
-            const newDebt = await prisma.debt.findUnique({
-                where: {
-                    id : newDebtDto.id,
-                    creditorId: newDebtDto.creditorId,
+        const newDebt = await prisma.debt.delete({
+            where: {
+                billId_debtorId: {
+                    billId: newDebtDto.billId,
                     debtorId: newDebtDto.debtorId,
                 }
-            });
-
-            if(!newDebt) {
-                throw new ConflictException("Debt not found");
             }
+        });
 
-            this.statistics.addLent(newDebt.debtorId, newDebt.creditorId, -newDebt.amount);
-            this.statistics.addOwed(newDebt.creditorId, newDebt.debtorId, -newDebt.amount);
-        
-            return true;
-        })
+        if(!newDebt) {
+            throw new ConflictException("Debt not found");
+        }
 
-        return await trans;
+        console.log(newDebt.amount)
+
+        await this.statistics.addLent(newDebt.debtorId, newDebt.creditorId, -newDebt.amount, prisma);
+        await this.statistics.addOwed(newDebt.creditorId, newDebt.debtorId, -newDebt.amount, prisma);
+    
+        return true;
     }
 }

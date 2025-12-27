@@ -1,9 +1,10 @@
 import { type BillDto } from "@/dtos/bill.dto";
+import { Bill } from "@generated/prisma";
 import { Injectable } from "@nestjs/common";
 import { Command } from "@nestjs/cqrs";
 
 @Injectable()
-export class EditBillCommand extends Command<boolean>{
+export class EditBillCommand extends Command<Bill>{
     constructor(public readonly bill: BillDto){
         super();
     }

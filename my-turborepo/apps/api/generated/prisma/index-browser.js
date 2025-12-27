@@ -128,9 +128,9 @@ exports.Prisma.UserScalarFieldEnum = {
 exports.Prisma.DebtScalarFieldEnum = {
   id: 'id',
   amount: 'amount',
-  billId: 'billId',
   creditorId: 'creditorId',
-  debtorId: 'debtorId'
+  debtorId: 'debtorId',
+  billId: 'billId'
 };
 
 exports.Prisma.BillScalarFieldEnum = {
@@ -167,9 +167,9 @@ exports.Prisma.UserOrderByRelevanceFieldEnum = {
 
 exports.Prisma.DebtOrderByRelevanceFieldEnum = {
   id: 'id',
-  billId: 'billId',
   creditorId: 'creditorId',
-  debtorId: 'debtorId'
+  debtorId: 'debtorId',
+  billId: 'billId'
 };
 
 exports.Prisma.NullsOrder = {

@@ -1,15 +1,16 @@
 import { PrismaService } from "@/prisma/prisma.service";
 import { Injectable } from "@nestjs/common";
 import { AddBillCommand } from "./add-bill.command";
-import { ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { DebtsService } from "@/debts/debts.service";
 import { BillService } from "@/bills/bill.service";
 import { DebtDto } from "@/dtos/debt.dto";
-import { Debt } from "@generated/prisma";
+import { Bill, Debt } from "@generated/prisma";
 
 
 
 @Injectable()
+@CommandHandler(AddBillCommand)
 export class AddBillHandler implements ICommandHandler<AddBillCommand, true> {
     constructor(
         private readonly prisma: PrismaService,
@@ -17,7 +18,7 @@ export class AddBillHandler implements ICommandHandler<AddBillCommand, true> {
         private readonly bill: BillService,
     ){}
 
-    async execute(command: AddBillCommand): Promise<void> {
+    async execute(command: AddBillCommand): Promise<Bill> {
         const billInfo = command.billInfo;
         
         const transaction = this.prisma.$transaction(async (prisma) => {
@@ -26,7 +27,7 @@ export class AddBillHandler implements ICommandHandler<AddBillCommand, true> {
                     creditorId: billInfo.creditorId,
                     debtorIDs: billInfo.debtorIDs,
                     description: billInfo.description ?? "",
-                    totalAmount: billInfo.amount,
+                    totalAmount: billInfo.totalAmount,
                     billType: billInfo.billType,
                 }
             });
@@ -34,8 +35,10 @@ export class AddBillHandler implements ICommandHandler<AddBillCommand, true> {
             const debts: DebtDto[] = this.bill.createDebtDtoFromBill(newBill);
 
             for (let debt of debts){
-                await this.debt.AddDebt(debt);
+                await this.debt.AddDebt(debt , prisma);
             }
+
+            return newBill;
         });
 
         return await transaction;

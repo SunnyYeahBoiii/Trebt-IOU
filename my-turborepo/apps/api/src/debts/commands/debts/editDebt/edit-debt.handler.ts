@@ -1,5 +1,5 @@
 import { ConflictException, Injectable } from "@nestjs/common";
-import { ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { EditDebtCommand } from "./edit-debt.command";
 import { PrismaService } from "@/prisma/prisma.service";
 import { StatisticService } from "@/statistics/statistic.service";
@@ -7,6 +7,7 @@ import { StatisticService } from "@/statistics/statistic.service";
 
 
 @Injectable()
+@CommandHandler(EditDebtCommand)
 export class EditDebtHandler implements ICommandHandler<EditDebtCommand , boolean>{
     constructor(
         private prisma: PrismaService,
@@ -15,36 +16,40 @@ export class EditDebtHandler implements ICommandHandler<EditDebtCommand , boolea
 
     async execute(command: EditDebtCommand): Promise<boolean> {
         const debtInfo = command.debt;
+        const prisma = command.tx ?? this.prisma
 
-        const trans = this.prisma.$transaction(async (prisma) => {
-            const oldDebt = await prisma.debt.findFirst({
-                where: {
-                    id: debtInfo.id
-                },
-            })
-
-            if(!oldDebt){
-                throw new ConflictException("Debt does not exists");
-            }
-            
-            this.statistics.addLent(oldDebt.debtorId , oldDebt.creditorId, -oldDebt.amount);
-            this.statistics.addOwed(oldDebt.creditorId, oldDebt.debtorId, -oldDebt.amount);
-            
-            const newDebt = await prisma.debt.update({
-                where: {
-                    id: debtInfo.id
-                },
-                data: {
-                    amount: debtInfo.amount,
-                }
-            })
-
-            this.statistics.addLent(newDebt.debtorId , newDebt.creditorId, newDebt.amount);
-            this.statistics.addOwed(newDebt.creditorId, newDebt.debtorId, newDebt.amount);
-            
-            return true;
+        console.log("DEBUGGG")
+        console.log(debtInfo)
+        const oldDebt = await prisma.debt.findFirst({
+            where: {
+                creditorId: debtInfo.creditorId,
+                debtorId: debtInfo.debtorId,
+                billId: debtInfo.billId,
+            },
         })
 
-        return await trans;
+        if(!oldDebt){
+            throw new ConflictException("Debt does not exists");
+        }
+        
+        await this.statistics.addLent(oldDebt.debtorId , oldDebt.creditorId, -oldDebt.amount, prisma);
+        await this.statistics.addOwed(oldDebt.creditorId, oldDebt.debtorId, -oldDebt.amount, prisma);
+        
+        const newDebt = await prisma.debt.update({
+            where: {
+                ...oldDebt
+            },
+            data: {
+                amount: debtInfo.amount,
+            }
+        })
+
+        console.log(newDebt)
+
+        await this.statistics.addLent(newDebt.debtorId , newDebt.creditorId, newDebt.amount, prisma);
+        await this.statistics.addOwed(newDebt.creditorId, newDebt.debtorId, newDebt.amount, prisma);
+        
+        return true;
+
     }
 }

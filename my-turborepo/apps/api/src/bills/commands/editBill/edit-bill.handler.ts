@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { EditBillCommand } from "./edit-bill.command";
 import { PrismaService } from "@/prisma/prisma.service";
 import { BillService } from "@/bills/bill.service";
@@ -10,14 +10,15 @@ import { DebtsService } from "@/debts/debts.service";
 
 
 @Injectable()
-export class EditBillHandler implements ICommandHandler<EditBillCommand , boolean>{
+@CommandHandler(EditBillCommand)
+export class EditBillHandler implements ICommandHandler<EditBillCommand , Bill>{
     constructor(
         private readonly prisma: PrismaService,
         private readonly bill: BillService,
         private readonly debt: DebtsService,
     ){}
 
-    async execute(command: EditBillCommand): Promise<boolean> {
+    async execute(command: EditBillCommand): Promise<Bill> {
         const bill = command.bill;
 
         const trans = this.prisma.$transaction(async (prisma) => {
@@ -39,8 +40,9 @@ export class EditBillHandler implements ICommandHandler<EditBillCommand , boolea
             const debtors = [false , false , false , false , false]
 
             for (let debt of debts){
-                debtors[parseInt(debt.id as string)] = true;
-                await this.debt.EditDebt(debt);
+                console.log(debts);
+                debtors[parseInt(debt.debtorId as string)] = true;
+                await this.debt.EditDebt(debt , prisma);
             }
 
             for (let i = 1 ; i <= 4 ; i++){
@@ -51,9 +53,9 @@ export class EditBillHandler implements ICommandHandler<EditBillCommand , boolea
                     debtorId: `${i}`,
                     amount: 0,
                     billId: newBill.id,
-                })
+                } , prisma)
             }
-            return true;
+            return newBill;
         });
 
         return await trans;

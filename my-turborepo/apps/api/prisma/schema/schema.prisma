@@ -1,14 +1,8 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider        = "prisma-client-js"
   output          = "../../generated/prisma"
+  previewFeatures = ["fullTextSearchPostgres", "postgresqlExtensions", "views"]
   binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
-  previewFeatures = ["postgresqlExtensions", "views", "fullTextSearchPostgres"]
   engineType      = "binary"
 }
 
@@ -17,41 +11,42 @@ datasource db {
 }
 
 model User {
-  id   String @id @unique @default(cuid())
-  name String
-
+  id                String      @id @unique @default(cuid())
+  name              String
+  billCreditorIn    Bill[]      @relation("billCreditor")
   creditorIn        Debt[]      @relation("creditor")
   debtorIn          Debt[]      @relation("debtor")
   statisticCreditor Statistic[] @relation("statisticCreditor")
   statisticDebtor   Statistic[] @relation("statisticDebtor")
-  billCreditorIn    Bill[]      @relation("billCreditor")
 
   @@map("users")
 }
 
 model Debt {
-  id              String   @id @unique @default(cuid())
-  amount          Float
-  billId          String 
-  bill            Bill @relation(fields: [billId], references: [id])
-
-  creditorId      String
-  creditor        User @relation("creditor" , fields: [creditorId], references: [id])
-  debtorId        String
-  debtor          User @relation("debtor" , fields: [debtorId], references: [id])
+  id         String @id @default(cuid())
+  amount     Float
+  creditorId String
+  debtorId   String
+  billId     String
+  bill       Bill   @relation(fields: [billId], references: [id])
+  creditor   User   @relation("creditor", fields: [creditorId], references: [id])
+  debtor     User   @relation("debtor", fields: [debtorId], references: [id])
 
   @@map("debts")
+  @@unique([billId , debtorId])
 }
 
-model Bill{
-  id              String @id @unique @default(cuid())
-  description     String?
-  totalAmount     Float
-  billType        BillType
-  debtorIDs       String
-  creditorId      String
-  creditor        User @relation("billCreditor" , fields: [creditorId], references: [id])
-  debts           Debt[]
+model Bill {
+  id          String   @id @unique @default(cuid())
+  description String?
+  totalAmount Float
+  billType    BillType
+  debtorIDs   String
+  creditorId  String
+  creditor    User     @relation("billCreditor", fields: [creditorId], references: [id])
+  debts       Debt[]
+
+  @@map("bills")
 }
 
 model Statistic {
@@ -59,12 +54,12 @@ model Statistic {
   totalLent  Float
   totalOwed  Float
   creditorId String
-  creditor   User   @relation("statisticCreditor", fields: [creditorId], references: [id])
   debtorId   String
+  creditor   User   @relation("statisticCreditor", fields: [creditorId], references: [id])
   debtor     User   @relation("statisticDebtor", fields: [debtorId], references: [id])
 
-  @@map("statistics")
   @@unique([creditorId, debtorId])
+  @@map("statistics")
 }
 
 enum BillType {

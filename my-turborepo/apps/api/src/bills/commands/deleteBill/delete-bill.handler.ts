@@ -1,5 +1,5 @@
 import { BeforeApplicationShutdown, Injectable } from "@nestjs/common";
-import { ICommand, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler, ICommand, ICommandHandler } from "@nestjs/cqrs";
 import { DeleteBillCommand } from "./delete-bill.command";
 import { PrismaService } from "@/prisma/prisma.service";
 import { DebtsService } from "@/debts/debts.service";
@@ -10,30 +10,37 @@ import { BillService } from "@/bills/bill.service";
 
 
 @Injectable()
-export class DeleteBillHandler implements ICommandHandler<DeleteBillCommand , boolean>{
+@CommandHandler(DeleteBillCommand)
+export class DeleteBillHandler implements ICommandHandler<DeleteBillCommand , void>{
     constructor(
         private prisma: PrismaService,
         private debt: DebtsService,
         private bill: BillService,
     ){}
 
-    async execute(command: DeleteBillCommand): Promise<boolean> {
+    async execute(command: DeleteBillCommand): Promise<void> {
         const billId = command.billId;
 
         const transaction = this.prisma.$transaction(async (prisma) => {
-            const bill = await prisma.bill.delete({    
+            const bill = await prisma.bill.findUnique({    
                 where:{
                     id: billId,
                 }
             })
 
+            if(!bill) throw new Error('Bill no longer exists')
+            
             const debts = this.bill.createDebtDtoFromBill(bill);
 
             for (let debt of debts){
-                await this.debt.RemoveDebt(debt);
+                await this.debt.RemoveDebt(debt , prisma);
             }
 
-            return true;
+            await prisma.bill.delete({    
+                where:{
+                    id: billId,
+                }
+            })
         })
 
         return await transaction;

@@ -1,10 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { User } from '@generated/prisma';
+import { Prisma, User } from '@generated/prisma';
 import { CommandBus } from '@nestjs/cqrs';
 import { AddDebtCommand } from './commands/debts/addDebt/add-debt.command';
 import { DebtDto } from '@/dtos/debt.dto';
 import { RemoveDebtCommand } from './commands/debts/removeDebt/remove-debt.command';
+import { EditDebtCommand } from './commands/debts/editDebt/edit-debt.command';
 
 @Injectable()
 export class DebtsService {
@@ -48,15 +49,15 @@ export class DebtsService {
     }
   }
 
-  async AddDebt(debt: DebtDto){
-    return this.commandBus.execute(new AddDebtCommand(debt));
+  async AddDebt(debt: DebtDto , tx? : Prisma.TransactionClient){
+    return this.commandBus.execute(new AddDebtCommand(debt, tx));
   }
 
-  async RemoveDebt(debt: DebtDto){
-    return this.commandBus.execute(new RemoveDebtCommand(debt));
+  async RemoveDebt(debt: DebtDto , tx? : Prisma.TransactionClient){
+    return this.commandBus.execute(new RemoveDebtCommand(debt , tx));
   }
 
-  async EditDebt(debt: DebtDto){
-    return this.commandBus.execute(new RemoveDebtCommand(debt));
+  async EditDebt(debt: DebtDto , tx? : Prisma.TransactionClient){
+    return this.commandBus.execute(new EditDebtCommand(debt , tx));
   }
 }

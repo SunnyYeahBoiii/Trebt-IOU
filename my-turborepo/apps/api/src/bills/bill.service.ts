@@ -31,18 +31,30 @@ export class BillService {
         const debts : DebtDto[] = []
 
         const debtors : string[] = bill.debtorIDs.split(',');
+        const debtorIn: boolean[] = [false , false , false ,false , false]
 
         const debtAmount = (
-            bill.billType == BillType.EACHONE
+            bill.billType == BillType.SPLITTING
             ? bill.totalAmount / (debtors.length)
             : bill.totalAmount
         )
 
-        for (let debtor in debtors){
+        for (let debtor of debtors){
             debts.push({
                 creditorId: bill.creditorId,
                 debtorId: debtor,
                 amount: debtAmount,
+                billId: bill.id as string,
+            })
+            debtorIn[parseInt(debtor)] = true;
+        }
+
+        for(let i = 1 ; i <= 4 ; i++){
+            if(debtorIn[i] === true) continue;
+            debts.push({
+                creditorId: bill.creditorId,
+                debtorId: `${i}`,
+                amount: 0,
                 billId: bill.id as string,
             })
         }

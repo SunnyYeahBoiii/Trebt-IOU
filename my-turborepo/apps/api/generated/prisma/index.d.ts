@@ -1152,19 +1152,19 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
+    billCreditorIn: number
     creditorIn: number
     debtorIn: number
     statisticCreditor: number
     statisticDebtor: number
-    billCreditorIn: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    billCreditorIn?: boolean | UserCountOutputTypeCountBillCreditorInArgs
     creditorIn?: boolean | UserCountOutputTypeCountCreditorInArgs
     debtorIn?: boolean | UserCountOutputTypeCountDebtorInArgs
     statisticCreditor?: boolean | UserCountOutputTypeCountStatisticCreditorArgs
     statisticDebtor?: boolean | UserCountOutputTypeCountStatisticDebtorArgs
-    billCreditorIn?: boolean | UserCountOutputTypeCountBillCreditorInArgs
   }
 
   // Custom InputTypes
@@ -1176,6 +1176,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the UserCountOutputType
      */
     select?: UserCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountBillCreditorInArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BillWhereInput
   }
 
   /**
@@ -1204,13 +1211,6 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountStatisticDebtorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: StatisticWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountBillCreditorInArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: BillWhereInput
   }
 
 
@@ -1389,11 +1389,11 @@ export namespace Prisma {
   export type UserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    billCreditorIn?: boolean | User$billCreditorInArgs<ExtArgs>
     creditorIn?: boolean | User$creditorInArgs<ExtArgs>
     debtorIn?: boolean | User$debtorInArgs<ExtArgs>
     statisticCreditor?: boolean | User$statisticCreditorArgs<ExtArgs>
     statisticDebtor?: boolean | User$statisticDebtorArgs<ExtArgs>
-    billCreditorIn?: boolean | User$billCreditorInArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1414,11 +1414,11 @@ export namespace Prisma {
 
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    billCreditorIn?: boolean | User$billCreditorInArgs<ExtArgs>
     creditorIn?: boolean | User$creditorInArgs<ExtArgs>
     debtorIn?: boolean | User$debtorInArgs<ExtArgs>
     statisticCreditor?: boolean | User$statisticCreditorArgs<ExtArgs>
     statisticDebtor?: boolean | User$statisticDebtorArgs<ExtArgs>
-    billCreditorIn?: boolean | User$billCreditorInArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1427,11 +1427,11 @@ export namespace Prisma {
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
+      billCreditorIn: Prisma.$BillPayload<ExtArgs>[]
       creditorIn: Prisma.$DebtPayload<ExtArgs>[]
       debtorIn: Prisma.$DebtPayload<ExtArgs>[]
       statisticCreditor: Prisma.$StatisticPayload<ExtArgs>[]
       statisticDebtor: Prisma.$StatisticPayload<ExtArgs>[]
-      billCreditorIn: Prisma.$BillPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -1830,11 +1830,11 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    billCreditorIn<T extends User$billCreditorInArgs<ExtArgs> = {}>(args?: Subset<T, User$billCreditorInArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     creditorIn<T extends User$creditorInArgs<ExtArgs> = {}>(args?: Subset<T, User$creditorInArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DebtPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     debtorIn<T extends User$debtorInArgs<ExtArgs> = {}>(args?: Subset<T, User$debtorInArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DebtPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     statisticCreditor<T extends User$statisticCreditorArgs<ExtArgs> = {}>(args?: Subset<T, User$statisticCreditorArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StatisticPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     statisticDebtor<T extends User$statisticDebtorArgs<ExtArgs> = {}>(args?: Subset<T, User$statisticDebtorArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StatisticPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    billCreditorIn<T extends User$billCreditorInArgs<ExtArgs> = {}>(args?: Subset<T, User$billCreditorInArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2254,6 +2254,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.billCreditorIn
+   */
+  export type User$billCreditorInArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bill
+     */
+    select?: BillSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Bill
+     */
+    omit?: BillOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillInclude<ExtArgs> | null
+    where?: BillWhereInput
+    orderBy?: BillOrderByWithRelationInput | BillOrderByWithRelationInput[]
+    cursor?: BillWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BillScalarFieldEnum | BillScalarFieldEnum[]
+  }
+
+  /**
    * User.creditorIn
    */
   export type User$creditorInArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2350,30 +2374,6 @@ export namespace Prisma {
   }
 
   /**
-   * User.billCreditorIn
-   */
-  export type User$billCreditorInArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Bill
-     */
-    select?: BillSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Bill
-     */
-    omit?: BillOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: BillInclude<ExtArgs> | null
-    where?: BillWhereInput
-    orderBy?: BillOrderByWithRelationInput | BillOrderByWithRelationInput[]
-    cursor?: BillWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: BillScalarFieldEnum | BillScalarFieldEnum[]
-  }
-
-  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2415,25 +2415,25 @@ export namespace Prisma {
   export type DebtMinAggregateOutputType = {
     id: string | null
     amount: number | null
-    billId: string | null
     creditorId: string | null
     debtorId: string | null
+    billId: string | null
   }
 
   export type DebtMaxAggregateOutputType = {
     id: string | null
     amount: number | null
-    billId: string | null
     creditorId: string | null
     debtorId: string | null
+    billId: string | null
   }
 
   export type DebtCountAggregateOutputType = {
     id: number
     amount: number
-    billId: number
     creditorId: number
     debtorId: number
+    billId: number
     _all: number
   }
 
@@ -2449,25 +2449,25 @@ export namespace Prisma {
   export type DebtMinAggregateInputType = {
     id?: true
     amount?: true
-    billId?: true
     creditorId?: true
     debtorId?: true
+    billId?: true
   }
 
   export type DebtMaxAggregateInputType = {
     id?: true
     amount?: true
-    billId?: true
     creditorId?: true
     debtorId?: true
+    billId?: true
   }
 
   export type DebtCountAggregateInputType = {
     id?: true
     amount?: true
-    billId?: true
     creditorId?: true
     debtorId?: true
+    billId?: true
     _all?: true
   }
 
@@ -2560,9 +2560,9 @@ export namespace Prisma {
   export type DebtGroupByOutputType = {
     id: string
     amount: number
-    billId: string
     creditorId: string
     debtorId: string
+    billId: string
     _count: DebtCountAggregateOutputType | null
     _avg: DebtAvgAggregateOutputType | null
     _sum: DebtSumAggregateOutputType | null
@@ -2587,9 +2587,9 @@ export namespace Prisma {
   export type DebtSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     amount?: boolean
-    billId?: boolean
     creditorId?: boolean
     debtorId?: boolean
+    billId?: boolean
     bill?: boolean | BillDefaultArgs<ExtArgs>
     creditor?: boolean | UserDefaultArgs<ExtArgs>
     debtor?: boolean | UserDefaultArgs<ExtArgs>
@@ -2598,9 +2598,9 @@ export namespace Prisma {
   export type DebtSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     amount?: boolean
-    billId?: boolean
     creditorId?: boolean
     debtorId?: boolean
+    billId?: boolean
     bill?: boolean | BillDefaultArgs<ExtArgs>
     creditor?: boolean | UserDefaultArgs<ExtArgs>
     debtor?: boolean | UserDefaultArgs<ExtArgs>
@@ -2609,9 +2609,9 @@ export namespace Prisma {
   export type DebtSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     amount?: boolean
-    billId?: boolean
     creditorId?: boolean
     debtorId?: boolean
+    billId?: boolean
     bill?: boolean | BillDefaultArgs<ExtArgs>
     creditor?: boolean | UserDefaultArgs<ExtArgs>
     debtor?: boolean | UserDefaultArgs<ExtArgs>
@@ -2620,12 +2620,12 @@ export namespace Prisma {
   export type DebtSelectScalar = {
     id?: boolean
     amount?: boolean
-    billId?: boolean
     creditorId?: boolean
     debtorId?: boolean
+    billId?: boolean
   }
 
-  export type DebtOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "amount" | "billId" | "creditorId" | "debtorId", ExtArgs["result"]["debt"]>
+  export type DebtOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "amount" | "creditorId" | "debtorId" | "billId", ExtArgs["result"]["debt"]>
   export type DebtInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     bill?: boolean | BillDefaultArgs<ExtArgs>
     creditor?: boolean | UserDefaultArgs<ExtArgs>
@@ -2652,9 +2652,9 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       amount: number
-      billId: string
       creditorId: string
       debtorId: string
+      billId: string
     }, ExtArgs["result"]["debt"]>
     composites: {}
   }
@@ -3083,9 +3083,9 @@ export namespace Prisma {
   interface DebtFieldRefs {
     readonly id: FieldRef<"Debt", 'String'>
     readonly amount: FieldRef<"Debt", 'Float'>
-    readonly billId: FieldRef<"Debt", 'String'>
     readonly creditorId: FieldRef<"Debt", 'String'>
     readonly debtorId: FieldRef<"Debt", 'String'>
+    readonly billId: FieldRef<"Debt", 'String'>
   }
     
 
@@ -5764,9 +5764,9 @@ export namespace Prisma {
   export const DebtScalarFieldEnum: {
     id: 'id',
     amount: 'amount',
-    billId: 'billId',
     creditorId: 'creditorId',
-    debtorId: 'debtorId'
+    debtorId: 'debtorId',
+    billId: 'billId'
   };
 
   export type DebtScalarFieldEnum = (typeof DebtScalarFieldEnum)[keyof typeof DebtScalarFieldEnum]
@@ -5821,9 +5821,9 @@ export namespace Prisma {
 
   export const DebtOrderByRelevanceFieldEnum: {
     id: 'id',
-    billId: 'billId',
     creditorId: 'creditorId',
-    debtorId: 'debtorId'
+    debtorId: 'debtorId',
+    billId: 'billId'
   };
 
   export type DebtOrderByRelevanceFieldEnum = (typeof DebtOrderByRelevanceFieldEnum)[keyof typeof DebtOrderByRelevanceFieldEnum]
@@ -5926,21 +5926,21 @@ export namespace Prisma {
     NOT?: UserWhereInput | UserWhereInput[]
     id?: StringFilter<"User"> | string
     name?: StringFilter<"User"> | string
+    billCreditorIn?: BillListRelationFilter
     creditorIn?: DebtListRelationFilter
     debtorIn?: DebtListRelationFilter
     statisticCreditor?: StatisticListRelationFilter
     statisticDebtor?: StatisticListRelationFilter
-    billCreditorIn?: BillListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
+    billCreditorIn?: BillOrderByRelationAggregateInput
     creditorIn?: DebtOrderByRelationAggregateInput
     debtorIn?: DebtOrderByRelationAggregateInput
     statisticCreditor?: StatisticOrderByRelationAggregateInput
     statisticDebtor?: StatisticOrderByRelationAggregateInput
-    billCreditorIn?: BillOrderByRelationAggregateInput
     _relevance?: UserOrderByRelevanceInput
   }
 
@@ -5950,11 +5950,11 @@ export namespace Prisma {
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     name?: StringFilter<"User"> | string
+    billCreditorIn?: BillListRelationFilter
     creditorIn?: DebtListRelationFilter
     debtorIn?: DebtListRelationFilter
     statisticCreditor?: StatisticListRelationFilter
     statisticDebtor?: StatisticListRelationFilter
-    billCreditorIn?: BillListRelationFilter
   }, "id" | "id">
 
   export type UserOrderByWithAggregationInput = {
@@ -5979,9 +5979,9 @@ export namespace Prisma {
     NOT?: DebtWhereInput | DebtWhereInput[]
     id?: StringFilter<"Debt"> | string
     amount?: FloatFilter<"Debt"> | number
-    billId?: StringFilter<"Debt"> | string
     creditorId?: StringFilter<"Debt"> | string
     debtorId?: StringFilter<"Debt"> | string
+    billId?: StringFilter<"Debt"> | string
     bill?: XOR<BillScalarRelationFilter, BillWhereInput>
     creditor?: XOR<UserScalarRelationFilter, UserWhereInput>
     debtor?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -5990,9 +5990,9 @@ export namespace Prisma {
   export type DebtOrderByWithRelationInput = {
     id?: SortOrder
     amount?: SortOrder
-    billId?: SortOrder
     creditorId?: SortOrder
     debtorId?: SortOrder
+    billId?: SortOrder
     bill?: BillOrderByWithRelationInput
     creditor?: UserOrderByWithRelationInput
     debtor?: UserOrderByWithRelationInput
@@ -6001,24 +6001,25 @@ export namespace Prisma {
 
   export type DebtWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    billId_debtorId?: DebtBillIdDebtorIdCompoundUniqueInput
     AND?: DebtWhereInput | DebtWhereInput[]
     OR?: DebtWhereInput[]
     NOT?: DebtWhereInput | DebtWhereInput[]
     amount?: FloatFilter<"Debt"> | number
-    billId?: StringFilter<"Debt"> | string
     creditorId?: StringFilter<"Debt"> | string
     debtorId?: StringFilter<"Debt"> | string
+    billId?: StringFilter<"Debt"> | string
     bill?: XOR<BillScalarRelationFilter, BillWhereInput>
     creditor?: XOR<UserScalarRelationFilter, UserWhereInput>
     debtor?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }, "id" | "id">
+  }, "id" | "billId_debtorId">
 
   export type DebtOrderByWithAggregationInput = {
     id?: SortOrder
     amount?: SortOrder
-    billId?: SortOrder
     creditorId?: SortOrder
     debtorId?: SortOrder
+    billId?: SortOrder
     _count?: DebtCountOrderByAggregateInput
     _avg?: DebtAvgOrderByAggregateInput
     _max?: DebtMaxOrderByAggregateInput
@@ -6032,9 +6033,9 @@ export namespace Prisma {
     NOT?: DebtScalarWhereWithAggregatesInput | DebtScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Debt"> | string
     amount?: FloatWithAggregatesFilter<"Debt"> | number
-    billId?: StringWithAggregatesFilter<"Debt"> | string
     creditorId?: StringWithAggregatesFilter<"Debt"> | string
     debtorId?: StringWithAggregatesFilter<"Debt"> | string
+    billId?: StringWithAggregatesFilter<"Debt"> | string
   }
 
   export type BillWhereInput = {
@@ -6168,41 +6169,41 @@ export namespace Prisma {
   export type UserCreateInput = {
     id?: string
     name: string
+    billCreditorIn?: BillCreateNestedManyWithoutCreditorInput
     creditorIn?: DebtCreateNestedManyWithoutCreditorInput
     debtorIn?: DebtCreateNestedManyWithoutDebtorInput
     statisticCreditor?: StatisticCreateNestedManyWithoutCreditorInput
     statisticDebtor?: StatisticCreateNestedManyWithoutDebtorInput
-    billCreditorIn?: BillCreateNestedManyWithoutCreditorInput
   }
 
   export type UserUncheckedCreateInput = {
     id?: string
     name: string
+    billCreditorIn?: BillUncheckedCreateNestedManyWithoutCreditorInput
     creditorIn?: DebtUncheckedCreateNestedManyWithoutCreditorInput
     debtorIn?: DebtUncheckedCreateNestedManyWithoutDebtorInput
     statisticCreditor?: StatisticUncheckedCreateNestedManyWithoutCreditorInput
     statisticDebtor?: StatisticUncheckedCreateNestedManyWithoutDebtorInput
-    billCreditorIn?: BillUncheckedCreateNestedManyWithoutCreditorInput
   }
 
   export type UserUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    billCreditorIn?: BillUpdateManyWithoutCreditorNestedInput
     creditorIn?: DebtUpdateManyWithoutCreditorNestedInput
     debtorIn?: DebtUpdateManyWithoutDebtorNestedInput
     statisticCreditor?: StatisticUpdateManyWithoutCreditorNestedInput
     statisticDebtor?: StatisticUpdateManyWithoutDebtorNestedInput
-    billCreditorIn?: BillUpdateManyWithoutCreditorNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    billCreditorIn?: BillUncheckedUpdateManyWithoutCreditorNestedInput
     creditorIn?: DebtUncheckedUpdateManyWithoutCreditorNestedInput
     debtorIn?: DebtUncheckedUpdateManyWithoutDebtorNestedInput
     statisticCreditor?: StatisticUncheckedUpdateManyWithoutCreditorNestedInput
     statisticDebtor?: StatisticUncheckedUpdateManyWithoutDebtorNestedInput
-    billCreditorIn?: BillUncheckedUpdateManyWithoutCreditorNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -6231,9 +6232,9 @@ export namespace Prisma {
   export type DebtUncheckedCreateInput = {
     id?: string
     amount: number
-    billId: string
     creditorId: string
     debtorId: string
+    billId: string
   }
 
   export type DebtUpdateInput = {
@@ -6247,17 +6248,17 @@ export namespace Prisma {
   export type DebtUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
-    billId?: StringFieldUpdateOperationsInput | string
     creditorId?: StringFieldUpdateOperationsInput | string
     debtorId?: StringFieldUpdateOperationsInput | string
+    billId?: StringFieldUpdateOperationsInput | string
   }
 
   export type DebtCreateManyInput = {
     id?: string
     amount: number
-    billId: string
     creditorId: string
     debtorId: string
+    billId: string
   }
 
   export type DebtUpdateManyMutationInput = {
@@ -6268,9 +6269,9 @@ export namespace Prisma {
   export type DebtUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
-    billId?: StringFieldUpdateOperationsInput | string
     creditorId?: StringFieldUpdateOperationsInput | string
     debtorId?: StringFieldUpdateOperationsInput | string
+    billId?: StringFieldUpdateOperationsInput | string
   }
 
   export type BillCreateInput = {
@@ -6409,6 +6410,12 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type BillListRelationFilter = {
+    every?: BillWhereInput
+    some?: BillWhereInput
+    none?: BillWhereInput
+  }
+
   export type DebtListRelationFilter = {
     every?: DebtWhereInput
     some?: DebtWhereInput
@@ -6421,10 +6428,8 @@ export namespace Prisma {
     none?: StatisticWhereInput
   }
 
-  export type BillListRelationFilter = {
-    every?: BillWhereInput
-    some?: BillWhereInput
-    none?: BillWhereInput
+  export type BillOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type DebtOrderByRelationAggregateInput = {
@@ -6432,10 +6437,6 @@ export namespace Prisma {
   }
 
   export type StatisticOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type BillOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -6506,12 +6507,17 @@ export namespace Prisma {
     search: string
   }
 
+  export type DebtBillIdDebtorIdCompoundUniqueInput = {
+    billId: string
+    debtorId: string
+  }
+
   export type DebtCountOrderByAggregateInput = {
     id?: SortOrder
     amount?: SortOrder
-    billId?: SortOrder
     creditorId?: SortOrder
     debtorId?: SortOrder
+    billId?: SortOrder
   }
 
   export type DebtAvgOrderByAggregateInput = {
@@ -6521,17 +6527,17 @@ export namespace Prisma {
   export type DebtMaxOrderByAggregateInput = {
     id?: SortOrder
     amount?: SortOrder
-    billId?: SortOrder
     creditorId?: SortOrder
     debtorId?: SortOrder
+    billId?: SortOrder
   }
 
   export type DebtMinOrderByAggregateInput = {
     id?: SortOrder
     amount?: SortOrder
-    billId?: SortOrder
     creditorId?: SortOrder
     debtorId?: SortOrder
+    billId?: SortOrder
   }
 
   export type DebtSumOrderByAggregateInput = {
@@ -6697,6 +6703,13 @@ export namespace Prisma {
     totalOwed?: SortOrder
   }
 
+  export type BillCreateNestedManyWithoutCreditorInput = {
+    create?: XOR<BillCreateWithoutCreditorInput, BillUncheckedCreateWithoutCreditorInput> | BillCreateWithoutCreditorInput[] | BillUncheckedCreateWithoutCreditorInput[]
+    connectOrCreate?: BillCreateOrConnectWithoutCreditorInput | BillCreateOrConnectWithoutCreditorInput[]
+    createMany?: BillCreateManyCreditorInputEnvelope
+    connect?: BillWhereUniqueInput | BillWhereUniqueInput[]
+  }
+
   export type DebtCreateNestedManyWithoutCreditorInput = {
     create?: XOR<DebtCreateWithoutCreditorInput, DebtUncheckedCreateWithoutCreditorInput> | DebtCreateWithoutCreditorInput[] | DebtUncheckedCreateWithoutCreditorInput[]
     connectOrCreate?: DebtCreateOrConnectWithoutCreditorInput | DebtCreateOrConnectWithoutCreditorInput[]
@@ -6725,7 +6738,7 @@ export namespace Prisma {
     connect?: StatisticWhereUniqueInput | StatisticWhereUniqueInput[]
   }
 
-  export type BillCreateNestedManyWithoutCreditorInput = {
+  export type BillUncheckedCreateNestedManyWithoutCreditorInput = {
     create?: XOR<BillCreateWithoutCreditorInput, BillUncheckedCreateWithoutCreditorInput> | BillCreateWithoutCreditorInput[] | BillUncheckedCreateWithoutCreditorInput[]
     connectOrCreate?: BillCreateOrConnectWithoutCreditorInput | BillCreateOrConnectWithoutCreditorInput[]
     createMany?: BillCreateManyCreditorInputEnvelope
@@ -6760,15 +6773,22 @@ export namespace Prisma {
     connect?: StatisticWhereUniqueInput | StatisticWhereUniqueInput[]
   }
 
-  export type BillUncheckedCreateNestedManyWithoutCreditorInput = {
-    create?: XOR<BillCreateWithoutCreditorInput, BillUncheckedCreateWithoutCreditorInput> | BillCreateWithoutCreditorInput[] | BillUncheckedCreateWithoutCreditorInput[]
-    connectOrCreate?: BillCreateOrConnectWithoutCreditorInput | BillCreateOrConnectWithoutCreditorInput[]
-    createMany?: BillCreateManyCreditorInputEnvelope
-    connect?: BillWhereUniqueInput | BillWhereUniqueInput[]
-  }
-
   export type StringFieldUpdateOperationsInput = {
     set?: string
+  }
+
+  export type BillUpdateManyWithoutCreditorNestedInput = {
+    create?: XOR<BillCreateWithoutCreditorInput, BillUncheckedCreateWithoutCreditorInput> | BillCreateWithoutCreditorInput[] | BillUncheckedCreateWithoutCreditorInput[]
+    connectOrCreate?: BillCreateOrConnectWithoutCreditorInput | BillCreateOrConnectWithoutCreditorInput[]
+    upsert?: BillUpsertWithWhereUniqueWithoutCreditorInput | BillUpsertWithWhereUniqueWithoutCreditorInput[]
+    createMany?: BillCreateManyCreditorInputEnvelope
+    set?: BillWhereUniqueInput | BillWhereUniqueInput[]
+    disconnect?: BillWhereUniqueInput | BillWhereUniqueInput[]
+    delete?: BillWhereUniqueInput | BillWhereUniqueInput[]
+    connect?: BillWhereUniqueInput | BillWhereUniqueInput[]
+    update?: BillUpdateWithWhereUniqueWithoutCreditorInput | BillUpdateWithWhereUniqueWithoutCreditorInput[]
+    updateMany?: BillUpdateManyWithWhereWithoutCreditorInput | BillUpdateManyWithWhereWithoutCreditorInput[]
+    deleteMany?: BillScalarWhereInput | BillScalarWhereInput[]
   }
 
   export type DebtUpdateManyWithoutCreditorNestedInput = {
@@ -6827,7 +6847,7 @@ export namespace Prisma {
     deleteMany?: StatisticScalarWhereInput | StatisticScalarWhereInput[]
   }
 
-  export type BillUpdateManyWithoutCreditorNestedInput = {
+  export type BillUncheckedUpdateManyWithoutCreditorNestedInput = {
     create?: XOR<BillCreateWithoutCreditorInput, BillUncheckedCreateWithoutCreditorInput> | BillCreateWithoutCreditorInput[] | BillUncheckedCreateWithoutCreditorInput[]
     connectOrCreate?: BillCreateOrConnectWithoutCreditorInput | BillCreateOrConnectWithoutCreditorInput[]
     upsert?: BillUpsertWithWhereUniqueWithoutCreditorInput | BillUpsertWithWhereUniqueWithoutCreditorInput[]
@@ -6895,20 +6915,6 @@ export namespace Prisma {
     update?: StatisticUpdateWithWhereUniqueWithoutDebtorInput | StatisticUpdateWithWhereUniqueWithoutDebtorInput[]
     updateMany?: StatisticUpdateManyWithWhereWithoutDebtorInput | StatisticUpdateManyWithWhereWithoutDebtorInput[]
     deleteMany?: StatisticScalarWhereInput | StatisticScalarWhereInput[]
-  }
-
-  export type BillUncheckedUpdateManyWithoutCreditorNestedInput = {
-    create?: XOR<BillCreateWithoutCreditorInput, BillUncheckedCreateWithoutCreditorInput> | BillCreateWithoutCreditorInput[] | BillUncheckedCreateWithoutCreditorInput[]
-    connectOrCreate?: BillCreateOrConnectWithoutCreditorInput | BillCreateOrConnectWithoutCreditorInput[]
-    upsert?: BillUpsertWithWhereUniqueWithoutCreditorInput | BillUpsertWithWhereUniqueWithoutCreditorInput[]
-    createMany?: BillCreateManyCreditorInputEnvelope
-    set?: BillWhereUniqueInput | BillWhereUniqueInput[]
-    disconnect?: BillWhereUniqueInput | BillWhereUniqueInput[]
-    delete?: BillWhereUniqueInput | BillWhereUniqueInput[]
-    connect?: BillWhereUniqueInput | BillWhereUniqueInput[]
-    update?: BillUpdateWithWhereUniqueWithoutCreditorInput | BillUpdateWithWhereUniqueWithoutCreditorInput[]
-    updateMany?: BillUpdateManyWithWhereWithoutCreditorInput | BillUpdateManyWithWhereWithoutCreditorInput[]
-    deleteMany?: BillScalarWhereInput | BillScalarWhereInput[]
   }
 
   export type BillCreateNestedOneWithoutDebtsInput = {
@@ -7185,6 +7191,34 @@ export namespace Prisma {
     _max?: NestedEnumBillTypeFilter<$PrismaModel>
   }
 
+  export type BillCreateWithoutCreditorInput = {
+    id?: string
+    description?: string | null
+    totalAmount: number
+    billType: $Enums.BillType
+    debtorIDs: string
+    debts?: DebtCreateNestedManyWithoutBillInput
+  }
+
+  export type BillUncheckedCreateWithoutCreditorInput = {
+    id?: string
+    description?: string | null
+    totalAmount: number
+    billType: $Enums.BillType
+    debtorIDs: string
+    debts?: DebtUncheckedCreateNestedManyWithoutBillInput
+  }
+
+  export type BillCreateOrConnectWithoutCreditorInput = {
+    where: BillWhereUniqueInput
+    create: XOR<BillCreateWithoutCreditorInput, BillUncheckedCreateWithoutCreditorInput>
+  }
+
+  export type BillCreateManyCreditorInputEnvelope = {
+    data: BillCreateManyCreditorInput | BillCreateManyCreditorInput[]
+    skipDuplicates?: boolean
+  }
+
   export type DebtCreateWithoutCreditorInput = {
     id?: string
     amount: number
@@ -7195,8 +7229,8 @@ export namespace Prisma {
   export type DebtUncheckedCreateWithoutCreditorInput = {
     id?: string
     amount: number
-    billId: string
     debtorId: string
+    billId: string
   }
 
   export type DebtCreateOrConnectWithoutCreditorInput = {
@@ -7219,8 +7253,8 @@ export namespace Prisma {
   export type DebtUncheckedCreateWithoutDebtorInput = {
     id?: string
     amount: number
-    billId: string
     creditorId: string
+    billId: string
   }
 
   export type DebtCreateOrConnectWithoutDebtorInput = {
@@ -7281,32 +7315,32 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type BillCreateWithoutCreditorInput = {
-    id?: string
-    description?: string | null
-    totalAmount: number
-    billType: $Enums.BillType
-    debtorIDs: string
-    debts?: DebtCreateNestedManyWithoutBillInput
-  }
-
-  export type BillUncheckedCreateWithoutCreditorInput = {
-    id?: string
-    description?: string | null
-    totalAmount: number
-    billType: $Enums.BillType
-    debtorIDs: string
-    debts?: DebtUncheckedCreateNestedManyWithoutBillInput
-  }
-
-  export type BillCreateOrConnectWithoutCreditorInput = {
+  export type BillUpsertWithWhereUniqueWithoutCreditorInput = {
     where: BillWhereUniqueInput
+    update: XOR<BillUpdateWithoutCreditorInput, BillUncheckedUpdateWithoutCreditorInput>
     create: XOR<BillCreateWithoutCreditorInput, BillUncheckedCreateWithoutCreditorInput>
   }
 
-  export type BillCreateManyCreditorInputEnvelope = {
-    data: BillCreateManyCreditorInput | BillCreateManyCreditorInput[]
-    skipDuplicates?: boolean
+  export type BillUpdateWithWhereUniqueWithoutCreditorInput = {
+    where: BillWhereUniqueInput
+    data: XOR<BillUpdateWithoutCreditorInput, BillUncheckedUpdateWithoutCreditorInput>
+  }
+
+  export type BillUpdateManyWithWhereWithoutCreditorInput = {
+    where: BillScalarWhereInput
+    data: XOR<BillUpdateManyMutationInput, BillUncheckedUpdateManyWithoutCreditorInput>
+  }
+
+  export type BillScalarWhereInput = {
+    AND?: BillScalarWhereInput | BillScalarWhereInput[]
+    OR?: BillScalarWhereInput[]
+    NOT?: BillScalarWhereInput | BillScalarWhereInput[]
+    id?: StringFilter<"Bill"> | string
+    description?: StringNullableFilter<"Bill"> | string | null
+    totalAmount?: FloatFilter<"Bill"> | number
+    billType?: EnumBillTypeFilter<"Bill"> | $Enums.BillType
+    debtorIDs?: StringFilter<"Bill"> | string
+    creditorId?: StringFilter<"Bill"> | string
   }
 
   export type DebtUpsertWithWhereUniqueWithoutCreditorInput = {
@@ -7331,9 +7365,9 @@ export namespace Prisma {
     NOT?: DebtScalarWhereInput | DebtScalarWhereInput[]
     id?: StringFilter<"Debt"> | string
     amount?: FloatFilter<"Debt"> | number
-    billId?: StringFilter<"Debt"> | string
     creditorId?: StringFilter<"Debt"> | string
     debtorId?: StringFilter<"Debt"> | string
+    billId?: StringFilter<"Debt"> | string
   }
 
   export type DebtUpsertWithWhereUniqueWithoutDebtorInput = {
@@ -7395,34 +7429,6 @@ export namespace Prisma {
     data: XOR<StatisticUpdateManyMutationInput, StatisticUncheckedUpdateManyWithoutDebtorInput>
   }
 
-  export type BillUpsertWithWhereUniqueWithoutCreditorInput = {
-    where: BillWhereUniqueInput
-    update: XOR<BillUpdateWithoutCreditorInput, BillUncheckedUpdateWithoutCreditorInput>
-    create: XOR<BillCreateWithoutCreditorInput, BillUncheckedCreateWithoutCreditorInput>
-  }
-
-  export type BillUpdateWithWhereUniqueWithoutCreditorInput = {
-    where: BillWhereUniqueInput
-    data: XOR<BillUpdateWithoutCreditorInput, BillUncheckedUpdateWithoutCreditorInput>
-  }
-
-  export type BillUpdateManyWithWhereWithoutCreditorInput = {
-    where: BillScalarWhereInput
-    data: XOR<BillUpdateManyMutationInput, BillUncheckedUpdateManyWithoutCreditorInput>
-  }
-
-  export type BillScalarWhereInput = {
-    AND?: BillScalarWhereInput | BillScalarWhereInput[]
-    OR?: BillScalarWhereInput[]
-    NOT?: BillScalarWhereInput | BillScalarWhereInput[]
-    id?: StringFilter<"Bill"> | string
-    description?: StringNullableFilter<"Bill"> | string | null
-    totalAmount?: FloatFilter<"Bill"> | number
-    billType?: EnumBillTypeFilter<"Bill"> | $Enums.BillType
-    debtorIDs?: StringFilter<"Bill"> | string
-    creditorId?: StringFilter<"Bill"> | string
-  }
-
   export type BillCreateWithoutDebtsInput = {
     id?: string
     description?: string | null
@@ -7449,19 +7455,19 @@ export namespace Prisma {
   export type UserCreateWithoutCreditorInInput = {
     id?: string
     name: string
+    billCreditorIn?: BillCreateNestedManyWithoutCreditorInput
     debtorIn?: DebtCreateNestedManyWithoutDebtorInput
     statisticCreditor?: StatisticCreateNestedManyWithoutCreditorInput
     statisticDebtor?: StatisticCreateNestedManyWithoutDebtorInput
-    billCreditorIn?: BillCreateNestedManyWithoutCreditorInput
   }
 
   export type UserUncheckedCreateWithoutCreditorInInput = {
     id?: string
     name: string
+    billCreditorIn?: BillUncheckedCreateNestedManyWithoutCreditorInput
     debtorIn?: DebtUncheckedCreateNestedManyWithoutDebtorInput
     statisticCreditor?: StatisticUncheckedCreateNestedManyWithoutCreditorInput
     statisticDebtor?: StatisticUncheckedCreateNestedManyWithoutDebtorInput
-    billCreditorIn?: BillUncheckedCreateNestedManyWithoutCreditorInput
   }
 
   export type UserCreateOrConnectWithoutCreditorInInput = {
@@ -7472,19 +7478,19 @@ export namespace Prisma {
   export type UserCreateWithoutDebtorInInput = {
     id?: string
     name: string
+    billCreditorIn?: BillCreateNestedManyWithoutCreditorInput
     creditorIn?: DebtCreateNestedManyWithoutCreditorInput
     statisticCreditor?: StatisticCreateNestedManyWithoutCreditorInput
     statisticDebtor?: StatisticCreateNestedManyWithoutDebtorInput
-    billCreditorIn?: BillCreateNestedManyWithoutCreditorInput
   }
 
   export type UserUncheckedCreateWithoutDebtorInInput = {
     id?: string
     name: string
+    billCreditorIn?: BillUncheckedCreateNestedManyWithoutCreditorInput
     creditorIn?: DebtUncheckedCreateNestedManyWithoutCreditorInput
     statisticCreditor?: StatisticUncheckedCreateNestedManyWithoutCreditorInput
     statisticDebtor?: StatisticUncheckedCreateNestedManyWithoutDebtorInput
-    billCreditorIn?: BillUncheckedCreateNestedManyWithoutCreditorInput
   }
 
   export type UserCreateOrConnectWithoutDebtorInInput = {
@@ -7535,19 +7541,19 @@ export namespace Prisma {
   export type UserUpdateWithoutCreditorInInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    billCreditorIn?: BillUpdateManyWithoutCreditorNestedInput
     debtorIn?: DebtUpdateManyWithoutDebtorNestedInput
     statisticCreditor?: StatisticUpdateManyWithoutCreditorNestedInput
     statisticDebtor?: StatisticUpdateManyWithoutDebtorNestedInput
-    billCreditorIn?: BillUpdateManyWithoutCreditorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreditorInInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    billCreditorIn?: BillUncheckedUpdateManyWithoutCreditorNestedInput
     debtorIn?: DebtUncheckedUpdateManyWithoutDebtorNestedInput
     statisticCreditor?: StatisticUncheckedUpdateManyWithoutCreditorNestedInput
     statisticDebtor?: StatisticUncheckedUpdateManyWithoutDebtorNestedInput
-    billCreditorIn?: BillUncheckedUpdateManyWithoutCreditorNestedInput
   }
 
   export type UserUpsertWithoutDebtorInInput = {
@@ -7564,19 +7570,19 @@ export namespace Prisma {
   export type UserUpdateWithoutDebtorInInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    billCreditorIn?: BillUpdateManyWithoutCreditorNestedInput
     creditorIn?: DebtUpdateManyWithoutCreditorNestedInput
     statisticCreditor?: StatisticUpdateManyWithoutCreditorNestedInput
     statisticDebtor?: StatisticUpdateManyWithoutDebtorNestedInput
-    billCreditorIn?: BillUpdateManyWithoutCreditorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDebtorInInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    billCreditorIn?: BillUncheckedUpdateManyWithoutCreditorNestedInput
     creditorIn?: DebtUncheckedUpdateManyWithoutCreditorNestedInput
     statisticCreditor?: StatisticUncheckedUpdateManyWithoutCreditorNestedInput
     statisticDebtor?: StatisticUncheckedUpdateManyWithoutDebtorNestedInput
-    billCreditorIn?: BillUncheckedUpdateManyWithoutCreditorNestedInput
   }
 
   export type UserCreateWithoutBillCreditorInInput = {
@@ -7674,19 +7680,19 @@ export namespace Prisma {
   export type UserCreateWithoutStatisticCreditorInput = {
     id?: string
     name: string
+    billCreditorIn?: BillCreateNestedManyWithoutCreditorInput
     creditorIn?: DebtCreateNestedManyWithoutCreditorInput
     debtorIn?: DebtCreateNestedManyWithoutDebtorInput
     statisticDebtor?: StatisticCreateNestedManyWithoutDebtorInput
-    billCreditorIn?: BillCreateNestedManyWithoutCreditorInput
   }
 
   export type UserUncheckedCreateWithoutStatisticCreditorInput = {
     id?: string
     name: string
+    billCreditorIn?: BillUncheckedCreateNestedManyWithoutCreditorInput
     creditorIn?: DebtUncheckedCreateNestedManyWithoutCreditorInput
     debtorIn?: DebtUncheckedCreateNestedManyWithoutDebtorInput
     statisticDebtor?: StatisticUncheckedCreateNestedManyWithoutDebtorInput
-    billCreditorIn?: BillUncheckedCreateNestedManyWithoutCreditorInput
   }
 
   export type UserCreateOrConnectWithoutStatisticCreditorInput = {
@@ -7697,19 +7703,19 @@ export namespace Prisma {
   export type UserCreateWithoutStatisticDebtorInput = {
     id?: string
     name: string
+    billCreditorIn?: BillCreateNestedManyWithoutCreditorInput
     creditorIn?: DebtCreateNestedManyWithoutCreditorInput
     debtorIn?: DebtCreateNestedManyWithoutDebtorInput
     statisticCreditor?: StatisticCreateNestedManyWithoutCreditorInput
-    billCreditorIn?: BillCreateNestedManyWithoutCreditorInput
   }
 
   export type UserUncheckedCreateWithoutStatisticDebtorInput = {
     id?: string
     name: string
+    billCreditorIn?: BillUncheckedCreateNestedManyWithoutCreditorInput
     creditorIn?: DebtUncheckedCreateNestedManyWithoutCreditorInput
     debtorIn?: DebtUncheckedCreateNestedManyWithoutDebtorInput
     statisticCreditor?: StatisticUncheckedCreateNestedManyWithoutCreditorInput
-    billCreditorIn?: BillUncheckedCreateNestedManyWithoutCreditorInput
   }
 
   export type UserCreateOrConnectWithoutStatisticDebtorInput = {
@@ -7731,19 +7737,19 @@ export namespace Prisma {
   export type UserUpdateWithoutStatisticCreditorInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    billCreditorIn?: BillUpdateManyWithoutCreditorNestedInput
     creditorIn?: DebtUpdateManyWithoutCreditorNestedInput
     debtorIn?: DebtUpdateManyWithoutDebtorNestedInput
     statisticDebtor?: StatisticUpdateManyWithoutDebtorNestedInput
-    billCreditorIn?: BillUpdateManyWithoutCreditorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStatisticCreditorInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    billCreditorIn?: BillUncheckedUpdateManyWithoutCreditorNestedInput
     creditorIn?: DebtUncheckedUpdateManyWithoutCreditorNestedInput
     debtorIn?: DebtUncheckedUpdateManyWithoutDebtorNestedInput
     statisticDebtor?: StatisticUncheckedUpdateManyWithoutDebtorNestedInput
-    billCreditorIn?: BillUncheckedUpdateManyWithoutCreditorNestedInput
   }
 
   export type UserUpsertWithoutStatisticDebtorInput = {
@@ -7760,33 +7766,41 @@ export namespace Prisma {
   export type UserUpdateWithoutStatisticDebtorInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    billCreditorIn?: BillUpdateManyWithoutCreditorNestedInput
     creditorIn?: DebtUpdateManyWithoutCreditorNestedInput
     debtorIn?: DebtUpdateManyWithoutDebtorNestedInput
     statisticCreditor?: StatisticUpdateManyWithoutCreditorNestedInput
-    billCreditorIn?: BillUpdateManyWithoutCreditorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStatisticDebtorInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    billCreditorIn?: BillUncheckedUpdateManyWithoutCreditorNestedInput
     creditorIn?: DebtUncheckedUpdateManyWithoutCreditorNestedInput
     debtorIn?: DebtUncheckedUpdateManyWithoutDebtorNestedInput
     statisticCreditor?: StatisticUncheckedUpdateManyWithoutCreditorNestedInput
-    billCreditorIn?: BillUncheckedUpdateManyWithoutCreditorNestedInput
+  }
+
+  export type BillCreateManyCreditorInput = {
+    id?: string
+    description?: string | null
+    totalAmount: number
+    billType: $Enums.BillType
+    debtorIDs: string
   }
 
   export type DebtCreateManyCreditorInput = {
     id?: string
     amount: number
-    billId: string
     debtorId: string
+    billId: string
   }
 
   export type DebtCreateManyDebtorInput = {
     id?: string
     amount: number
-    billId: string
     creditorId: string
+    billId: string
   }
 
   export type StatisticCreateManyCreditorInput = {
@@ -7803,12 +7817,30 @@ export namespace Prisma {
     creditorId: string
   }
 
-  export type BillCreateManyCreditorInput = {
-    id?: string
-    description?: string | null
-    totalAmount: number
-    billType: $Enums.BillType
-    debtorIDs: string
+  export type BillUpdateWithoutCreditorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    totalAmount?: FloatFieldUpdateOperationsInput | number
+    billType?: EnumBillTypeFieldUpdateOperationsInput | $Enums.BillType
+    debtorIDs?: StringFieldUpdateOperationsInput | string
+    debts?: DebtUpdateManyWithoutBillNestedInput
+  }
+
+  export type BillUncheckedUpdateWithoutCreditorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    totalAmount?: FloatFieldUpdateOperationsInput | number
+    billType?: EnumBillTypeFieldUpdateOperationsInput | $Enums.BillType
+    debtorIDs?: StringFieldUpdateOperationsInput | string
+    debts?: DebtUncheckedUpdateManyWithoutBillNestedInput
+  }
+
+  export type BillUncheckedUpdateManyWithoutCreditorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    totalAmount?: FloatFieldUpdateOperationsInput | number
+    billType?: EnumBillTypeFieldUpdateOperationsInput | $Enums.BillType
+    debtorIDs?: StringFieldUpdateOperationsInput | string
   }
 
   export type DebtUpdateWithoutCreditorInput = {
@@ -7821,15 +7853,15 @@ export namespace Prisma {
   export type DebtUncheckedUpdateWithoutCreditorInput = {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
-    billId?: StringFieldUpdateOperationsInput | string
     debtorId?: StringFieldUpdateOperationsInput | string
+    billId?: StringFieldUpdateOperationsInput | string
   }
 
   export type DebtUncheckedUpdateManyWithoutCreditorInput = {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
-    billId?: StringFieldUpdateOperationsInput | string
     debtorId?: StringFieldUpdateOperationsInput | string
+    billId?: StringFieldUpdateOperationsInput | string
   }
 
   export type DebtUpdateWithoutDebtorInput = {
@@ -7842,15 +7874,15 @@ export namespace Prisma {
   export type DebtUncheckedUpdateWithoutDebtorInput = {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
-    billId?: StringFieldUpdateOperationsInput | string
     creditorId?: StringFieldUpdateOperationsInput | string
+    billId?: StringFieldUpdateOperationsInput | string
   }
 
   export type DebtUncheckedUpdateManyWithoutDebtorInput = {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
-    billId?: StringFieldUpdateOperationsInput | string
     creditorId?: StringFieldUpdateOperationsInput | string
+    billId?: StringFieldUpdateOperationsInput | string
   }
 
   export type StatisticUpdateWithoutCreditorInput = {
@@ -7893,32 +7925,6 @@ export namespace Prisma {
     totalLent?: FloatFieldUpdateOperationsInput | number
     totalOwed?: FloatFieldUpdateOperationsInput | number
     creditorId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type BillUpdateWithoutCreditorInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    totalAmount?: FloatFieldUpdateOperationsInput | number
-    billType?: EnumBillTypeFieldUpdateOperationsInput | $Enums.BillType
-    debtorIDs?: StringFieldUpdateOperationsInput | string
-    debts?: DebtUpdateManyWithoutBillNestedInput
-  }
-
-  export type BillUncheckedUpdateWithoutCreditorInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    totalAmount?: FloatFieldUpdateOperationsInput | number
-    billType?: EnumBillTypeFieldUpdateOperationsInput | $Enums.BillType
-    debtorIDs?: StringFieldUpdateOperationsInput | string
-    debts?: DebtUncheckedUpdateManyWithoutBillNestedInput
-  }
-
-  export type BillUncheckedUpdateManyWithoutCreditorInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    totalAmount?: FloatFieldUpdateOperationsInput | number
-    billType?: EnumBillTypeFieldUpdateOperationsInput | $Enums.BillType
-    debtorIDs?: StringFieldUpdateOperationsInput | string
   }
 
   export type DebtCreateManyBillInput = {
