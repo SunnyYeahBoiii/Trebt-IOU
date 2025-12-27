@@ -39,7 +39,7 @@ export class EditDebtHandler implements ICommandHandler<EditDebtCommand , boolea
                 ...oldDebt
             },
             data: {
-                creditorId: debtInfo.creditorId,
+                creditorId: debtInfo.creditorId, 
                 amount: debtInfo.amount,
             }
         })
