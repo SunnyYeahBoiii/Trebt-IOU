@@ -1,46 +1,44 @@
-import { PrismaService } from "@/prisma/prisma.service";
-import { Injectable } from "@nestjs/common";
-import { AddBillCommand } from "./add-bill.command";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { DebtsService } from "@/debts/debts.service";
-import { BillService } from "@/bills/bill.service";
-import { DebtDto } from "@/dtos/debt.dto";
-import { Bill, Debt } from "@generated/prisma";
-
-
+import { PrismaService } from '@/prisma/prisma.service';
+import { Injectable } from '@nestjs/common';
+import { AddBillCommand } from './add-bill.command';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { DebtsService } from '@/debts/debts.service';
+import { BillService } from '@/bills/bill.service';
+import { DebtDto } from '@/dtos/debt.dto';
+import { Bill, Debt } from '@generated/prisma';
 
 @Injectable()
 @CommandHandler(AddBillCommand)
-export class AddBillHandler implements ICommandHandler<AddBillCommand, true> {
-    constructor(
-        private readonly prisma: PrismaService,
-        private readonly debt: DebtsService,
-        private readonly bill: BillService,
-    ){}
+export class AddBillHandler implements ICommandHandler<AddBillCommand, Bill> {
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly debt: DebtsService,
+    private readonly bill: BillService,
+  ) {}
 
-    async execute(command: AddBillCommand): Promise<Bill> {
-        const billInfo = command.billInfo;
-        
-        const transaction = this.prisma.$transaction(async (prisma) => {
-            const newBill = await prisma.bill.create({
-                data: {
-                    creditorId: billInfo.creditorId,
-                    debtorIDs: billInfo.debtorIDs,
-                    description: billInfo.description ?? "",
-                    totalAmount: billInfo.totalAmount,
-                    billType: billInfo.billType,
-                }
-            });
+  async execute(command: AddBillCommand): Promise<Bill> {
+    const billInfo = command.billInfo;
 
-            const debts: DebtDto[] = this.bill.createDebtDtoFromBill(newBill);
+    const transaction = this.prisma.$transaction(async (prisma) => {
+      const newBill = await prisma.bill.create({
+        data: {
+          creditorId: billInfo.creditorId,
+          debtorIDs: billInfo.debtorIDs,
+          description: billInfo.description ?? '',
+          totalAmount: billInfo.totalAmount,
+          billType: billInfo.billType,
+        },
+      });
 
-            for (let debt of debts){
-                await this.debt.AddDebt(debt , prisma);
-            }
+      const debts: DebtDto[] = this.bill.createDebtDtoFromBill(newBill);
 
-            return newBill;
-        });
+      for (const debt of debts) {
+        await this.debt.AddDebt(debt, prisma);
+      }
 
-        return await transaction;
-    }
+      return newBill;
+    });
+
+    return await transaction;
+  }
 }

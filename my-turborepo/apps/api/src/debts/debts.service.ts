@@ -16,48 +16,46 @@ export class DebtsService {
 
   async seed() {
     const userIds = ['1', '2', '3', '4'];
-    const names = ['' , 'Phương' , 'Pha' , 'Thịnh' , 'Tuấn']
+    const names = ['', 'Phương', 'Pha', 'Thịnh', 'Tuấn'];
 
-    const users : User[] = [];
+    const users: User[] = [];
 
-    for (const userId of userIds){
+    for (const userId of userIds) {
       const existingUser = await this.prisma.user.create({
         data: {
           id: userId,
           name: names[userId],
         },
-      }); 
-      
+      });
+
       users.push(existingUser);
     }
 
     for (const creditorId of userIds) {
       for (const debtorId of userIds) {
-        console.log(creditorId , debtorId)
+        console.log(creditorId, debtorId);
 
-        await this.prisma.statistic.create(
-            {
-                data: {
-                    creditorId,
-                    debtorId,
-                    totalLent: 0,
-                    totalOwed: 0,
-                },
-            }
-        );
+        await this.prisma.statistic.create({
+          data: {
+            creditorId,
+            debtorId,
+            totalLent: 0,
+            totalOwed: 0,
+          },
+        });
       }
     }
   }
 
-  async AddDebt(debt: DebtDto , tx? : Prisma.TransactionClient){
+  async AddDebt(debt: DebtDto, tx?: Prisma.TransactionClient) {
     return this.commandBus.execute(new AddDebtCommand(debt, tx));
   }
 
-  async RemoveDebt(debt: DebtDto , tx? : Prisma.TransactionClient){
-    return this.commandBus.execute(new RemoveDebtCommand(debt , tx));
+  async RemoveDebt(debt: DebtDto, tx?: Prisma.TransactionClient) {
+    return this.commandBus.execute(new RemoveDebtCommand(debt, tx));
   }
 
-  async EditDebt(debt: DebtDto , tx? : Prisma.TransactionClient){
-    return this.commandBus.execute(new EditDebtCommand(debt , tx));
+  async EditDebt(debt: DebtDto, tx?: Prisma.TransactionClient) {
+    return this.commandBus.execute(new EditDebtCommand(debt, tx));
   }
 }

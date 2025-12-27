@@ -6,6 +6,5 @@ import { Bill } from './decorators/bill.decorator';
 
 @Injectable()
 export class AppService {
-    constructor(private readonly debt: DebtsService) {}   
+  constructor(private readonly debt: DebtsService) {}
 }
-

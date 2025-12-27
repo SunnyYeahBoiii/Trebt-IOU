@@ -1,19 +1,16 @@
-import { Module } from "@nestjs/common";
-import { CqrsModule } from "@nestjs/cqrs";
-import { AddLentHandler } from "./commands/addLent/add-lent.handler";
-import { AddOwedHandler } from "./commands/addOwed/add-owed.handler";
-import { PrismaModule } from "@/prisma/prisma.module";
-import { DebtsModule } from "@/debts/debts.module";
-import { StatisticService } from "./statistic.service";
+import { Module } from '@nestjs/common';
+import { CqrsModule } from '@nestjs/cqrs';
+import { AddLentHandler } from './commands/addLent/add-lent.handler';
+import { AddOwedHandler } from './commands/addOwed/add-owed.handler';
+import { PrismaModule } from '@/prisma/prisma.module';
+import { DebtsModule } from '@/debts/debts.module';
+import { StatisticService } from './statistic.service';
 
-const Handlers = [AddLentHandler , AddOwedHandler]
+const Handlers = [AddLentHandler, AddOwedHandler];
 
 @Module({
-    imports: [
-        CqrsModule,
-        PrismaModule,
-    ],
-    providers: [...Handlers , StatisticService],
-    exports: [StatisticService]
+  imports: [CqrsModule, PrismaModule],
+  providers: [...Handlers, StatisticService],
+  exports: [StatisticService],
 })
 export class StatisticModule {}

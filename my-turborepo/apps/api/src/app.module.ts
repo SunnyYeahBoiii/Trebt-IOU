@@ -9,14 +9,8 @@ import { CqrsModule } from '@nestjs/cqrs';
 
 @Global()
 @Module({
-  imports: [
-    DebtsModule,
-    BillModule,
-    DebtsModule,
-    StatisticModule,
-    CqrsModule
-  ],
+  imports: [DebtsModule, BillModule, StatisticModule, CqrsModule],
   controllers: [AppController],
-  providers: [AppService , ConfigService],
+  providers: [AppService, ConfigService],
 })
 export class AppModule {}
