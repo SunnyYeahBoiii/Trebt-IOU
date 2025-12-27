@@ -1,5 +1,5 @@
 {
-  "name": "api",
+  "name": "@trebt-iou/api",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -18,7 +18,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -36,6 +37,7 @@
     "express": "^5.2.1",
     "express-session": "^1.18.2",
     "nestjs": "^0.0.1",
+    "path": "^0.12.7",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },
