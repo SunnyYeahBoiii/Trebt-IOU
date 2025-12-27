@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  output          = "../../generated/prisma"
+  output          = "../../node_modules/@generated/prisma"
   previewFeatures = ["fullTextSearchPostgres", "postgresqlExtensions", "views"]
   binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
   engineType      = "binary"
@@ -63,4 +63,9 @@ model Statistic {
 
   @@unique([creditorId, debtorId])
   @@map("statistics")
+}
+
+enum BillType {
+  EACHONE
+  SPLITTING
 }

@@ -24,7 +24,7 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@/*": ["./src/*"],
-      "@generated/*": ["./generated/*"]
+      "@generated/*": ["./node_modules/@generated/prisma"]
     }
-  },
+  }
 }
