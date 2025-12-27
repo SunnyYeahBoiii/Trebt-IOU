@@ -47,6 +47,7 @@ There exists a Statistic Table to persist the data for the Statistics feature, u
 
 ### Feature:
 - Add/Remove/Edit Bills which manipulates data in the statistic table.
+- Bills Filter Endpoint
 
 ## Testing Phase
 
