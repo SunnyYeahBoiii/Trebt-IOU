@@ -17,6 +17,9 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       port: env.PORT ? Number(env.PORT) : 5173,
+      allowedHosts: [
+        'ac31b4da2b1b.ngrok-free.app'
+      ]
     },
   }
 })

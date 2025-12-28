@@ -59,11 +59,11 @@ export function EditDialog({ closeDialog , data } : DialogProps){
     return (<>
         <div className="fixed top-0 left-0 w-screen h-screen bg-(--bg) opacity-70 backdrop-blur-3xl cursor-not-allowed "></div>
         <div className="dialog-wrapper fixed w-1/2 h-[calc(min(50vw,50vh))] bg-(--btn) left-1/2 top-1/2 z-10 -translate-1/2 rounded-2xl">
-            <div className="dialog h-full w-full text-center p-[20px] flex flex-col justify-between">
-                <h2>Chỉnh sửa Bill</h2>
+            <div className="dialog h-full w-full text-center p-[20px]">
 
-                <form action={'http://localhost:3001/v1/bills/add'} method="POST" onSubmit={(e) => handleSubmit(e)}>
-                <ul className="wrap-break-word text-left">
+                <form className="h-full flex flex-col justify-between" action={'http://localhost:3001/v1/bills/add'} method="POST" onSubmit={(e) => handleSubmit(e)}>
+                <h2>Chỉnh sửa Bill</h2>
+                <ul className="wrap-break-word text-left h-[80%] flex flex-col justify-around">
                     <li className="flex flex-row justify-between pb-1">Chủ nợ: 
                         <span>
                             <input onClick={() => setCreditorId(1)} type="radio" id="creditor-Phuong" value="1" name = "creditor" />
