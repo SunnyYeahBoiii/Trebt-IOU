@@ -1,12 +1,12 @@
 export type BillType = "SPLITTING" | "EACHONE";
 
 export interface BillDto {
-  id: string;
+  id?: string;
   creditorId: string;
   debtorIDs: string;     // multiple debtors
   description: string;
   billType: BillType;      // use enum, not string
   totalAmount: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

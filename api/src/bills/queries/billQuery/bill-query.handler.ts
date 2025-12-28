@@ -21,7 +21,7 @@ export class BillQueryHandler implements IQueryHandler<BillQuery, Bill[]> {
     }
     return this.prisma.bill.findMany({
       where,
-      orderBy: { createdAt: query.timeDesc ? 'asc' : 'desc' },
+      orderBy: { updatedAt: query.timeDesc ? 'asc' : 'desc' },
     });
   }
 }

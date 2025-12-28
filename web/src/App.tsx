@@ -27,10 +27,10 @@ function App() {
         </div>
 
         <nav className="bg-[var(--btn)] mb-4 p-4 rounded-xl grid lg:grid-cols-4 lg:grid-rows-1 sm:grid-cols-2 sm:grid-rows-2 grid-cols-[1fr] grid-rows-4 gap-2.5 items-center text-center min-h-20">
-          <a className='pt-2.5 pb-2.5 rounded-xl bg-(--clr)' href = "/dashboard">Dashboard</a>
-          <a className='pt-2.5 pb-2.5 rounded-xl bg-(--clr)' href = "/add-bill">Thêm nợ</a>
-          <a className='pt-2.5 pb-2.5 rounded-xl bg-(--clr)' href = "/statistic">Thống kê nợ</a>
-          <a className='pt-2.5 pb-2.5 rounded-xl bg-(--clr)' href = "/filter">Filter & Sort</a>
+          <a className='pt-2.5 pb-2.5 rounded-xl bg-(--clr) hover:scale-105 transition-all' href = "/dashboard">Dashboard</a>
+          <a className='pt-2.5 pb-2.5 rounded-xl bg-(--clr) hover:scale-105 transition-all' href = "/add-bill">Thêm nợ</a>
+          <a className='pt-2.5 pb-2.5 rounded-xl bg-(--clr) hover:scale-105 transition-all' href = "/statistic">Thống kê nợ</a>
+          <a className='pt-2.5 pb-2.5 rounded-xl bg-(--clr) hover:scale-105 transition-all' href = "/filter">Filter & Sort</a>
         </nav>
 
         <Routes>

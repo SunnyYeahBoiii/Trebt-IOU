@@ -18,6 +18,8 @@ export class AddBillHandler implements ICommandHandler<AddBillCommand, Bill> {
 
   async execute(command: AddBillCommand): Promise<Bill> {
     const billInfo = command.billInfo;
+    
+    console.log(billInfo);
 
     const transaction = this.prisma.$transaction(async (prisma) => {
       const newBill = await prisma.bill.create({
