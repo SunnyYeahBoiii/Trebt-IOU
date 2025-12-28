@@ -7,7 +7,7 @@ function App() {
   return (
   <>
       <div className="w-screen min-h-screen bg-[var(--bg)]">
-      <div className="px-[10vw] py-[2.5vh]">
+      <div className="min-h-screen px-[10vw] py-[2.5vh]">
         <div
           className="bg-[var(--btn)] mb-4 p-4 rounded-xl grid sm:grid-cols-[auto_1fr_auto] sm:grid-rows-1 grid-cols-[1fr] grid-rows-2 items-center text-center min-h-20"
         >
