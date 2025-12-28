@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&display=swap');
+@import "tailwindcss";
+
+
+html, body {
+    font-family: Rowdies , Consolas;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--text);
+}
+
+h1{
+    font-size: 40px;
+}
+
+:root{
+    /* Light theme */
+    --light-bg: #EAE0CC;
+    --light-btn: #856A5D;
+    --light-clr: #B6AE9F;
+
+    /* Dark theme */
+    --dark-bg: #171614;
+    --dark-btn: #312F2F;
+    --dark-clr: #393E41;
+
+    /* States */
+    --err-state: #960200;
+    --ac-state: #A2FAA3;
+
+    /* Current Theme*/
+    --text: #FFFFFF;
+    --bg: var(--light-bg);
+    --btn: var(--light-btn);
+    --clr: var(--light-clr);
+}

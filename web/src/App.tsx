@@ -1,35 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import './global.css'
+import { ThemeSwitch } from './components/themeSwitcher/ThemeSwitcher'
+import { Route, Routes } from 'react-router'
+import { Dashboard } from './components/dashboard/Dashboard'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+  <>
+      <div className="w-screen min-h-screen bg-[var(--bg)]">
+      <div className="px-[10vw] py-[2.5vh]">
+        <div
+          className="bg-[var(--btn)] mb-4 p-4 rounded-xl grid sm:grid-cols-[auto_1fr_auto] sm:grid-rows-1 grid-cols-[1fr] grid-rows-2 items-center text-center min-h-20"
+        >
+            <p className="hidden sm:block text-sm opacity-80">
+                Time: 36:36:36
+            </p>
+
+
+            <h1 className="text-center text-xl font-bold block">
+                Sổ Thơ Nụ
+            </h1>
+
+        
+            <div className="flex flex-row justify-center">
+                <ThemeSwitch />
+            </div>
+        </div>
+
+        <nav className="bg-[var(--btn)] mb-4 p-4 rounded-xl grid lg:grid-cols-4 lg:grid-rows-1 sm:grid-cols-2 sm:grid-rows-2 grid-cols-[1fr] grid-rows-4 gap-2.5 items-center text-center min-h-20">
+          <a className='pt-2.5 pb-2.5 rounded-xl bg-(--clr)' href = "/dashboard">Dashboard</a>
+          <a className='pt-2.5 pb-2.5 rounded-xl bg-(--clr)' href = "/add-bill">Thêm nợ</a>
+          <a className='pt-2.5 pb-2.5 rounded-xl bg-(--clr)' href = "/statistic">Thống kê nợ</a>
+          <a className='pt-2.5 pb-2.5 rounded-xl bg-(--clr)' href = "/filter">Filter & Sort</a>
+        </nav>
+
+        <Routes>
+          <Route path='/dashboard' element={<Dashboard/>}></Route>
+          <Route path="/add-bill"></Route>
+          <Route path="/statistic"></Route>
+          <Route path="/filter"></Route>
+        </Routes>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  </>)
 }
 
 export default App
