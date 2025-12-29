@@ -11,7 +11,6 @@ interface DialogProps {
 
 export function EditDialog({  setLoading, closeEditBill , closeDialog , data } : DialogProps){
     const [totalAmount , setTotalAmount] = useState<number>(data.totalAmount);
-    const [creditorId , setCreditorId] = useState<number>(0);
     const submitButtonRef = useRef<HTMLButtonElement>(null)
 
     const handleChangeAmount = (e : React.ChangeEvent<HTMLInputElement>) => {
@@ -86,22 +85,22 @@ export function EditDialog({  setLoading, closeEditBill , closeDialog , data } :
                 <ul className="wrap-break-word text-left h-[80%] flex flex-col justify-around">
                     <li className="flex flex-row justify-between pb-1">Chủ nợ: 
                         <span>
-                            <input onClick={() => setCreditorId(1)} type="radio" id="creditor-Phuong" value="1" name = "creditor" />
+                            <input type="radio" id="creditor-Phuong" value="1" name = "creditor" />
                             <label htmlFor="creditor-Phuong">Phương</label>
                         </span>
 
                         <span>
-                            <input onClick={() => setCreditorId(2)} type="radio" id="creditor-Pha" value="2" name = "creditor" />
+                            <input type="radio" id="creditor-Pha" value="2" name = "creditor" />
                             <label htmlFor="creditor-Pha">Pha</label>
                         </span>
                             
                         <span>
-                            <input onClick={() => setCreditorId(3)} type="radio" id="creditor-Thinh" value="3" name = "creditor" />
+                            <input type="radio" id="creditor-Thinh" value="3" name = "creditor" />
                             <label htmlFor="creditor-Thinh">Thịnh</label>
                         </span>
 
                         <span>
-                            <input onClick={() => setCreditorId(4)} type="radio" id="creditor-Tuan" value="4" name = "creditor" />
+                            <input type="radio" id="creditor-Tuan" value="4" name = "creditor" />
                             <label htmlFor="creditor-Tuan">Tuấn</label>
                         </span>
                     </li>
