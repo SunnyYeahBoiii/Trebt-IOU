@@ -108,22 +108,22 @@ export function EditDialog({  setLoading, closeEditBill , closeDialog , data } :
                     
                     <li className="flex flex-row justify-between pb-1">Người nợ: 
                         <span>
-                            <input disabled={creditorId === 1} type="checkbox" id="debtor-Phuong" name="debtor" value="1"/>
+                            <input type="checkbox" id="debtor-Phuong" name="debtor" value="1"/>
                             <label htmlFor="debtor-Phuong">Phương</label>
                         </span>
 
                         <span>
-                            <input disabled={creditorId === 2}  type="checkbox" id="debtor-Pha" name="debtor" value="2"/>
+                            <input  type="checkbox" id="debtor-Pha" name="debtor" value="2"/>
                             <label htmlFor="debtor-Pha">Pha</label>
                         </span>
                             
                         <span>
-                            <input disabled={creditorId === 3}  type="checkbox" id="debtor-Thinh" name="debtor" value="3"/>
+                            <input  type="checkbox" id="debtor-Thinh" name="debtor" value="3"/>
                             <label htmlFor="debtor-Thinh">Thịnh</label>
                         </span>
 
                         <span>
-                            <input disabled={creditorId ===4}  type="checkbox" id="debtor-Tuan" name="debtor" value="4"/>
+                            <input  type="checkbox" id="debtor-Tuan" name="debtor" value="4"/>
                             <label htmlFor="debtor-Tuan">Tuấn</label>
                         </span>
                     </li>
