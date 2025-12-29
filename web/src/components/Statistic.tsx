@@ -1,7 +1,5 @@
-import type { DebtDto } from "@/dtos/debt.dto";
 import { useEffect, useState } from "react";
 import loadingGif from "@/assets/icons8-loading.png";
-import { idsToNames } from "@/helper/idToName.helper";
 import { addDotsToMoney } from "@/helper/amountDots.helper";
 
 
@@ -17,11 +15,7 @@ export function Statistic(){
         fetch('https://trebt-iou-api.onrender.com/v1/statistic')
             .then(data => data.json())
             .then(data => {
-                for(let stat of data){
-                    console.log(stat.creditorId);
-                    console.log(stat.debtorId);
-                    console.log(stat.totalOwed - stat.totalLent)
-                    console.log("DEBUG" , debt[parseInt(stat.creditorId)][parseInt(stat.debtorId)].toString() , parseInt(stat.creditorId) , parseInt(stat.debtorId))
+                for(const stat of data){
                     setDebt(oldDebt => {
                         oldDebt[parseInt(stat.creditorId)][parseInt(stat.debtorId)] = Math.max(0 , Math.round(stat.totalOwed - stat.totalLent)) + 10000000;
                         return oldDebt

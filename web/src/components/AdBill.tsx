@@ -48,7 +48,7 @@ export function AddBill(){
         }        
 
         axios.post('https://trebt-iou-api.onrender.com/v1/bills/add' , Bill)
-            .then(res => {
+            .then(() => {
                 alert('Thêm nợ thành công!'); 
                 if(submitButtonRef.current){
                     submitButtonRef.current.disabled = false;

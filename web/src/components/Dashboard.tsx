@@ -4,7 +4,6 @@ import loadingGif from "@/assets/icons8-loading.png";
 import { Options } from "./dialogs/Options";
 import { idsToNames } from "@/helper/idToName.helper";
 import { addDotsToMoney } from "@/helper/amountDots.helper";
-import { EditDialog } from "./dialogs/EditDialog";
 
 export function Dashboard(){
 
@@ -64,9 +63,6 @@ export function Dashboard(){
         toggleEditBill(true)
     }
 
-    const closeEditBill = () => {
-        toggleEditBill(false);
-    }
 
     return (<>
         
@@ -116,8 +112,6 @@ export function Dashboard(){
             <Options openEditBill={openEditBill} closeDialog={closeOptions} data = {dialogData}/>
         }
 
-        { showingEditBil && 
-            <EditDialog closeDialog={closeEditBill} data={dialogData} />
-        }
+        
     </>);
 }
