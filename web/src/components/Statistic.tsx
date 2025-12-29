@@ -17,7 +17,7 @@ export function Statistic(){
             .then(data => {
                 for(const stat of data){
                     setDebt(oldDebt => {
-                        oldDebt[parseInt(stat.creditorId)][parseInt(stat.debtorId)] = Math.max(0 , Math.round(stat.totalOwed - stat.totalLent)) + 10000000;
+                        oldDebt[parseInt(stat.creditorId)][parseInt(stat.debtorId)] = Math.max(0 , Math.round(stat.totalOwed - stat.totalLent));
                         return oldDebt
                     })
                 }
