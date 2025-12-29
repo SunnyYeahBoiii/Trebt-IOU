@@ -1,66 +1,202 @@
-# Trebt IOU - Debt and Exspense Tracker
+# Trebt IOU - Debt and Expense Tracker
 
-## Overview: 
-- PetalsIOU is a lightweight web app designed to simplify personal and shared expense tracking for roommates, automating debt calculations and transaction logging to save time on manual math.
+## Overview
 
-- Problem It Solves:
-You and your roommates struggled with tracking income, expenses, and who owes whom, leading to confusion and wasted time on spreadsheets or notes.
-PetalsIOU automates this by logging transactions, categorizing debts (IOUs), and generating instant summaries like total owed, pending receivables, and monthly spending breakdowns.
+Sổ Thơ Nụ is a lightweight web application designed to simplify personal and shared expense tracking for roommates, automating debt calculations and transaction logging.
 
-- Key Features:
-  - Quick Entry: Add income, expenses, or IOUs with debtor names, amounts, dates, and notes in seconds.
+### Problem It Solves
+Track who owes whom among friends and roommates, eliminating confusion from spreadsheets and manual calculations.
 
-  - Dashboard Overview: See real-time totals—e.g., "Roommates owe you 500,000đ", "This month's expenses: 2,300,000đ"—with filters by person or period.
+### Key Features
+- Quick entry for debts and bills
+- Real-time debt dashboard with filtering
+- Automatic debt calculations and statistics
+- Visual debt matrix showing net balances
+- Light/dark theme support
+- Vietnamese language interface
 
-  - Auto-Calculations: Computes balances, generates shareable reports (e.g., "You owe Phương 200k from groceries"), and alerts for overdue debts.
+## Project Structure
 
-- Why It Works for You
-Built for everyday Vietnamese students, stores data locally or via simple backend. Saves hours weekly, turning chaotic roommate finances into a clear "sổ thu nợ" everyone can trust.
+```
+Trebt-IOU/
+├── api/                    # NestJS Backend
+│   ├── src/
+│   │   ├── bills/          # Bill management (CQRS)
+│   │   ├── debts/          # Debt tracking
+│   │   ├── statistics/     # Statistics calculation
+│   │   ├── dtos/           # Data transfer objects
+│   │   └── prisma/         # Prisma service
+│   ├── prisma/
+│   │   ├── schema/         # Prisma schema
+│   │   └── migrations/      # Database migrations
+│   └── package.json
+├── web/                    # React Frontend
+│   ├── src/
+│   │   ├── components/     # React components
+│   │   ├── dtos/           # TypeScript DTOs
+│   │   └── helper/         # Utility functions
+│   └── package.json
+└── README.md
+```
 
+## Tech Stack
 
-## Planning Phase:
+### Backend (api/)
+- **Framework**: NestJS 11 with CQRS pattern
+- **Language**: TypeScript
+- **Database**: PostgreSQL with Prisma ORM
+- **API Documentation**: Swagger (OpenAPI)
+- **Package Manager**: pnpm
 
-Overall, this app should be basic and lightweight, mainly because its idea is a time-saver app. 
+### Frontend (web/)
+- **Framework**: React 19 with TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS v4
+- **Routing**: React Router v7
+- **HTTP Client**: Axios
+- **Deployment**: Vercel
 
-### Techies:
+## Database Schema
 
-Since this is a financial app, I should be using postgreSQL for transactions, could be postgreSQL in Prisma I think. Besides, I would like to use NestJS for the Backend and React for Frontend.
+![TrebtIOU Database Schema](./images/TrebtIOU.drawio.svg)
 
-In total, tech that I should be using is:
-- ReactJS (Frontend)
-- NestJS (Backend)
-- PostgreSQL(Database)
+### Models
+- **User**: User information (name)
+- **Bill**: Expense records with creditor, debtors, type (SPLITTING/EACHONE)
+- **Debt**: Individual debt relationships
+- **Statistic**: Aggregated debt statistics between users
 
-### Design:
+### Bill Types
+- **SPLITTING**: Total amount divided among all debtors
+- **EACHONE**: Each debtor owes the full amount
 
-Currently working on the design of the web using Figma, the progess can be viewed in the link below.
+## Installation
 
-[Preview on the current progress.](https://www.figma.com/proto/CZLhPcdSvnKStu2X47k1zo/S%E1%BB%95-th%C6%A1-n%E1%BB%A5-On-Steroid?node-id=0-1&t=VF72d0eYnOOcsK1U-1)
+### Prerequisites
+- Node.js (v18 or higher)
+- PostgreSQL
+- pnpm (for backend) or npm (for frontend)
 
-## Development Phase
+### Backend Setup
 
-### Database:
+```bash
+cd api
+pnpm install
+cp .env.example .env
+```
 
-![An Overview of TrebtIOU Database](./images/TrebtIOU.drawio.svg)
+Configure your `.env` file:
+```env
+DATABASE_URL="postgresql://user:password@localhost:5432/trebt_iou"
+PORT=3002
+CORS_ORIGIN="http://localhost:5173"
+```
 
-There exists a Statistic Table to persist the data for the Statistics feature, using datas from the Debt Table.
+Run migrations:
+```bash
+pnpm prisma migrate dev
+```
 
-### Feature:
-- Add/Remove/Edit Bills which manipulates data in the statistic table.
-- Bills Filter Endpoint
+Start development server:
+```bash
+pnpm run dev
+```
 
-## Testing Phase
+The API will be available at `http://localhost:3002/v1`
 
-Currently on Development Phase
+### Frontend Setup
 
-## Deployment:
-Target: Local development and roommate sharing only—no public hosting needed.
+```bash
+cd web
+npm install
+```
 
-Local Setup:
-- Run on localhost:3000 (React) + localhost:3001 (NestJS) for personal use.
-- Use npm run dev scripts for hot reload during development.
+Start development server:
+```bash
+npm run dev
+```
 
-Sharing with Roommates:
-- Ngrok: Expose local server via ngrok http 3000 → get public URL like https://abc123.ngrok.io to share instantly.
-- Alternative: Local network IP (e.g., 192.168.1.100:3000)
-- Data persistence: PostgreSQL Docker container (docker run -p 5432:5432 postgres) for consistent local DB across sessions.
+The app will be available at `http://localhost:5173`
+
+## API Documentation
+
+Swagger UI is available at: `http://localhost:3002/v1/docs`
+
+### Available Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/` | Health check |
+| POST | `/seed` | Seed initial data |
+| POST | `/bills/add` | Add new bill |
+| POST | `/bills/edit` | Edit existing bill |
+| POST | `/bills/remove` | Remove bill |
+| GET | `/bills/query` | Query bills with filters |
+| GET | `/statistic` | Get debt statistics matrix |
+
+### Query Parameters (for `/bills/query`)
+- `creditorId`: Filter by creditor ID
+- `lowerAmount`: Minimum total amount
+- `upperAmount`: Maximum total amount
+- `timeDesc`: Sort by creation time descending
+
+## Pre-configured Users
+
+The application includes 4 default users:
+1. Phương (ID: 1)
+2. Pha (ID: 2)
+3. Thịnh (ID: 3)
+4. Tuấn (ID: 4)
+
+## Development
+
+### Backend Commands
+```bash
+pnpm run dev          # Start in watch mode
+pnpm run build        # Build for production
+pnpm run start:prod   # Run production build
+pnpm run test         # Run unit tests
+pnpm run test:e2e     # Run e2e tests
+pnpm run lint         # Lint code
+pnpm run format       # Format code with Prettier
+```
+
+### Frontend Commands
+```bash
+npm run dev           # Start dev server
+npm run build         # Build for production
+npm run preview       # Preview production build
+npm run lint          # Lint code
+```
+
+## Deployment
+
+### Backend
+Deploy to any Node.js hosting platform (Heroku, Render, Railway, etc.) with:
+- PostgreSQL database connection
+- Environment variables configured
+- `pnpm run build` output in `dist/`
+
+### Frontend
+Configured for Vercel deployment. The `vercel.json` includes:
+- Build command: `npm run build`
+- Output directory: `dist`
+- SPA routing rewrite rule
+
+Deploy to Vercel:
+1. Push code to Git repository
+2. Connect repository to Vercel
+3. Vercel auto-detects and deploys
+
+### Local Sharing
+For sharing with roommates locally:
+- **Ngrok**: Expose via `ngrok http 3002` or `ngrok http 5173`
+- **Local network**: Use local IP (e.g., `http://192.168.1.100:5173`)
+
+## Design Preview
+
+[Figma Design](https://www.figma.com/proto/CZLhPcdSvnKStu2X47k1zo/S%E1%BB%95-th%C6%A1-n%E1%BB%A5-On-Steroid?node-id=0-1&t=VF72d0eYnOOcsK1U-1)
+
+## License
+
+Private project
