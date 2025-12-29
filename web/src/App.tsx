@@ -1,7 +1,9 @@
 import './global.css'
 import { ThemeSwitch } from './components/themeSwitcher/ThemeSwitcher'
 import { Route, Routes } from 'react-router'
-import { Dashboard } from './components/dashboard/Dashboard'
+import { Dashboard } from './components/Dashboard'
+import { Statistic } from './components/Statistic'
+import { AddBill } from './components/AdBill'
 
 function App() {
   return (
@@ -35,8 +37,8 @@ function App() {
 
         <Routes>
           <Route path='/dashboard' element={<Dashboard/>}></Route>
-          <Route path="/add-bill"></Route>
-          <Route path="/statistic"></Route>
+          <Route path="/add-bill" element={<AddBill/>}></Route>
+          <Route path="/statistic" element = {<Statistic/>}></Route>
           <Route path="/filter"></Route>
         </Routes>
       </div>

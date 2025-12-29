@@ -16,11 +16,6 @@ export class PrismaService
       adapter,
       log: ['query', 'info', 'warn', 'error'],
       errorFormat: 'pretty',
-      omit: {
-        statistic: {
-          totalLent: true,
-        },
-      },
     });
   }
 

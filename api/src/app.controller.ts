@@ -19,6 +19,8 @@ import {
   ApiQuery,
 } from '@nestjs/swagger';
 import { QueryBus } from '@nestjs/cqrs';
+import { QueryStatisticQueryHandler } from './statistics/queries/queryStatistic/query-statistic.handler';
+import { QueryStatisticQuery } from './statistics/queries/queryStatistic/query-statistic.query';
 
 @ApiTags('API')
 @Controller()
@@ -110,5 +112,10 @@ export class AppController {
     };
 
     return await this.queryBus.execute(new BillQuery(query));
+  }
+
+  @Get('/statistic')
+  async getStatistic(){
+    return this.queryBus.execute(new QueryStatisticQuery());
   }
 }
