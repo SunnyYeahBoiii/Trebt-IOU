@@ -46,7 +46,7 @@ export function AddBill(){
             billType: "SPLITTING",
         }        
 
-        axios.post('https://trebt-iou-api.onrender.com/v1/v1/bills/add' , Bill)
+        axios.post('https://trebt-iou-api.onrender.com/v1/bills/add' , Bill)
             .then(() => {
                 alert('Thêm nợ thành công!'); 
                 if(submitButtonRef.current){
