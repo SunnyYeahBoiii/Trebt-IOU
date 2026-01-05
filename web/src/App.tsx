@@ -55,7 +55,7 @@ function App() {
         </nav>
 
         <Routes>
-          <Route path='/dashboard' element={<Dashboard/>}></Route>
+          <Route path='/dashboard' element={<Dashboard linkQuery=''/>}></Route>
           <Route path="/add-bill" element={<AddBill/>}></Route>
           <Route path="/statistic" element = {<Statistic/>}></Route>
           <Route path='/filter' element={<Filter/>}></Route>
