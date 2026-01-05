@@ -18,7 +18,7 @@ async function bootstrap() {
   app.set('trust proxy', true);
   // Enable CORS
   app.enableCors({
-    origin: configService.get<string>('CORS_ORIGIN', 'http://127.0.0.1:3000'),
+    origin: configService.get<string>('CORS_ORIGIN', 'http://localhost:3000'),
     credentials: true,
   });
 

@@ -46,7 +46,7 @@ export function AddBill(){
             billType: "SPLITTING",
         }        
 
-        axios.post('https://trebt-iou-api.onrender.com/v1/bills/add' , Bill)
+        axios.post('https://trebt-iou-api.onrender.com/v1/v1/bills/add' , Bill)
             .then(() => {
                 alert('Thêm nợ thành công!'); 
                 if(submitButtonRef.current){
@@ -64,7 +64,7 @@ export function AddBill(){
     return (<>
         <div className="table-wrapper rounded-xl bg-(--btn) flex flex-col overflow-auto [&::-webkit-scrollbar]:w-0">
             <div className="table p-2">
-                <h2 className="text-center">Thêm Nợ</h2>
+                <h2 className="text-center"></h2>
                 <form onSubmit={handleSubmit}>
                     <ul className="wrap-break-word text-left h-[80%] flex flex-col justify-around">
                     <li className="flex flex-row justify-between pb-1">Chủ nợ: 

@@ -46,42 +46,43 @@ export function Statistic(){
                     </colgroup>
                     <thead>
                         <tr>
-                            <th className="p-2.5  border-white border-3 border-t-0 border-l-0 text-center"></th>
-                            <th className="p-2.5 border-white border-3 border-t-0 text-center">Phương</th>
-                            <th className="p-2.5 border-white border-3 border-t-0 text-center">Pha</th>
-                            <th className="p-2.5 border-white border-3 border-t-0 text-center">Thịnh</th>
-                            <th className="p-2.5 border-white border-3 border-t-0 border-r-0 text-center">Tuấn</th>
+                            <th className="p-2.5 relative border-white border-3 border-t-0 border-l-0 text-center">
+                            </th>
+                            <th className="p-2.5 border-white border-3 border-t-0 text-center truncate">Phương</th>
+                            <th className="p-2.5 border-white border-3 border-t-0 text-center truncate">Pha</th>
+                            <th className="p-2.5 border-white border-3 border-t-0 text-center truncate">Thịnh</th>
+                            <th className="p-2.5 border-white border-3 border-t-0 border-r-0 text-center truncate">Tuấn</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th className="p-2.5 border-white border-3 border-t-0 border-l-0 text-center">Phương</th>
-                            <th className="p-1 border-white border-3 border-t-0 text-center align-middle">{addDotsToMoney(debt[1][1])}</th>
-                            <th className="p-1 border-white border-3 border-t-0 text-center align-middle">{addDotsToMoney(debt[1][2])}</th>
-                            <th className="p-1 border-white border-3 border-t-0 text-center align-middle">{addDotsToMoney(debt[1][3])}</th>
-                            <th className="p-1 border-white border-3 border-t-0 border-r-0 text-center align-middle">{addDotsToMoney(debt[1][4])}</th>
+                            <th className="p-2.5 border-white border-3 border-t-0 border-l-0 text-center truncate">Phương</th>
+                            <th className="p-1 border-white border-3 border-t-0 text-center align-middle truncate">{addDotsToMoney(debt[1][1])}</th>
+                            <th className="p-1 border-white border-3 border-t-0 text-center align-middle truncate">{addDotsToMoney(debt[1][2])}</th>
+                            <th className="p-1 border-white border-3 border-t-0 text-center align-middle truncate">{addDotsToMoney(debt[1][3])}</th>
+                            <th className="p-1 border-white border-3 border-t-0 border-r-0 text-center align-middle truncate">{addDotsToMoney(debt[1][4])}</th>
                         </tr>
                         <tr>
-                            <th className="p-2.5 border-white border-3 border-t-0 border-l-0 text-center">Pha</th>
-                            <th className="p-1 border-white border-3 border-t-0 text-center">{addDotsToMoney(debt[2][1])}</th>
-                            <th className="p-1 border-white border-3 border-t-0 text-center">{addDotsToMoney(debt[2][2])}</th>
-                            <th className="p-1 border-white border-3 border-t-0 text-center">{addDotsToMoney(debt[2][3])}</th>
-                            <th className="p-1 border-white border-3 border-t-0 border-r-0 text-center">{addDotsToMoney(debt[2][4])}</th>
+                            <th className="p-2.5 border-white border-3 border-t-0 border-l-0 text-center truncate">Pha</th>
+                            <th className="p-1 border-white border-3 border-t-0 text-center truncate">{addDotsToMoney(debt[2][1])}</th>
+                            <th className="p-1 border-white border-3 border-t-0 text-center truncate">{addDotsToMoney(debt[2][2])}</th>
+                            <th className="p-1 border-white border-3 border-t-0 text-center truncate">{addDotsToMoney(debt[2][3])}</th>
+                            <th className="p-1 border-white border-3 border-t-0 border-r-0 text-center truncate">{addDotsToMoney(debt[2][4])}</th>
                         </tr>
                         <tr>
-                            <th className="p-2.5 border-white border-3 border-t-0 border-l-0 text-center">Thịnh</th>
-                            <th className="p-1 border-white border-3 border-t-0 text-center">{addDotsToMoney(debt[3][1])}</th>
-                            <th className="p-1 border-white border-3 border-t-0 text-center">{addDotsToMoney(debt[3][2])}</th>
-                            <th className="p-1 border-white border-3 border-t-0 text-center">{addDotsToMoney(debt[3][3])}</th>
-                            <th className="p-1 border-white border-3 border-t-0 border-r-0 text-center">{addDotsToMoney(debt[3][4])}</th>
+                            <th className="p-2.5 border-white border-3 border-t-0 border-l-0 text-center truncate">Thịnh</th>
+                            <th className="p-1 border-white border-3 border-t-0 text-center truncate">{addDotsToMoney(debt[3][1])}</th>
+                            <th className="p-1 border-white border-3 border-t-0 text-center truncate">{addDotsToMoney(debt[3][2])}</th>
+                            <th className="p-1 border-white border-3 border-t-0 text-center truncate">{addDotsToMoney(debt[3][3])}</th>
+                            <th className="p-1 border-white border-3 border-t-0 border-r-0 text-center truncate">{addDotsToMoney(debt[3][4])}</th>
                         </tr>
                         <tr>
-                            <th className="p-2.5 border-white border-3 border-t-0 border-l-0 text-center">Tuấn</th>
-                            <th className="p-1 border-white border-3 border-t-0 text-center">{addDotsToMoney(debt[4][1])}</th>
-                            <th className="p-1 border-white border-3 border-t-0 text-center">{addDotsToMoney(debt[4][2])}</th>
-                            <th className="p-1 border-white border-3 border-t-0 text-center">{addDotsToMoney(debt[4][3])}</th>
-                            <th className="p-1 border-white border-3 border-t-0 border-r-0 text-center">{addDotsToMoney(debt[4][4])}</th>
+                            <th className="p-2.5 border-white border-3 border-t-0 border-l-0 text-center truncate border-b-0">Tuấn</th>
+                            <th className="p-1 border-white border-3 border-t-0 text-center truncate border-b-0">{addDotsToMoney(debt[4][1])}</th>
+                            <th className="p-1 border-white border-3 border-t-0 text-center truncate border-b-0">{addDotsToMoney(debt[4][2])}</th>
+                            <th className="p-1 border-white border-3 border-t-0 text-center truncate border-b-0">{addDotsToMoney(debt[4][3])}</th>
+                            <th className="p-1 border-white border-3 border-t-0 border-r-0 text-center truncate border-b-0">{addDotsToMoney(debt[4][4])}</th>
                         </tr>
                     </tbody>
                 </table>

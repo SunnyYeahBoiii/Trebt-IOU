@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Query,
   ValidationPipe,
@@ -100,15 +101,19 @@ export class AppController {
   @ApiResponse({ status: 200, description: 'Returns filtered bills' })
   async queryBills(
     @Query('creditorId') creditorId: string | null,
+    @Query('debtorIds') debtorsIds: string | null,
     @Query('lowerAmount') lowerAmount: number | null,
     @Query('upperAmount') upperAmount: number | null,
-    @Query('timeDesc') timeDesc: boolean | null,
+    @Query('timeAsc') timeAsc: boolean | null,
+    @Query('amountAsc') amountAsc: boolean | null,
   ) {
     const query: QueryDto = {
       creditorId: creditorId,
+      debtorIds: debtorsIds,
       lowerAmount: lowerAmount,
       upperAmount: upperAmount,
-      timeDesc: timeDesc,
+      timeAsc: timeAsc,
+      amountAsc: amountAsc,
     };
 
     return await this.queryBus.execute(new BillQuery(query));

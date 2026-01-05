@@ -45,7 +45,7 @@ export class EditDebtHandler implements ICommandHandler<
 
     const newDebt = await prisma.debt.update({
       where: {
-        ...oldDebt,
+        id: oldDebt.id,
       },
       data: {
         creditorId: debtInfo.creditorId,

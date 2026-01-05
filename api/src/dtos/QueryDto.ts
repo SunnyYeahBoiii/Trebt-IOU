@@ -12,6 +12,8 @@ export class QueryDto {
   @MaxLength(1)
   creditorId: string | null;
 
+  debtorIds: string | null;
+
   @IsOptional()
   @IsNumber()
   lowerAmount: number | null;
@@ -20,7 +22,9 @@ export class QueryDto {
   @IsNumber()
   upperAmount: number | null;
 
+  amountAsc: boolean | null;
+
   @IsOptional()
   @IsBoolean()
-  timeDesc: boolean | null;
+  timeAsc: boolean | null;
 }

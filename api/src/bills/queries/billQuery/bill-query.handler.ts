@@ -13,15 +13,29 @@ export class BillQueryHandler implements IQueryHandler<BillQuery, Bill[]> {
   async execute(command: BillQuery): Promise<Bill[]> {
     const query: QueryDto = command.query;
     const where: Prisma.BillWhereInput = {};
+    const debtors = query.debtorIds?.split(',');
+
+    console.log(query);
+
     if (query.creditorId) where.creditorId = query.creditorId;
     if (query.lowerAmount || query.upperAmount) {
       where.totalAmount = {};
       if (query.lowerAmount) where.totalAmount.gte = query.lowerAmount;
       if (query.upperAmount) where.totalAmount.lte = query.upperAmount;
     }
+    if(debtors){
+      where.AND = debtors.map(debtor => ({
+        debtorIDs: {
+          contains: debtor,
+        }
+      }))
+    }
     return this.prisma.bill.findMany({
       where,
-      orderBy: { updatedAt: query.timeDesc ? 'asc' : 'desc' },
+      orderBy: { 
+        updatedAt: query.timeAsc ? 'asc' : 'desc', 
+        // totalAmount: query.amountAsc ? 'asc' : 'desc',
+      },
     });
   }
 }
