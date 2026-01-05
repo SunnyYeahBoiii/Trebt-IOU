@@ -58,7 +58,7 @@ export function EditDialog({  setLoading, closeEditBill , closeDialog , data } :
         }        
 
         setLoading(true);
-        axios.post('https://trebt-iou-api.onrender.com/v1/v1/bills/edit' , Bill)
+        axios.post('https://trebt-iou-api.onrender.com/v1/bills/edit' , Bill)
             .then(() => {
                 alert('Cập nhật thành công!'); 
                 if(submitButtonRef.current){
