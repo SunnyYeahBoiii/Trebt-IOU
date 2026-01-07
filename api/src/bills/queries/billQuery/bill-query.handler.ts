@@ -14,10 +14,13 @@ export class BillQueryHandler implements IQueryHandler<BillQuery, Bill[]> {
     const query: QueryDto = command.query;
     const where: Prisma.BillWhereInput = {};
     const debtors = query.debtorIds?.split(',');
+    const creditors = query.creditorId?.split(',');
 
-    console.log(query);
+    console.log(creditors);
 
-    if (query.creditorId) where.creditorId = query.creditorId;
+    if (creditors){
+      where.creditorId = {in: creditors};
+    }
     if (query.lowerAmount || query.upperAmount) {
       where.totalAmount = {};
       if (query.lowerAmount) where.totalAmount.gte = query.lowerAmount;

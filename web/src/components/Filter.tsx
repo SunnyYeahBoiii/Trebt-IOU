@@ -15,14 +15,15 @@ export function Filter(){
 
         const formData = new FormData(e.currentTarget);
 
-        const creditorId: FormDataEntryValue = formData.get('creditor') ?? "";
+        const creditorId: FormDataEntryValue[] = formData.getAll('creditor') ?? "";
+        const creditorIds: string = creditorId.join(','); 
         const debtors: FormDataEntryValue[] = formData.getAll('debtor') ?? "";
         const debtorIDs: string = debtors.join(',');
 
-        console.log(creditorId);
+        console.log(creditorIds);
         console.log(debtorIDs);   
 
-        setQueryLink(`creditorId=${creditorId}&debtorIds=${debtorIDs}`)
+        setQueryLink(`creditorIds=${creditorId}&debtorIds=${debtorIDs}`)
         if(submitButtonRef.current){
             submitButtonRef.current.disabled = false;
         }
@@ -36,22 +37,22 @@ export function Filter(){
                     <ul className="wrap-break-word text-left h-[80%] flex flex-col justify-around">
                     <li className="flex flex-row justify-between pb-1">Filter theo Chủ nợ: 
                         <span>
-                            <input type="radio" id="creditor-Phuong" value="1" name = "creditor" />
+                            <input type="checkbox" id="creditor-Phuong" value="1" name = "creditor" />
                             <label htmlFor="creditor-Phuong">Phương</label>
                         </span>
 
                         <span>
-                            <input type="radio" id="creditor-Pha" value="2" name = "creditor" />
+                            <input type="checkbox" id="creditor-Pha" value="2" name = "creditor" />
                             <label htmlFor="creditor-Pha">Pha</label>
                         </span>
                             
                         <span>
-                            <input type="radio" id="creditor-Thinh" value="3" name = "creditor" />
+                            <input type="checkbox" id="creditor-Thinh" value="3" name = "creditor" />
                             <label htmlFor="creditor-Thinh">Thịnh</label>
                         </span>
 
                         <span>
-                            <input type="radio" id="creditor-Tuan" value="4" name = "creditor" />
+                            <input type="checkbox" id="creditor-Tuan" value="4" name = "creditor" />
                             <label htmlFor="creditor-Tuan">Tuấn</label>
                         </span>
                     </li>
