@@ -12,7 +12,7 @@ export interface DashboardInputProps{
 
 export function Dashboard({ linkQuery } : DashboardInputProps){
     const fetchData = async () => {
-        const data = await fetch(`http://localhost:3001/v1/bills/query?${linkQuery}`)
+        const data = await fetch(`https://trebt-iou-api.onrender.com/v1/bills/query?${linkQuery}`)
             .then(data => data.json())
         return data
     }
