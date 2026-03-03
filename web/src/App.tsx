@@ -54,7 +54,6 @@ function App() {
 
         
             <div className="flex flex-row items-center justify-center sm:justify-end gap-3">
-                <span className="text-sm opacity-80 hidden sm:inline">{userName}</span>
                 <button
                   onClick={logout}
                   className="text-sm px-3 py-1.5 rounded-lg bg-(--clr) hover:scale-105 transition-all cursor-pointer"

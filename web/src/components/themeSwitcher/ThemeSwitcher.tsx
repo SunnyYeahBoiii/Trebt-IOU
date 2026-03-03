@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 
 export function ThemeSwitch() {
-    const [isLightTheme , setTheme] = useState<boolean>(localStorage.getItem('isLightTheme') === '0' ? false : true);
-    const innerButtonRef = useRef<HTMLDivElement | null>(null)
+    const [isLightTheme , setTheme] = useState<boolean>(localStorage.getItem('isLightTheme') !== '0');
 
     useEffect(() => {
         if(!isLightTheme){
@@ -19,22 +18,14 @@ export function ThemeSwitch() {
         }
     } , [isLightTheme])
 
-    useEffect(() => {
-    } , [])
-
-    const handleChangeTheme = () => {
-        setTheme(!isLightTheme);
-    }
-
     return (
         <div
-            className="bg-(--bg) w-18 h-10 rounded-full relative cursor-pointer items-center px-1 flex"
-            onClick={() => handleChangeTheme()}
+            className="bg-(--bg) w-18 h-10 rounded-full cursor-pointer flex items-center px-1"
+            onClick={() => setTheme(!isLightTheme)}
         >
         <div
             className={`bg-(--text) w-8 h-8 rounded-full transition-all duration-300 ${isLightTheme ? "translate-x-0" : "translate-x-8"}`}
-            ref={innerButtonRef}
         />
         </div>
     );
-    }
+}
