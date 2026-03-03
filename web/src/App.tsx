@@ -6,8 +6,11 @@ import { Statistic } from './components/Statistic'
 import { AddBill } from './components/AdBill'
 import { useEffect, useState } from 'react'
 import { Filter } from './components/Filter'
+import { LoginPopup } from './components/LoginPopup'
+import { useAuth } from './contexts/AuthContext'
 
 function App() {
+  const { isAuthenticated, userName, logout } = useAuth();
   const [currentTime , setTime] = useState<Date>(new Date());
 
   useEffect(() => {
@@ -20,10 +23,18 @@ function App() {
     }
   } , [])
 
+  if (!isAuthenticated) {
+    return (
+      <div className="w-screen min-h-screen bg-[var(--bg)]">
+        <LoginPopup />
+      </div>
+    );
+  }
+
   return (
   <>
       <div className="w-screen min-h-screen bg-[var(--bg)]">
-      <div className="min-h-screen px-[10vw] py-[2.5vh]">
+      <div className="min-h-screen px-[10vw] py-[2.5vh] flex flex-col">
         <div
           className="bg-[var(--btn)] mb-4 p-4 rounded-xl grid sm:grid-cols-[1fr_1fr_1fr] sm:grid-rows-1 grid-cols-[1fr] grid-rows-2 items-center text-center min-h-20"
         >
@@ -42,7 +53,14 @@ function App() {
             </h1>
 
         
-            <div className="flex flex-row justify-center sm:justify-end">
+            <div className="flex flex-row items-center justify-center sm:justify-end gap-3">
+                <span className="text-sm opacity-80 hidden sm:inline">{userName}</span>
+                <button
+                  onClick={logout}
+                  className="text-sm px-3 py-1.5 rounded-lg bg-(--clr) hover:scale-105 transition-all cursor-pointer"
+                >
+                  Đăng xuất
+                </button>
                 <ThemeSwitch />
             </div>
         </div>

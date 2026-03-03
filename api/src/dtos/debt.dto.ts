@@ -2,8 +2,8 @@ import {
   IsString,
   IsNumber,
   IsNotEmpty,
+  IsIn,
   Min,
-  MaxLength,
 } from 'class-validator';
 
 export class DebtDto {
@@ -11,11 +11,12 @@ export class DebtDto {
 
   @IsString()
   @IsNotEmpty()
-  @MaxLength(1)
+  @IsIn(['1', '2', '3', '4'])
   creditorId: string;
 
   @IsString()
   @IsNotEmpty()
+  @IsIn(['1', '2', '3', '4'])
   debtorId: string;
 
   @IsNumber()

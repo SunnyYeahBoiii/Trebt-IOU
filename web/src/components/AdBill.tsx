@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import axios from "axios";
+import { api } from "@/lib/api";
 
 export function AddBill(){
     const [totalAmount , setTotalAmount] = useState<number>(0);
@@ -12,7 +12,6 @@ export function AddBill(){
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        console.log(submitButtonRef)
         if(submitButtonRef.current){
             submitButtonRef.current.disabled = true;
         }
@@ -27,14 +26,12 @@ export function AddBill(){
         const totalAmount: FormDataEntryValue | null = formData.get('totalAmount');
         const description: FormDataEntryValue | null = formData.get('description');
 
-        console.log(creditorId);
-        console.log(debtorIDs);
-        console.log(totalAmount);
-        console.log(description);
-
         if(!creditorId || !debtorIDs || !totalAmount || totalAmount === "0"){
             const message = `${!creditorId ? "Chủ nợ không được phép rỗng!\n" : ""}${!debtorIDs ? "Người nợ bắt buộc phải có 1 người!\n" : ""}${!totalAmount || totalAmount === "0" ? "Bắt buộc phải có số tiền và khác không!\n" : ""}`;
             alert(message);
+            if(submitButtonRef.current){
+                submitButtonRef.current.disabled = false;
+            }
             return;
         }
 
@@ -46,7 +43,7 @@ export function AddBill(){
             billType: "SPLITTING",
         }        
 
-        axios.post('https://trebt-iou-api.onrender.com/v1/bills/add' , Bill)
+        api.post('/bills/add' , Bill)
             .then(() => {
                 alert('Thêm nợ thành công!'); 
                 if(submitButtonRef.current){

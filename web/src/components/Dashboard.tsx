@@ -1,60 +1,41 @@
 import type { BillDto } from "@/dtos/bill.dto";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import loadingGif from "@/assets/icons8-loading.png";
 import { Options } from "./dialogs/Options";
 import { idsToNames } from "@/helper/idToName.helper";
 import { addDotsToMoney } from "@/helper/amountDots.helper";
 import { useQuery } from "@tanstack/react-query"
+import { apiFetch } from "@/lib/api";
 
-export interface DashboardInputProps{
+export interface DashboardInputProps {
     linkQuery: string;
 }
 
-export function Dashboard({ linkQuery } : DashboardInputProps){
+export function Dashboard({ linkQuery }: DashboardInputProps) {
     const fetchData = async () => {
-        const data = await fetch(`https://trebt-iou-api.onrender.com/v1/bills/query?${linkQuery}`)
+        const data = await apiFetch(`/bills/query?${linkQuery}`)
             .then(data => data.json())
         return data
     }
 
     const query = useQuery<BillDto[]>({
-        queryKey: ['data' , linkQuery],
+        queryKey: ['data', linkQuery],
         queryFn: fetchData,
     })
 
-    const [dialogData , setDialogData] = useState<BillDto>({
-        id:"1" ,
-        creditorId:"1" ,
-        debtorIDs:"1" ,
-        createdAt:new Date() ,
-        updatedAt:new Date() ,
-        totalAmount: 0 ,
+    const [dialogData, setDialogData] = useState<BillDto>({
+        id: "1",
+        creditorId: "1",
+        debtorIDs: "1",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        totalAmount: 0,
         billType: "SPLITTING",
         description: "none"
     });
-    
-    const [showingOptions , toggleOptions] = useState<boolean>(false);
-    const [showingEditBil , toggleEditBill] = useState<boolean>(false);
 
-    useEffect(() => {
-    } , [] )
-
-    useEffect(() => {
-        if (showingOptions || showingEditBil) {
-        // Disable scrolling
-            document.body.style.overflow = 'hidden';
-        } else {
-        // Re-enable scrolling
-            document.body.style.overflow = 'unset';
-        }
-
-        // Cleanup function to ensure scroll is restored if component unmounts
-        return () => {
-            document.body.style.overflow = 'unset';
-        };
-    }, [showingOptions , showingEditBil]);
-
-    
+    const [showingOptions, toggleOptions] = useState<boolean>(false);
+    const [showingEditBil, toggleEditBill] = useState<boolean>(false);
 
     const openOptions = (data: BillDto) => {
         setDialogData(data);
@@ -64,7 +45,7 @@ export function Dashboard({ linkQuery } : DashboardInputProps){
     const closeOptions = () => {
         toggleOptions(false);
     }
-    
+
     const openEditBill = (data: BillDto) => {
         setDialogData(data);
         toggleEditBill(true)
@@ -72,18 +53,17 @@ export function Dashboard({ linkQuery } : DashboardInputProps){
 
 
     return (<>
-        
-        {query.isLoading && 
-        <div className="dashboard-wrapper w-auto rounded-xl bg-(--btn) min-w-[50vw] min-h-[calc(max(500px,50vh))] flex flex-col justify-center items-center">
-            <img src={loadingGif} alt="Computer man" style={{width: '50px', height: '50px'}} className="animate-spin text-center content-center"/>
-            <p>Fetching data from server</p>
-        </div>
+
+        {query.isLoading &&
+            <div className="dashboard-wrapper w-auto rounded-xl bg-(--btn) min-w-[50vw] min-h-[calc(max(500px,50vh))] flex flex-col justify-center items-center">
+                <img src={loadingGif} alt="Computer man" style={{ width: '50px', height: '50px' }} className="animate-spin text-center content-center" />
+                <p>Fetching data from server</p>
+            </div>
         }
 
-        {query.data && 
+        {query.data &&
             <>
-                <div className="table-wrapper rounded-xl bg-(--btn) h-[calc(max(500px,55vh))] flex flex-col overflow-auto [&::-webkit-scrollbar]:w-0">
-                    {/* <div className="w-[50px] h-[50px] bg-black"></div> */}
+                <div className="table-wrapper rounded-xl bg-(--btn) h-[calc(max(500px,55vh))] flex flex-1 flex-col overflow-auto [&::-webkit-scrollbar]:w-0">
                     <table className="table-fixed w-full">
                         <colgroup>
                             <col className="w-[15%]" />
@@ -103,25 +83,25 @@ export function Dashboard({ linkQuery } : DashboardInputProps){
                         </thead>
 
                         <tbody>
-                        {query.data.map(data => 
-                            <tr key={data.id}>
-                                <td className="p-2.5 border-white border-3 border-l-0 text-center truncate">{idsToNames(data.creditorId)}</td>
-                                <td className="p-2.5 border-white border-3 text-center truncate">{idsToNames(data.debtorIDs)}</td>
-                                <td className="p-2.5 border-white border-3 text-center truncate">{addDotsToMoney(data.totalAmount)}</td>
-                                <td className="p-2.5 border-white border-3 text-center truncate">{data.description}</td>
-                                <td className="p-2.5 border-white border-3 border-r-0 text-center truncate cursor-pointer" onClick={() => openOptions(data)}>...</td>
-                            </tr>
-                        )}
+                            {query.data.map(data =>
+                                <tr key={data.id}>
+                                    <td className="p-2.5 border-white border-3 border-l-0 text-center truncate">{idsToNames(data.creditorId)}</td>
+                                    <td className="p-2.5 border-white border-3 text-center truncate">{idsToNames(data.debtorIDs)}</td>
+                                    <td className="p-2.5 border-white border-3 text-center truncate">{addDotsToMoney(data.totalAmount)}</td>
+                                    <td className="p-2.5 border-white border-3 text-center truncate">{data.description}</td>
+                                    <td className="p-2.5 border-white border-3 border-r-0 text-center truncate cursor-pointer" onClick={() => openOptions(data)}>...</td>
+                                </tr>
+                            )}
                         </tbody>
                     </table>
                 </div>
             </>
         }
 
-        { showingOptions &&
-            <Options openEditBill={openEditBill} closeDialog={closeOptions} data = {dialogData}/>
+        {showingOptions &&
+            <Options openEditBill={openEditBill} closeDialog={closeOptions} data={dialogData} />
         }
 
-        
+
     </>);
 }

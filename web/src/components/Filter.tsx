@@ -8,7 +8,6 @@ export function Filter(){
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        console.log(submitButtonRef)
         if(submitButtonRef.current){
             submitButtonRef.current.disabled = true;
         }
@@ -18,10 +17,7 @@ export function Filter(){
         const creditorId: FormDataEntryValue[] = formData.getAll('creditor') ?? "";
         const creditorIds: string = creditorId.join(','); 
         const debtors: FormDataEntryValue[] = formData.getAll('debtor') ?? "";
-        const debtorIDs: string = debtors.join(',');
-
-        console.log(creditorIds);
-        console.log(debtorIDs);   
+        const debtorIDs: string = debtors.join(',');   
 
         setQueryLink(`creditorIds=${creditorId}&debtorIds=${debtorIDs}`)
         if(submitButtonRef.current){

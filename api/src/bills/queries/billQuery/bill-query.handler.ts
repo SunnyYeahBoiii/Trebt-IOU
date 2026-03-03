@@ -14,30 +14,27 @@ export class BillQueryHandler implements IQueryHandler<BillQuery, Bill[]> {
     const query: QueryDto = command.query;
     const where: Prisma.BillWhereInput = {};
     const debtors = query.debtorIds?.split(',');
-    const creditors = query.creditorId?.split(',');
+    const creditors = query.creditorIds?.split(',');
 
-    console.log(creditors);
-
-    if (creditors){
-      where.creditorId = {in: creditors};
+    if (creditors) {
+      where.creditorId = { in: creditors };
     }
-    if (query.lowerAmount || query.upperAmount) {
+    if (query.lowerAmount != null || query.upperAmount != null) {
       where.totalAmount = {};
-      if (query.lowerAmount) where.totalAmount.gte = query.lowerAmount;
-      if (query.upperAmount) where.totalAmount.lte = query.upperAmount;
+      if (query.lowerAmount != null) where.totalAmount.gte = query.lowerAmount;
+      if (query.upperAmount != null) where.totalAmount.lte = query.upperAmount;
     }
-    if(debtors){
-      where.AND = debtors.map(debtor => ({
+    if (debtors) {
+      where.AND = debtors.map((debtor) => ({
         debtorIDs: {
           contains: debtor,
-        }
-      }))
+        },
+      }));
     }
     return this.prisma.bill.findMany({
       where,
-      orderBy: { 
-        updatedAt: query.timeAsc ? 'asc' : 'desc', 
-        // totalAmount: query.amountAsc ? 'asc' : 'desc',
+      orderBy: {
+        updatedAt: query.timeAsc ? 'asc' : 'desc',
       },
     });
   }

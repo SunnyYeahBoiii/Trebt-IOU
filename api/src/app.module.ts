@@ -1,16 +1,31 @@
-import { Global, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
+import { ConfigModule } from '@nestjs/config';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { CqrsModule } from '@nestjs/cqrs';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DebtsModule } from './debts/debts.module';
-import { ConfigService } from '@nestjs/config';
 import { BillModule } from './bills/bill.module';
 import { StatisticModule } from './statistics/statistic.module';
-import { CqrsModule } from '@nestjs/cqrs';
+import { ApiKeyGuard } from './guards/api-key.guard';
 
-@Global()
 @Module({
-  imports: [DebtsModule, BillModule, StatisticModule, CqrsModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    ThrottlerModule.forRoot({
+      throttlers: [{ ttl: 60_000, limit: 100 }],
+    }),
+    DebtsModule,
+    BillModule,
+    StatisticModule,
+    CqrsModule,
+  ],
   controllers: [AppController],
-  providers: [AppService, ConfigService],
+  providers: [
+    AppService,
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
+    { provide: APP_GUARD, useClass: ApiKeyGuard },
+  ],
 })
 export class AppModule {}

@@ -1,7 +1,7 @@
 import type { BillDto } from "@/dtos/bill.dto";
 import { addDotsToMoney } from "@/helper/amountDots.helper";
 import { idsToNames } from "@/helper/idToName.helper";
-import axios from "axios";
+import { api } from "@/lib/api";
 import { useEffect, useRef, useState } from "react";
 import { EditDialog } from "./EditDialog";
 import loadingGif from "@/assets/icons8-loading.png"
@@ -29,7 +29,7 @@ export function Options({closeDialog , data } : DialogProps){
         }
 
         setLoading(true);
-        axios.post('https://trebt-iou-api.onrender.com/v1/bills/remove' , data)
+        api.post('/bills/remove' , data)
             .then(() => {alert('Nợ đã được xóa'); closeDialog(); setLoading(false)})
             .catch(err => {alert(err)
                 if(deleteBillRef.current){
@@ -40,7 +40,6 @@ export function Options({closeDialog , data } : DialogProps){
     }
 
     useEffect(() => {
-        console.log(1);
         if(showingEditBil){
             if(dialogRef.current) dialogRef.current.style.display = "none";
         }else if(dialogRef.current) dialogRef.current.style.display = "flex";
@@ -48,13 +47,10 @@ export function Options({closeDialog , data } : DialogProps){
 
     return (<>
         <div className="fixed top-0 left-0 w-screen h-screen bg-(--bg) opacity-70 backdrop-blur-3xl cursor-not-allowed "></div>
-        {/* 1. Đảm bảo không có dấu $ ở đây */}
 {isLoading && (
   <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center">
-    {/* Lớp phủ tối riêng cho Loading để ngăn user bấm vào bên dưới */}
     <div className="absolute inset-0 bg-(--bg) opacity-70 backdrop-blur-md"></div>
     
-    {/* Nội dung Loading - Dùng flexbox để căn giữa thay vì top-1/2 left-1/2 */}
         <div className="relative flex flex-col items-center z-[101]">
         <img 
             src={loadingGif} 

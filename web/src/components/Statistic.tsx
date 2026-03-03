@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import loadingGif from "@/assets/icons8-loading.png";
 import { addDotsToMoney } from "@/helper/amountDots.helper";
+import { apiFetch } from "@/lib/api";
 
 
 export function Statistic(){
@@ -12,7 +13,7 @@ export function Statistic(){
                                                     [0 , 0 , 0 , 0 , 0 ] , 
                                                     [0 , 0 , 0 , 0 , 0 ]]); 
     useEffect(() => {
-        fetch('https://trebt-iou-api.onrender.com/v1/statistic')
+        apiFetch('/statistic')
             .then(data => data.json())
             .then(data => {
                 for(const stat of data){

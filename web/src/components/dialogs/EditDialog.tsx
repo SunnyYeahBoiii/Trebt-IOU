@@ -1,5 +1,5 @@
 import type { BillDto } from "@/dtos/bill.dto";
-import axios from "axios";
+import { api } from "@/lib/api";
 import React, { useRef, useState } from "react";
 
 interface DialogProps {
@@ -20,7 +20,6 @@ export function EditDialog({  setLoading, closeEditBill , closeDialog , data } :
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        console.log(submitButtonRef)
         if(submitButtonRef.current){
             submitButtonRef.current.disabled = true;
         }
@@ -32,12 +31,6 @@ export function EditDialog({  setLoading, closeEditBill , closeDialog , data } :
         const debtorIDs: string = debtors.join(',');
         const totalAmount: FormDataEntryValue | null = formData.get('totalAmount');
         const description: FormDataEntryValue | null = formData.get('description');
-
-        console.log(data.id);
-        console.log(creditorId);
-        console.log(debtorIDs);
-        console.log(totalAmount);
-        console.log(description);
 
         if(!creditorId || !debtorIDs || !totalAmount || totalAmount === "0"){
             if(submitButtonRef.current){
@@ -58,7 +51,7 @@ export function EditDialog({  setLoading, closeEditBill , closeDialog , data } :
         }        
 
         setLoading(true);
-        axios.post('https://trebt-iou-api.onrender.com/v1/bills/edit' , Bill)
+        api.post('/bills/edit' , Bill)
             .then(() => {
                 alert('Cập nhật thành công!'); 
                 if(submitButtonRef.current){
