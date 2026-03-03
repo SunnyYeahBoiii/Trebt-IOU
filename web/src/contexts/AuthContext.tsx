@@ -1,6 +1,6 @@
-import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
+import { createContext, useState, useCallback, type ReactNode } from 'react';
 
-interface AuthState {
+export interface AuthState {
   isAuthenticated: boolean;
   userId: string | null;
   userName: string | null;
@@ -15,7 +15,7 @@ const USER_NAMES: Record<string, string> = {
   '4': 'Tuấn',
 };
 
-const AuthContext = createContext<AuthState | null>(null);
+export const AuthContext = createContext<AuthState | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setAuthenticated] = useState(
@@ -63,10 +63,4 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       {children}
     </AuthContext.Provider>
   );
-}
-
-export function useAuth() {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error('useAuth must be used within AuthProvider');
-  return ctx;
 }

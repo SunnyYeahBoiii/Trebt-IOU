@@ -7,7 +7,7 @@ import { AddBill } from './components/AdBill'
 import { useEffect, useState } from 'react'
 import { Filter } from './components/Filter'
 import { LoginPopup } from './components/LoginPopup'
-import { useAuth } from './contexts/AuthContext'
+import { useAuth } from './hooks/useAuth'
 
 function App() {
   const { isAuthenticated, userName, logout } = useAuth();

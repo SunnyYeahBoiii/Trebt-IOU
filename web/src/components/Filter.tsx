@@ -15,11 +15,10 @@ export function Filter(){
         const formData = new FormData(e.currentTarget);
 
         const creditorId: FormDataEntryValue[] = formData.getAll('creditor') ?? "";
-        const creditorIds: string = creditorId.join(','); 
         const debtors: FormDataEntryValue[] = formData.getAll('debtor') ?? "";
-        const debtorIDs: string = debtors.join(',');   
+        const debtorIDs: string = debtors.join(',');
 
-        setQueryLink(`creditorIds=${creditorId}&debtorIds=${debtorIDs}`)
+        setQueryLink(`creditorIds=${creditorId.join(',')}&debtorIds=${debtorIDs}`)
         if(submitButtonRef.current){
             submitButtonRef.current.disabled = false;
         }

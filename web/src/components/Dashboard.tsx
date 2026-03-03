@@ -35,7 +35,6 @@ export function Dashboard({ linkQuery }: DashboardInputProps) {
     });
 
     const [showingOptions, toggleOptions] = useState<boolean>(false);
-    const [showingEditBil, toggleEditBill] = useState<boolean>(false);
 
     const openOptions = (data: BillDto) => {
         setDialogData(data);
@@ -48,9 +47,7 @@ export function Dashboard({ linkQuery }: DashboardInputProps) {
 
     const openEditBill = (data: BillDto) => {
         setDialogData(data);
-        toggleEditBill(true)
     }
-
 
     return (<>
 
