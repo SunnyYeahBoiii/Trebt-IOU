@@ -10,7 +10,7 @@ import { LoginPopup } from './components/LoginPopup'
 import { useAuth } from './hooks/useAuth'
 
 function App() {
-  const { isAuthenticated, userName, logout } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
   const [currentTime , setTime] = useState<Date>(new Date());
 
   useEffect(() => {
