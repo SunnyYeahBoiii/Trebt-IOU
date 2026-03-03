@@ -1,6 +1,6 @@
 import type { BillDto } from "@/dtos/bill.dto";
 import { api } from "@/lib/api";
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 interface DialogProps {
     setLoading: (state: boolean) => void;

@@ -9,6 +9,7 @@ import { DebtsModule } from './debts/debts.module';
 import { BillModule } from './bills/bill.module';
 import { StatisticModule } from './statistics/statistic.module';
 import { ApiKeyGuard } from './guards/api-key.guard';
+import { TokenService } from './services/token.service';
 
 @Module({
   imports: [
@@ -24,8 +25,10 @@ import { ApiKeyGuard } from './guards/api-key.guard';
   controllers: [AppController],
   providers: [
     AppService,
+    TokenService,
     { provide: APP_GUARD, useClass: ThrottlerGuard },
     { provide: APP_GUARD, useClass: ApiKeyGuard },
   ],
+  exports: [TokenService],
 })
 export class AppModule {}

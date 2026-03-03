@@ -24,6 +24,7 @@ import { BillService } from './bills/bill.service';
 import { BillQuery } from './bills/queries/billQuery/bill-query.query';
 import { QueryStatisticQuery } from './statistics/queries/queryStatistic/query-statistic.query';
 import { Public } from './decorators/public.decorator';
+import { TokenService } from './services/token.service';
 
 @ApiTags('API')
 @ApiSecurity('api-key')
@@ -34,6 +35,7 @@ export class AppController {
     private readonly bill: BillService,
     private readonly queryBus: QueryBus,
     private readonly configService: ConfigService,
+    private readonly tokenService: TokenService,
   ) {}
 
   @Get()
@@ -49,7 +51,8 @@ export class AppController {
   @ApiResponse({ status: 200, description: 'API key is valid' })
   @ApiResponse({ status: 401, description: 'Invalid or missing API key' })
   verify() {
-    return { verified: true };
+    const token = this.tokenService.generate();
+    return { verified: true, token };
   }
 
   @Post('seed')

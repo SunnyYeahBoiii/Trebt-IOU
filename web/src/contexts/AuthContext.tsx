@@ -33,7 +33,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
       if (!res.ok) return false;
 
-      localStorage.setItem('api_key', apiKey);
+      const { token } = await res.json();
+      localStorage.setItem('api_key', token);
       localStorage.setItem('user_id', uid);
       setAuthenticated(true);
       setUserId(uid);
