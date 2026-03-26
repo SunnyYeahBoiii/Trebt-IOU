@@ -1,20 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Iosevka+Charon:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Roboto:ital,wght@0,100..900;1,100..900&family=SN+Pro:ital,wght@0,200..900;1,200..900&display=swap');
 @import "tailwindcss";
 
 
-html, body {
-    font-family: Rowdies , Consolas;
+html,
+body {
+    font-family: Roboto;
     font-weight: 700;
     font-size: 20px;
     color: var(--text);
     background-color: var(--bg);
 }
 
-h1{
+h1 {
     font-size: 40px;
 }
 
-:root{
+:root {
     /* Light theme */
     --light-bg: #EAE0CC;
     --light-btn: #856A5D;
