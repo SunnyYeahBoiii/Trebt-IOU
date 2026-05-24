@@ -1,21 +1,39 @@
 export const colors = {
   light: {
-    bg: "#EAE0CC",
-    btn: "#856A5D",
-    clr: "#B6AE9F",
-    text: "#1a1a1a",
-    border: "#ffffff",
-    err: "#960200",
-    ac: "#A2FAA3",
+    bg: "oklch(0.94 0.027 82)",
+    surface: "oklch(0.985 0.012 87)",
+    "surface-raised": "oklch(0.965 0.019 80)",
+    btn: "oklch(0.43 0.073 53)",
+    "btn-hover": "oklch(0.36 0.08 49)",
+    clr: "oklch(0.89 0.032 78)",
+    text: "oklch(0.25 0.035 54)",
+    "text-muted": "oklch(0.49 0.039 59)",
+    border: "oklch(0.78 0.036 75)",
+    err: "oklch(0.54 0.17 28)",
+    "err-state": "oklch(0.94 0.045 28)",
+    ac: "oklch(0.62 0.086 66)",
+    "ac-state": "oklch(0.87 0.046 70)",
+    focus: "oklch(0.53 0.105 55)",
+    shadow: "0 14px 36px oklch(0.28 0.047 52 / 0.16)",
+    "shadow-soft": "0 6px 20px oklch(0.28 0.047 52 / 0.1)",
   },
   dark: {
-    bg: "#171614",
-    btn: "#312F2F",
-    clr: "#393E41",
-    text: "#e8e8e8",
-    border: "#ffffff",
-    err: "#ff4d4d",
-    ac: "#A2FAA3",
+    bg: "oklch(0.21 0.035 48)",
+    surface: "oklch(0.27 0.039 50)",
+    "surface-raised": "oklch(0.32 0.044 52)",
+    btn: "oklch(0.68 0.083 68)",
+    "btn-hover": "oklch(0.75 0.083 69)",
+    clr: "oklch(0.38 0.046 55)",
+    text: "oklch(0.92 0.031 82)",
+    "text-muted": "oklch(0.75 0.033 78)",
+    border: "oklch(0.44 0.047 57)",
+    err: "oklch(0.7 0.16 28)",
+    "err-state": "oklch(0.31 0.045 28)",
+    ac: "oklch(0.75 0.091 72)",
+    "ac-state": "oklch(0.37 0.061 62)",
+    focus: "oklch(0.76 0.095 72)",
+    shadow: "0 16px 38px oklch(0.12 0.03 45 / 0.42)",
+    "shadow-soft": "0 8px 24px oklch(0.12 0.03 45 / 0.3)",
   },
 } as const;
 
@@ -23,6 +41,7 @@ export type ColorTheme = keyof typeof colors;
 export type ColorKey = keyof (typeof colors)["light"];
 
 export function applyTheme(theme: ColorTheme) {
+  document.documentElement.dataset.theme = theme;
   const root = document.documentElement.style;
   const palette = colors[theme];
   for (const [key, value] of Object.entries(palette)) {
