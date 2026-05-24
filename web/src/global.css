@@ -1,38 +1,51 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Iosevka+Charon:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Roboto:ital,wght@0,100..900;1,100..900&family=SN+Pro:ital,wght@0,200..900;1,200..900&display=swap');
 @import "tailwindcss";
 
-
-html,
-body {
-    font-family: Roboto;
-    font-weight: 700;
-    font-size: 20px;
-    color: var(--text);
-    background-color: var(--bg);
-}
-
-h1 {
-    font-size: 40px;
-}
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Iosevka+Charon&family=Roboto&family=SN+Pro:wght@400;500;600;700&display=swap");
 
 :root {
-    /* Light theme */
-    --light-bg: #EAE0CC;
-    --light-btn: #856A5D;
-    --light-clr: #B6AE9F;
+  /* Light theme defaults */
+  --bg: #EAE0CC;
+  --btn: #856A5D;
+  --clr: #B6AE9F;
+  --text: #1a1a1a;
+  --border: #ffffff;
+  --err: #960200;
+  --ac: #A2FAA3;
+}
 
-    /* Dark theme */
-    --dark-bg: #171614;
-    --dark-btn: #312F2F;
-    --dark-clr: #393E41;
+[data-theme="dark"] {
+  --bg: #171614;
+  --btn: #312F2F;
+  --clr: #393E41;
+  --text: #e8e8e8;
+  --border: #ffffff;
+  --err: #ff4d4d;
+  --ac: #A2FAA3;
+}
 
-    /* States */
-    --err-state: #960200;
-    --ac-state: #A2FAA3;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    /* Current Theme*/
-    --text: #FFFFFF;
-    --bg: var(--light-bg);
-    --btn: var(--light-btn);
-    --clr: var(--light-clr);
+body {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* CSS Spinner (replaces PNG loading icon) */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--clr);
+  border-top-color: var(--btn);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
 }
