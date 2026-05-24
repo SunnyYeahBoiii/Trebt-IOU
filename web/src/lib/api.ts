@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { showToast } from '@/lib/toast';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
@@ -20,7 +21,10 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       localStorage.removeItem('api_key');
       localStorage.removeItem('user_id');
-      window.location.reload();
+      showToast('Phiên đăng nhập hết hạn, vui lòng đăng nhập lại', 'error');
+      window.location.href = '/';
+    } else if (error.response?.status === 500) {
+      showToast('Lỗi máy chủ, vui lòng thử lại sau', 'error');
     }
     return Promise.reject(error);
   },

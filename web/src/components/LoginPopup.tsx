@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { getUserEntries } from '../config/users';
+import { Card, Button, FormField, Stack } from '../../ui';
 
 const USERS = getUserEntries().map(([id, name]) => ({ id, name }));
 
@@ -34,20 +35,20 @@ export function LoginPopup() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="bg-(--btn) rounded-2xl p-8 w-[90vw] max-w-[400px] shadow-2xl">
+      <Card className="w-[90vw] max-w-[400px] shadow-2xl p-8">
         <h1 className="text-center mb-2">Sổ Thơ Nụ</h1>
         <p className="text-center text-sm opacity-70 mb-6">Đăng nhập để tiếp tục</p>
 
         <form onSubmit={handleSubmit}>
           <div className="mb-5">
             <label className="block mb-2 text-sm">Bạn là ai?</label>
-            <div className="grid grid-cols-2 gap-2">
+            <Stack direction="horizontal" wrap gap="sm" className="grid-cols-2">
               {USERS.map((u) => (
                 <button
                   key={u.id}
                   type="button"
                   onClick={() => setSelectedUser(u.id)}
-                  className={`p-3 rounded-xl transition-all cursor-pointer text-base ${
+                  className={`p-3 rounded-xl transition-all cursor-pointer text-base w-full ${
                     selectedUser === u.id
                       ? 'bg-(--ac-state) text-black scale-105'
                       : 'bg-(--clr) hover:scale-105'
@@ -56,17 +57,17 @@ export function LoginPopup() {
                   {u.name}
                 </button>
               ))}
-            </div>
+            </Stack>
           </div>
 
           <div className="mb-5">
-            <label className="block mb-2 text-sm">Mật khẩu nhóm</label>
-            <input
+            <FormField
+              label="Mật khẩu nhóm"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-3 rounded-xl bg-(--clr) outline-none text-base"
               placeholder="Nhập mật khẩu"
+              className="text-base"
             />
           </div>
 
@@ -76,15 +77,16 @@ export function LoginPopup() {
             </p>
           )}
 
-          <button
+          <Button
             type="submit"
-            disabled={loading}
-            className="w-full p-3 rounded-xl bg-(--ac-state) text-black font-bold hover:opacity-90 transition-all disabled:opacity-50 cursor-pointer text-base"
+            variant="primary"
+            loading={loading}
+            className="w-full text-base"
           >
             {loading ? 'Đang xác thực...' : 'Đăng nhập'}
-          </button>
+          </Button>
         </form>
-      </div>
+      </Card>
     </div>
   );
 }

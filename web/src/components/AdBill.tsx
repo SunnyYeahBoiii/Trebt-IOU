@@ -1,38 +1,35 @@
 import { useRef, useState } from "react";
 import { api } from "@/lib/api";
 import { showToast } from "../../lib/toast";
+import { Card, FormGroup, FormField, Button, Stack } from "../../ui";
+import { getUserEntries } from "../../config/users";
 
-export function AddBill(){
-    const [totalAmount , setTotalAmount] = useState<number>(0);
-    const submitButtonRef = useRef<HTMLButtonElement>(null)
+const USER_OPTIONS = getUserEntries().map(([id, name]) => ({ id, label: name }));
 
-    const handleChangeAmount = (e : React.ChangeEvent<HTMLInputElement>) => {
+export function AddBill() {
+    const [totalAmount, setTotalAmount] = useState<number>(0);
+    const [selectedCreditor, setSelectedCreditor] = useState<string>("");
+    const [selectedDebtors, setSelectedDebtors] = useState<string[]>([]);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTotalAmount(parseInt(e.target.value));
-    }
+    };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        if(submitButtonRef.current){
-            submitButtonRef.current.disabled = true;
-        }
-
         const formData = new FormData(e.currentTarget);
-
-        if(!formData.get('creditor')) return;
 
         const creditorId: FormDataEntryValue | null = formData.get('creditor');
         const debtors: FormDataEntryValue[] = formData.getAll('debtor');
         const debtorIDs: string = debtors.join(',');
-        const totalAmount: FormDataEntryValue | null = formData.get('totalAmount');
+        const totalAmountVal: FormDataEntryValue | null = formData.get('totalAmount');
         const description: FormDataEntryValue | null = formData.get('description');
 
-        if(!creditorId || !debtorIDs || !totalAmount || totalAmount === "0"){
-            const message = `${!creditorId ? "Chủ nợ không được phép rỗng!\n" : ""}${!debtorIDs ? "Người nợ bắt buộc phải có 1 người!\n" : ""}${!totalAmount || totalAmount === "0" ? "Bắt buộc phải có số tiền và khác không!\n" : ""}`;
+        if (!creditorId || !debtorIDs || !totalAmountVal || totalAmountVal === "0") {
+            const message = `${!creditorId ? "Chủ nợ không được phép rỗng!\n" : ""}${!debtorIDs ? "Người nợ bắt buộc phải có 1 người!\n" : ""}${!totalAmountVal || totalAmountVal === "0" ? "Bắt buộc phải có số tiền và khác không!\n" : ""}`;
             showToast(message, "error");
-            if(submitButtonRef.current){
-                submitButtonRef.current.disabled = false;
-            }
             return;
         }
 
@@ -40,90 +37,83 @@ export function AddBill(){
             description: description,
             creditorId: creditorId,
             debtorIDs: debtorIDs,
-            totalAmount: parseInt(totalAmount as string),
+            totalAmount: parseInt(totalAmountVal as string),
             billType: "SPLITTING",
-        }
+        };
 
-        api.post('/bills/add' , Bill)
+        setIsSubmitting(true);
+        api.post('/bills/add', Bill)
             .then(() => {
                 showToast('Thêm nợ thành công!', 'success');
-                if(submitButtonRef.current){
-                    submitButtonRef.current.disabled = false;
-                }
+                setIsSubmitting(false);
             })
             .catch(error => {
                 showToast(error?.message || 'Có lỗi xảy ra', 'error');
-                if(submitButtonRef.current){
-                    submitButtonRef.current.disabled = false;
-                }
-            })
-    }
+                setIsSubmitting(false);
+            });
+    };
 
-    return (<>
-        <div className="table-wrapper rounded-xl bg-(--btn) flex flex-col overflow-auto [&::-webkit-scrollbar]:w-0">
-            <div className="table p-2">
-                <h2 className="text-center"></h2>
-                <form onSubmit={handleSubmit}>
-                    <ul className="wrap-break-word text-left h-[80%] flex flex-col justify-around">
-                    <li className="flex flex-row justify-between pb-1">Chủ nợ:
-                        <span>
-                            <input type="radio" id="creditor-Phuong" value="1" name = "creditor" />
-                            <label htmlFor="creditor-Phuong">Phương</label>
-                        </span>
+    return (
+        <Card>
+            <form onSubmit={handleSubmit}>
+                <Stack gap="md">
+                    {/* Creditor - radio buttons */}
+                    <fieldset className="border border-(--clr) rounded-lg p-3">
+                        <legend className="text-sm font-medium text-white px-2">Chủ nợ</legend>
+                        <Stack direction="vertical" gap="sm" className="mt-2">
+                            {USER_OPTIONS.map((user) => (
+                                <label key={user.id} className="flex items-center gap-2 cursor-pointer text-(--text)">
+                                    <input
+                                        type="radio"
+                                        id={`creditor-${user.id}`}
+                                        value={user.id}
+                                        name="creditor"
+                                        checked={selectedCreditor === user.id}
+                                        onChange={() => setSelectedCreditor(user.id)}
+                                        className="accent-(--btn)"
+                                    />
+                                    {user.label}
+                                </label>
+                            ))}
+                        </Stack>
+                    </fieldset>
 
-                        <span>
-                            <input type="radio" id="creditor-Pha" value="2" name = "creditor" />
-                            <label htmlFor="creditor-Pha">Pha</label>
-                        </span>
+                    {/* Debtors - checkboxes */}
+                    <FormGroup
+                        label="Người nợ"
+                        options={USER_OPTIONS}
+                        selected={selectedDebtors}
+                        onChange={setSelectedDebtors}
+                    />
 
-                        <span>
-                            <input type="radio" id="creditor-Thinh" value="3" name = "creditor" />
-                            <label htmlFor="creditor-Thinh">Thịnh</label>
-                        </span>
+                    {/* Amount */}
+                    <FormField
+                        label="Số tiền"
+                        name="totalAmount"
+                        type="number"
+                        min={0}
+                        value={totalAmount}
+                        onChange={handleChangeAmount}
+                        className="text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
 
-                        <span>
-                            <input type="radio" id="creditor-Tuan" value="4" name = "creditor" />
-                            <label htmlFor="creditor-Tuan">Tuấn</label>
-                        </span>
-                    </li>
+                    {/* Note */}
+                    <FormField label="Ghi chú">
+                        <textarea
+                            name="description"
+                            className="h-[100px] w-full bg-(--clr) rounded-sm resize-none px-3 py-2 text-(--text) outline-none focus:ring-2 focus:ring-(--btn)"
+                            placeholder="Nhập ghi chú ở đây"
+                        />
+                    </FormField>
 
-                    <li className="flex flex-row justify-between pb-1">Người nợ:
-                        <span>
-                            <input type="checkbox" id="debtor-Phuong" name="debtor" value="1"/>
-                            <label htmlFor="debtor-Phuong">Phương</label>
-                        </span>
-
-                        <span>
-                            <input type="checkbox" id="debtor-Pha" name="debtor" value="2"/>
-                            <label htmlFor="debtor-Pha">Pha</label>
-                        </span>
-
-                        <span>
-                            <input type="checkbox" id="debtor-Thinh" name="debtor" value="3"/>
-                            <label htmlFor="debtor-Thinh">Thịnh</label>
-                        </span>
-
-                        <span>
-                            <input type="checkbox" id="debtor-Tuan" name="debtor" value="4"/>
-                            <label htmlFor="debtor-Tuan">Tuấn</label>
-                        </span>
-                    </li>
-
-                    <li className="flex flex-row justify-between pb-1">
-                        Số tiền:
-                        <input min={0} name="totalAmount" type="number" onChange={(e) => handleChangeAmount(e)}  className="text-right bg-(--clr) rounded-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" value={totalAmount} />
-                    </li>
-                    <li className="pb-1">
-                        Ghi chú: <br></br>
-                        <textarea name = "description" className="h-[100px] w-full bg-(--clr) rounded-sm resize-none" placeholder="Nhập ghi chú ở đây"></textarea>
-                    </li>
-                </ul>
-
-                <ul className = "flex flex-row justify-around">
-                    <li><button ref={submitButtonRef} type="submit" className="pl-5 pr-5 pt-2 pb-2 bg-(--clr) rounded-xl hover:scale-105">Cập nhật</button></li>
-                </ul>
-                </form>
-            </div>
-        </div>
-    </>);
+                    {/* Submit */}
+                    <div className="flex justify-center">
+                        <Button type="submit" variant="primary" loading={isSubmitting}>
+                            Thêm hóa đơn
+                        </Button>
+                    </div>
+                </Stack>
+            </form>
+        </Card>
+    );
 }

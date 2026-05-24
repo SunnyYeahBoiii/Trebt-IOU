@@ -1,7 +1,11 @@
 import type { BillDto } from "@/dtos/bill.dto";
 import { api } from "@/lib/api";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { showToast } from "../../../lib/toast";
+import { Dialog, FormField, Button, Stack, FormGroup } from "../../../ui";
+import { getUserEntries } from "../../../config/users";
+
+const USER_OPTIONS = getUserEntries().map(([id, name]) => ({ id, label: name }));
 
 interface DialogProps {
     setLoading: (state: boolean) => void;
@@ -10,135 +14,120 @@ interface DialogProps {
     data: BillDto,
 }
 
-export function EditDialog({  setLoading, closeEditBill , closeDialog , data } : DialogProps){
-    const [totalAmount , setTotalAmount] = useState<number>(data.totalAmount);
-    const submitButtonRef = useRef<HTMLButtonElement>(null)
-
-    const handleChangeAmount = (e : React.ChangeEvent<HTMLInputElement>) => {
-        setTotalAmount(parseInt(e.target.value));
-    }
+export function EditDialog({ setLoading, closeEditBill, closeDialog, data }: DialogProps) {
+    const [totalAmount, setTotalAmount] = useState<number>(data.totalAmount);
+    const [selectedCreditor, setSelectedCreditor] = useState<string>(data.creditorId);
+    const [selectedDebtors, setSelectedDebtors] = useState<string[]>(data.debtorIDs?.split(',') ?? []);
+    const [description, setDescription] = useState<string>(data.description ?? "");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-        if(submitButtonRef.current){
-            submitButtonRef.current.disabled = true;
-        }
 
         const formData = new FormData(e.currentTarget);
 
         const creditorId: FormDataEntryValue | null = formData.get('creditor');
         const debtors: FormDataEntryValue[] = formData.getAll('debtor');
         const debtorIDs: string = debtors.join(',');
-        const totalAmount: FormDataEntryValue | null = formData.get('totalAmount');
-        const description: FormDataEntryValue | null = formData.get('description');
+        const totalAmountVal: FormDataEntryValue | null = formData.get('totalAmount');
+        const desc: FormDataEntryValue | null = formData.get('description');
 
-        if(!creditorId || !debtorIDs || !totalAmount || totalAmount === "0"){
-            if(submitButtonRef.current){
-                submitButtonRef.current.disabled = false;
-            }
-            const message = `${!creditorId ? "Chủ nợ không được phép rỗng!\n" : ""}${!debtorIDs ? "Người nợ bắt buộc phải có 1 người!\n" : ""}${!totalAmount || totalAmount === "0" ? "Bắt buộc phải có số tiền và khác không!\n" : ""}`;
+        if (!creditorId || !debtorIDs || !totalAmountVal || totalAmountVal === "0") {
+            const message = `${!creditorId ? "Chủ nợ không được phép rỗng!\n" : ""}${!debtorIDs ? "Người nợ bắt buộc phải có 1 người!\n" : ""}${!totalAmountVal || totalAmountVal === "0" ? "Bắt buộc phải có số tiền và khác không!\n" : ""}`;
             showToast(message, "error");
             return;
         }
 
         const Bill = {
             id: data.id,
-            description: description,
+            description: desc,
             creditorId: creditorId,
             debtorIDs: debtorIDs,
-            totalAmount: parseInt(totalAmount as string),
+            totalAmount: parseInt(totalAmountVal as string),
             billType: "SPLITTING",
-        }
+        };
 
+        setIsSubmitting(true);
         setLoading(true);
-        api.post('/bills/edit' , Bill)
+        api.post('/bills/edit', Bill)
             .then(() => {
                 showToast('Cập nhật thành công!', 'success');
-                if(submitButtonRef.current){
-                    submitButtonRef.current.disabled = false;
-                }
+                setIsSubmitting(false);
                 setLoading(false);
                 closeDialog();
             })
             .catch(error => {
                 showToast(error?.message || 'Có lỗi xảy ra', 'error');
-                if(submitButtonRef.current){
-                    submitButtonRef.current.disabled = false;
-                }
+                setIsSubmitting(false);
                 setLoading(false);
-            })
-    }
+            });
+    };
 
-    return (<>
-        <div className="dialog-wrapper fixed bg-(--btn) left-1/2 top-1/2 z-10 -translate-1/2 rounded-2xl">
-            <div className="dialog h-full w-full text-center p-[20px]">
+    return (
+        <Dialog open={true} onClose={closeDialog} title="Chỉnh sửa Bill">
+            <form onSubmit={handleSubmit}>
+                <Stack gap="md">
+                    {/* Creditor - radio buttons */}
+                    <fieldset className="border border-(--clr) rounded-lg p-3">
+                        <legend className="text-sm font-medium text-white px-2">Chủ nợ</legend>
+                        <Stack direction="vertical" gap="sm" className="mt-2">
+                            {USER_OPTIONS.map((user) => (
+                                <label key={user.id} className="flex items-center gap-2 cursor-pointer text-(--text)">
+                                    <input
+                                        type="radio"
+                                        id={`creditor-${user.id}`}
+                                        value={user.id}
+                                        name="creditor"
+                                        checked={selectedCreditor === user.id}
+                                        onChange={() => setSelectedCreditor(user.id)}
+                                        className="accent-(--btn)"
+                                    />
+                                    {user.label}
+                                </label>
+                            ))}
+                        </Stack>
+                    </fieldset>
 
-                <form className="h-full flex flex-col justify-between" onSubmit={(e) => handleSubmit(e)}>
-                <h2>Chỉnh sửa Bill</h2>
-                <ul className="wrap-break-word text-left h-[80%] flex flex-col justify-around">
-                    <li className="flex flex-row justify-between pb-1">Chủ nợ:
-                        <span>
-                            <input type="radio" id="creditor-Phuong" value="1" name = "creditor" />
-                            <label htmlFor="creditor-Phuong">Phương</label>
-                        </span>
+                    {/* Debtors - checkboxes */}
+                    <FormGroup
+                        label="Người nợ"
+                        options={USER_OPTIONS}
+                        selected={selectedDebtors}
+                        onChange={setSelectedDebtors}
+                    />
 
-                        <span>
-                            <input type="radio" id="creditor-Pha" value="2" name = "creditor" />
-                            <label htmlFor="creditor-Pha">Pha</label>
-                        </span>
+                    {/* Amount */}
+                    <FormField
+                        label="Số tiền"
+                        name="totalAmount"
+                        type="number"
+                        min={0}
+                        value={totalAmount}
+                        onChange={(e) => setTotalAmount(parseInt(e.target.value))}
+                        className="text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
 
-                        <span>
-                            <input type="radio" id="creditor-Thinh" value="3" name = "creditor" />
-                            <label htmlFor="creditor-Thinh">Thịnh</label>
-                        </span>
+                    {/* Description */}
+                    <FormField label="Ghi chú">
+                        <textarea
+                            name="description"
+                            className="h-[100px] w-full bg-(--clr) rounded-sm resize-none px-3 py-2 text-(--text) outline-none focus:ring-2 focus:ring-(--btn)"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                        />
+                    </FormField>
 
-                        <span>
-                            <input type="radio" id="creditor-Tuan" value="4" name = "creditor" />
-                            <label htmlFor="creditor-Tuan">Tuấn</label>
-                        </span>
-                    </li>
-
-                    <li className="flex flex-row justify-between pb-1">Người nợ:
-                        <span>
-                            <input type="checkbox" id="debtor-Phuong" name="debtor" value="1"/>
-                            <label htmlFor="debtor-Phuong">Phương</label>
-                        </span>
-
-                        <span>
-                            <input  type="checkbox" id="debtor-Pha" name="debtor" value="2"/>
-                            <label htmlFor="debtor-Pha">Pha</label>
-                        </span>
-
-                        <span>
-                            <input  type="checkbox" id="debtor-Thinh" name="debtor" value="3"/>
-                            <label htmlFor="debtor-Thinh">Thịnh</label>
-                        </span>
-
-                        <span>
-                            <input  type="checkbox" id="debtor-Tuan" name="debtor" value="4"/>
-                            <label htmlFor="debtor-Tuan">Tuấn</label>
-                        </span>
-                    </li>
-
-                    <li className="flex flex-row justify-between pb-1">
-                        Số tiền:
-                        <input min={0} name="totalAmount" type="number" onChange={(e) => handleChangeAmount(e)}  className="text-right bg-(--clr) rounded-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" value={totalAmount} />
-                    </li>
-                    <li className="pb-1">
-                        Ghi chú: <br></br>
-                        <textarea name = "description" className="h-[100px] w-full bg-(--clr) rounded-sm resize-none" defaultValue={data?.description}></textarea>
-                    </li>
-                </ul>
-
-                <ul className = "flex flex-row justify-around">
-                    <li><button ref={submitButtonRef} type="submit" className="pl-5 pr-5 pt-2 pb-2 bg-(--clr) rounded-xl hover:scale-105">Cập nhật</button></li>
-                    <li><div className="pl-5 pr-5 pt-2 pb-2 bg-(--clr) rounded-xl hover:scale-105" onClick={() => closeEditBill()}>Quay lại</div></li>
-                </ul>
-                </form>
-
-
-            </div>
-        </div>
-    </>)
+                    {/* Actions */}
+                    <Stack direction="horizontal" justify="center" gap="md">
+                        <Button type="submit" variant="primary" loading={isSubmitting}>
+                            Cập nhật
+                        </Button>
+                        <Button type="button" variant="secondary" onClick={closeEditBill}>
+                            Quay lại
+                        </Button>
+                    </Stack>
+                </Stack>
+            </form>
+        </Dialog>
+    );
 }
