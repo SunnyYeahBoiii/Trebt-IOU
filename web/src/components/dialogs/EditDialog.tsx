@@ -1,9 +1,9 @@
 import type { BillDto } from "@/dtos/bill.dto";
 import { api } from "@/lib/api";
 import { useState } from "react";
-import { showToast } from "../../../lib/toast";
-import { Dialog, FormField, Button, Stack, FormGroup } from "../../../ui";
-import { getUserEntries } from "../../../config/users";
+import { showToast } from "@/lib/toast";
+import { Dialog, FormField, Button, Stack, FormGroup } from "@/ui";
+import { getUserEntries } from "@/config/users";
 
 const USER_OPTIONS = getUserEntries().map(([id, name]) => ({ id, label: name }));
 
@@ -15,9 +15,11 @@ interface DialogProps {
 }
 
 export function EditDialog({ setLoading, closeEditBill, closeDialog, data }: DialogProps) {
-    const [totalAmount, setTotalAmount] = useState<number>(data.totalAmount);
+    const [totalAmount, setTotalAmount] = useState<string>(String(data.totalAmount));
     const [selectedCreditor, setSelectedCreditor] = useState<string>(data.creditorId);
-    const [selectedDebtors, setSelectedDebtors] = useState<string[]>(data.debtorIDs?.split(',') ?? []);
+    const [selectedDebtors, setSelectedDebtors] = useState<string[]>(
+        data.debtorIDs?.split(',').map((id) => id.trim()).filter(Boolean) ?? []
+    );
     const [description, setDescription] = useState<string>(data.description ?? "");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -43,7 +45,7 @@ export function EditDialog({ setLoading, closeEditBill, closeDialog, data }: Dia
             description: desc,
             creditorId: creditorId,
             debtorIDs: debtorIDs,
-            totalAmount: parseInt(totalAmountVal as string),
+            totalAmount: parseInt(totalAmountVal as string, 10),
             billType: "SPLITTING",
         };
 
@@ -64,15 +66,21 @@ export function EditDialog({ setLoading, closeEditBill, closeDialog, data }: Dia
     };
 
     return (
-        <Dialog open={true} onClose={closeDialog} title="Chỉnh sửa Bill">
+        <Dialog open={true} onClose={closeDialog} title="Chỉnh sửa khoản nợ">
             <form onSubmit={handleSubmit}>
                 <Stack gap="md">
-                    {/* Creditor - radio buttons */}
-                    <fieldset className="border border-(--clr) rounded-lg p-3">
-                        <legend className="text-sm font-medium text-white px-2">Chủ nợ</legend>
-                        <Stack direction="vertical" gap="sm" className="mt-2">
+                    <fieldset className="rounded-lg border border-(--border) bg-(--surface-raised) p-3">
+                        <legend className="px-2 text-sm font-semibold text-(--text)">Chủ nợ</legend>
+                        <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4">
                             {USER_OPTIONS.map((user) => (
-                                <label key={user.id} className="flex items-center gap-2 cursor-pointer text-(--text)">
+                                <label
+                                    key={user.id}
+                                    className={`cursor-pointer rounded-md border px-3 py-2 text-center text-sm font-semibold transition-colors ${
+                                        selectedCreditor === user.id
+                                            ? "border-(--btn) bg-(--ac-state) text-(--text)"
+                                            : "border-(--border) bg-(--surface) text-(--text-muted) hover:bg-(--clr) hover:text-(--text)"
+                                    }`}
+                                >
                                     <input
                                         type="radio"
                                         id={`creditor-${user.id}`}
@@ -80,17 +88,17 @@ export function EditDialog({ setLoading, closeEditBill, closeDialog, data }: Dia
                                         name="creditor"
                                         checked={selectedCreditor === user.id}
                                         onChange={() => setSelectedCreditor(user.id)}
-                                        className="accent-(--btn)"
+                                        className="sr-only"
                                     />
                                     {user.label}
                                 </label>
                             ))}
-                        </Stack>
+                        </div>
                     </fieldset>
 
-                    {/* Debtors - checkboxes */}
                     <FormGroup
                         label="Người nợ"
+                        name="debtor"
                         options={USER_OPTIONS}
                         selected={selectedDebtors}
                         onChange={setSelectedDebtors}
@@ -103,22 +111,20 @@ export function EditDialog({ setLoading, closeEditBill, closeDialog, data }: Dia
                         type="number"
                         min={0}
                         value={totalAmount}
-                        onChange={(e) => setTotalAmount(parseInt(e.target.value))}
-                        className="text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        onChange={(e) => setTotalAmount(e.target.value)}
+                        className="text-right tabular-nums [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     />
 
-                    {/* Description */}
                     <FormField label="Ghi chú">
                         <textarea
                             name="description"
-                            className="h-[100px] w-full bg-(--clr) rounded-sm resize-none px-3 py-2 text-(--text) outline-none focus:ring-2 focus:ring-(--btn)"
+                            className="min-h-[112px] w-full resize-none rounded-md border border-(--border) bg-(--surface) px-3 py-2 text-(--text) outline-none transition-colors placeholder:text-(--text-muted) focus:border-(--focus) focus:ring-1 focus:ring-(--focus)"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                         />
                     </FormField>
 
-                    {/* Actions */}
-                    <Stack direction="horizontal" justify="center" gap="md">
+                    <Stack direction="horizontal" justify="end" gap="sm" wrap>
                         <Button type="submit" variant="primary" loading={isSubmitting}>
                             Cập nhật
                         </Button>

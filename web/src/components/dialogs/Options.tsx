@@ -4,9 +4,8 @@ import { idsToNames } from "@/helper/idToName.helper";
 import { api } from "@/lib/api";
 import { useState } from "react";
 import { EditDialog } from "./EditDialog";
-import loadingGif from "@/assets/icons8-loading.png";
-import { showToast } from "../../../lib/toast";
-import { Dialog, Button, Stack } from "../../../ui";
+import { showToast } from "@/lib/toast";
+import { Dialog, Button, Spinner, Stack } from "@/ui";
 
 interface DialogProps {
     openEditBill: (data: BillDto) => void;
@@ -45,42 +44,43 @@ export function Options({ closeDialog, data }: DialogProps) {
         <>
             {isLoading && (
                 <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center">
-                    <div className="absolute inset-0 bg-(--bg) opacity-70 backdrop-blur-md"></div>
-                    <div className="relative flex flex-col items-center z-[101]">
-                        <img
-                            src={loadingGif}
-                            alt="loading"
-                            style={{ width: '50px', height: '50px' }}
-                            className="animate-spin mb-2"
-                        />
-                        <p className="font-medium text-white">Sending data to server</p>
+                    <div className="absolute inset-0 bg-(--bg) opacity-80 backdrop-blur-sm"></div>
+                    <div className="relative z-[101] flex flex-col items-center gap-3 rounded-lg border border-(--border) bg-(--surface) px-6 py-5 shadow-[var(--shadow)]">
+                        <Spinner />
+                        <p className="text-sm font-medium text-(--text-muted)">Đang gửi dữ liệu</p>
                     </div>
                 </div>
             )}
 
-            <Dialog open={true} onClose={closeDialog} title="More Options">
-                <Stack gap="sm">
-                    <ul className="text-left">
-                        <li>Chủ nợ: {idsToNames(data?.creditorId)}</li>
-                        <li>Người nợ: {idsToNames(data?.debtorIDs)}</li>
-                        <li>Số tiền: {addDotsToMoney(data?.totalAmount)}</li>
-                        <li>Ghi chú: {data?.description}</li>
-                        <li>Ngày tạo: {new Date(data.createdAt as Date).toLocaleDateString('vi-VN')}</li>
-                        <li>Lần cập nhật gần nhất: {new Date(data.updatedAt as Date).toLocaleDateString('vi-VN')}</li>
-                    </ul>
+            <Dialog open={true} onClose={closeDialog} title="Chi tiết khoản nợ">
+                <Stack gap="md">
+                    <dl className="grid grid-cols-[120px_1fr] gap-x-3 gap-y-2 text-sm">
+                        <dt className="font-semibold text-(--text-muted)">Chủ nợ</dt>
+                        <dd className="font-medium text-(--text)">{idsToNames(data?.creditorId)}</dd>
+                        <dt className="font-semibold text-(--text-muted)">Người nợ</dt>
+                        <dd className="font-medium text-(--text)">{idsToNames(data?.debtorIDs)}</dd>
+                        <dt className="font-semibold text-(--text-muted)">Số tiền</dt>
+                        <dd className="font-semibold tabular-nums text-(--text)">{addDotsToMoney(data?.totalAmount)}</dd>
+                        <dt className="font-semibold text-(--text-muted)">Ghi chú</dt>
+                        <dd className="text-(--text)">{data?.description}</dd>
+                        <dt className="font-semibold text-(--text-muted)">Ngày tạo</dt>
+                        <dd className="text-(--text)">{data.createdAt ? new Date(data.createdAt as Date).toLocaleDateString('vi-VN') : ""}</dd>
+                        <dt className="font-semibold text-(--text-muted)">Cập nhật</dt>
+                        <dd className="text-(--text)">{data.updatedAt ? new Date(data.updatedAt as Date).toLocaleDateString('vi-VN') : ""}</dd>
+                    </dl>
 
-                    <Stack direction="horizontal" justify="between" gap="sm">
+                    <Stack direction="horizontal" justify="end" gap="sm" wrap>
                         <Button
                             variant="primary"
                             onClick={() => { if (!redeemDialog) { toggleEditBill(true); } }}
                         >
-                            Chỉnh nợ
+                            Chỉnh sửa
                         </Button>
                         <Button variant="danger" onClick={() => toggleRedeem(true)}>
                             Xóa nợ
                         </Button>
                         <Button variant="secondary" onClick={() => { if (!redeemDialog) { closeDialog(); } }}>
-                            Tắt Dialog
+                            Đóng
                         </Button>
                     </Stack>
                 </Stack>

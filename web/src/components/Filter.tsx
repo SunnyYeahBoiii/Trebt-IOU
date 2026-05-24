@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Dashboard } from "./Dashboard";
-import { Card, FormGroup, Button, Stack } from "../../ui";
-import { getUserEntries } from "../../config/users";
+import { Card, FormGroup, Button, Stack } from "@/ui";
+import { getUserEntries } from "@/config/users";
 
 const USER_OPTIONS = getUserEntries().map(([id, name]) => ({ id, label: name }));
 
@@ -17,25 +17,26 @@ export function Filter() {
 
     return (
         <>
-            <Card className="mb-4">
-                <h2 className="text-center mb-3">Filter</h2>
+            <Card className="mx-auto mb-5 max-w-3xl">
                 <form onSubmit={handleSubmit}>
-                    <Stack gap="md">
+                    <Stack gap="lg">
                         <FormGroup
-                            label="Filter theo Chủ nợ"
+                            label="Chủ nợ"
+                            name="creditorFilter"
                             options={USER_OPTIONS}
                             selected={creditors}
                             onChange={setCreditors}
                         />
                         <FormGroup
-                            label="Filter theo Người nợ"
+                            label="Người nợ"
+                            name="debtorFilter"
                             options={USER_OPTIONS}
                             selected={debtors}
                             onChange={setDebtors}
                         />
-                        <div className="flex justify-center">
-                            <Button type="submit" variant="primary">
-                                Filter
+                        <div className="flex justify-end">
+                            <Button type="submit" variant="primary" className="w-full sm:w-auto">
+                                Áp dụng lọc
                             </Button>
                         </div>
                     </Stack>

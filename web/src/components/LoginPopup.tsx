@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { getUserEntries } from '../config/users';
-import { Card, Button, FormField, Stack } from '../../ui';
+import { Card, Button, FormField } from '@/ui';
 
 const USERS = getUserEntries().map(([id, name]) => ({ id, name }));
 
@@ -34,30 +34,27 @@ export function LoginPopup() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <Card className="w-[90vw] max-w-[400px] shadow-2xl p-8">
-        <h1 className="text-center mb-2">Sổ Thơ Nụ</h1>
-        <p className="text-center text-sm opacity-70 mb-6">Đăng nhập để tiếp tục</p>
-
+    <div className="flex min-h-screen items-center justify-center bg-(--bg) px-4 py-8">
+      <Card className="w-full max-w-[420px] p-6 shadow-[var(--shadow)]">
         <form onSubmit={handleSubmit}>
           <div className="mb-5">
-            <label className="block mb-2 text-sm">Bạn là ai?</label>
-            <Stack direction="horizontal" wrap gap="sm" className="grid-cols-2">
+            <label className="mb-2 block text-sm font-semibold text-(--text)">Bạn là ai?</label>
+            <div className="grid grid-cols-2 gap-2">
               {USERS.map((u) => (
                 <button
                   key={u.id}
                   type="button"
                   onClick={() => setSelectedUser(u.id)}
-                  className={`p-3 rounded-xl transition-all cursor-pointer text-base w-full ${
+                  className={`min-h-11 rounded-md border px-3 py-2 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) ${
                     selectedUser === u.id
-                      ? 'bg-(--ac-state) text-black scale-105'
-                      : 'bg-(--clr) hover:scale-105'
+                      ? 'border-(--btn) bg-(--ac-state) text-(--text)'
+                      : 'border-(--border) bg-(--surface-raised) text-(--text-muted) hover:bg-(--clr) hover:text-(--text)'
                   }`}
                 >
                   {u.name}
                 </button>
               ))}
-            </Stack>
+            </div>
           </div>
 
           <div className="mb-5">
@@ -72,7 +69,7 @@ export function LoginPopup() {
           </div>
 
           {error && (
-            <p className="text-center mb-4 text-sm p-2 rounded-lg bg-(--err-state)/30 text-red-300">
+            <p className="mb-4 rounded-md bg-(--err-state) p-2 text-center text-sm font-medium text-(--err)">
               {error}
             </p>
           )}
@@ -81,7 +78,7 @@ export function LoginPopup() {
             type="submit"
             variant="primary"
             loading={loading}
-            className="w-full text-base"
+            className="w-full"
           >
             {loading ? 'Đang xác thực...' : 'Đăng nhập'}
           </Button>

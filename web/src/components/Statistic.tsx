@@ -1,105 +1,107 @@
 import { useEffect, useState } from "react";
-import loadingGif from "@/assets/icons8-loading.png";
 import { addDotsToMoney } from "@/helper/amountDots.helper";
 import { apiFetch } from "@/lib/api";
-import { showToast } from "../../lib/toast";
+import { showToast } from "@/lib/toast";
+import { getUserEntries } from "@/config/users";
+import { Card, Spinner, Table, TableCell, TableHeader } from "@/ui";
 
+type StatisticRow = {
+    creditorId: string;
+    debtorId: string;
+    totalOwed: number;
+    totalLent: number;
+};
 
-export function Statistic(){
-    const [isLoading , setLoading] = useState<boolean>(true);
-    const [currentData , setData] = useState<boolean>(false);
-    const [debt , setDebt] = useState<number[][]>([[0 , 0 , 0 , 0 , 0 ] ,
-                                                    [0 , 0 , 0 , 0 , 0 ] ,
-                                                    [0 , 0 , 0 , 0 , 0 ] ,
-                                                    [0 , 0 , 0 , 0 , 0 ] ,
-                                                    [0 , 0 , 0 , 0 , 0 ]]);
+const USERS = getUserEntries();
+const createMatrix = () =>
+    Array.from({ length: USERS.length + 1 }, () => Array(USERS.length + 1).fill(0));
+
+export function Statistic() {
+    const [isLoading, setLoading] = useState<boolean>(true);
+    const [hasData, setHasData] = useState<boolean>(false);
+    const [debt, setDebt] = useState<number[][]>(createMatrix);
+
     useEffect(() => {
         apiFetch('/statistic')
             .then(data => data.json())
-            .then((data: Array<{ creditorId: string; debtorId: string; totalOwed: number; totalLent: number }>) => {
-                setDebt(oldDebt => {
-                    return oldDebt.map((row, creditorIdx) => {
-                        const stat = data.find(s => parseInt(s.creditorId) === creditorIdx);
-                        if (!stat) return row;
-                        return row.map((cell, debtorIdx) => {
-                            if (parseInt(stat.debtorId) === debtorIdx) {
-                                return Math.max(0, Math.round(stat.totalOwed - stat.totalLent));
-                            }
-                            return cell;
-                        });
-                    });
+            .then((data: StatisticRow[]) => {
+                const nextDebt = createMatrix();
+                data.forEach((stat) => {
+                    const creditorIdx = parseInt(stat.creditorId, 10);
+                    const debtorIdx = parseInt(stat.debtorId, 10);
+                    if (!Number.isFinite(creditorIdx) || !Number.isFinite(debtorIdx)) return;
+                    if (!nextDebt[creditorIdx] || nextDebt[creditorIdx][debtorIdx] === undefined) return;
+                    nextDebt[creditorIdx][debtorIdx] += Math.max(0, Math.round(stat.totalOwed - stat.totalLent));
                 });
+                setDebt(nextDebt);
                 setLoading(false);
-                setData(true);
+                setHasData(true);
             })
             .catch((err) => {
                 console.error("Failed to fetch statistics:", err);
                 showToast("Không thể tải thống kê", "error");
                 setLoading(false);
             });
-    } , [] )
+    }, []);
 
-    return (<>
-        {isLoading &&
-        <div className="dashboard-wrapper w-auto rounded-xl bg-(--btn) min-w-[50vw] min-h-[calc(max(500px,50vh))] flex flex-col justify-center items-center">
-            <img src={loadingGif} alt="Computer man" style={{width: '50px', height: '50px'}} className="animate-spin text-center content-center"/>
-            <p>Fetching data from server</p>
-        </div>
-        }
+    if (isLoading) {
+        return (
+            <Card className="flex min-h-[320px] items-center justify-center">
+                <div className="flex flex-col items-center gap-3 text-(--text-muted)">
+                    <Spinner />
+                    <p className="text-sm font-medium">Đang tải thống kê</p>
+                </div>
+            </Card>
+        );
+    }
 
-        {currentData &&
-            <div className="table-wrapper rounded-xl bg-(--btn) h-auto flex flex-col overflow-auto [&::-webkit-scrollbar]:w-0">
-                <table className="table-fixed w-full">
-                    <colgroup>
-                        <col className="w-[20%]" />
-                        <col className="w-[20%]" />
-                        <col className="w-[20%]" />
-                        <col className="w-[20%]" />
-                        <col className="w-[20%]" />
-                    </colgroup>
+    if (!hasData) {
+        return (
+            <Card className="border-(--err) bg-(--err-state)">
+                <p className="font-semibold text-(--err)">Không thể tải thống kê.</p>
+            </Card>
+        );
+    }
+
+    return (
+        <Card className="overflow-hidden p-0">
+            <div className="overflow-auto">
+                <Table className="min-w-[680px]">
+                    <caption className="sr-only">Ma trận thống kê nợ giữa các thành viên</caption>
                     <thead>
                         <tr>
-                            <th className="p-2.5 relative border-white border-3 border-t-0 border-l-0 text-center">
-                            </th>
-                            <th className="p-2.5 border-white border-3 border-t-0 text-center truncate">Phương</th>
-                            <th className="p-2.5 border-white border-3 border-t-0 text-center truncate">Pha</th>
-                            <th className="p-2.5 border-white border-3 border-t-0 text-center truncate">Thịnh</th>
-                            <th className="p-2.5 border-white border-3 border-t-0 border-r-0 text-center truncate">Tuấn</th>
+                            <TableHeader className="sticky left-0 top-0 z-20">Người nợ</TableHeader>
+                            {USERS.map(([, name]) => (
+                                <TableHeader key={name} className="sticky top-0 z-10 text-right">
+                                    {name}
+                                </TableHeader>
+                            ))}
                         </tr>
                     </thead>
-
                     <tbody>
-                        <tr>
-                            <th className="p-2.5 border-white border-3 border-t-0 border-l-0 text-center truncate">Phương</th>
-                            <th className="p-1 border-white border-3 border-t-0 text-center align-middle truncate">{addDotsToMoney(debt[1][1])}</th>
-                            <th className="p-1 border-white border-3 border-t-0 text-center align-middle truncate">{addDotsToMoney(debt[1][2])}</th>
-                            <th className="p-1 border-white border-3 border-t-0 text-center align-middle truncate">{addDotsToMoney(debt[1][3])}</th>
-                            <th className="p-1 border-white border-3 border-t-0 border-r-0 text-center align-middle truncate">{addDotsToMoney(debt[1][4])}</th>
-                        </tr>
-                        <tr>
-                            <th className="p-2.5 border-white border-3 border-t-0 border-l-0 text-center truncate">Pha</th>
-                            <th className="p-1 border-white border-3 border-t-0 text-center truncate">{addDotsToMoney(debt[2][1])}</th>
-                            <th className="p-1 border-white border-3 border-t-0 text-center truncate">{addDotsToMoney(debt[2][2])}</th>
-                            <th className="p-1 border-white border-3 border-t-0 text-center truncate">{addDotsToMoney(debt[2][3])}</th>
-                            <th className="p-1 border-white border-3 border-t-0 border-r-0 text-center truncate">{addDotsToMoney(debt[2][4])}</th>
-                        </tr>
-                        <tr>
-                            <th className="p-2.5 border-white border-3 border-t-0 border-l-0 text-center truncate">Thịnh</th>
-                            <th className="p-1 border-white border-3 border-t-0 text-center truncate">{addDotsToMoney(debt[3][1])}</th>
-                            <th className="p-1 border-white border-3 border-t-0 text-center truncate">{addDotsToMoney(debt[3][2])}</th>
-                            <th className="p-1 border-white border-3 border-t-0 text-center truncate">{addDotsToMoney(debt[3][3])}</th>
-                            <th className="p-1 border-white border-3 border-t-0 border-r-0 text-center truncate">{addDotsToMoney(debt[3][4])}</th>
-                        </tr>
-                        <tr>
-                            <th className="p-2.5 border-white border-3 border-t-0 border-l-0 text-center truncate border-b-0">Tuấn</th>
-                            <th className="p-1 border-white border-3 border-t-0 text-center truncate border-b-0">{addDotsToMoney(debt[4][1])}</th>
-                            <th className="p-1 border-white border-3 border-t-0 text-center truncate border-b-0">{addDotsToMoney(debt[4][2])}</th>
-                            <th className="p-1 border-white border-3 border-t-0 text-center truncate border-b-0">{addDotsToMoney(debt[4][3])}</th>
-                            <th className="p-1 border-white border-3 border-t-0 border-r-0 text-center truncate border-b-0">{addDotsToMoney(debt[4][4])}</th>
-                        </tr>
+                        {USERS.map(([rowId, rowName]) => (
+                            <tr key={rowId} className="transition-colors hover:bg-(--surface-raised)">
+                                <TableCell className="sticky left-0 z-10 bg-(--surface) font-semibold">
+                                    {rowName}
+                                </TableCell>
+                                {USERS.map(([colId]) => {
+                                    const value = debt[Number(rowId)]?.[Number(colId)] ?? 0;
+                                    return (
+                                        <TableCell
+                                            key={colId}
+                                            className={`text-right tabular-nums ${
+                                                value > 0 ? "font-semibold text-(--text)" : "text-(--text-muted)"
+                                            }`}
+                                        >
+                                            {addDotsToMoney(value)}
+                                        </TableCell>
+                                    );
+                                })}
+                            </tr>
+                        ))}
                     </tbody>
-                </table>
+                </Table>
             </div>
-        }
-    </>)
+        </Card>
+    );
 }

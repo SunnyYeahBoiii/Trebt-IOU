@@ -10,7 +10,7 @@ export function Clock() {
   }, []);
 
   return (
-    <time className="text-sm text-(--clr)" dateTime={time.toISOString()}>
+    <time className="text-sm font-medium text-(--text-muted)" dateTime={time.toISOString()}>
       {time.toLocaleTimeString("vi-VN")}
     </time>
   );

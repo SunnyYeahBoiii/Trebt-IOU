@@ -1,6 +1,6 @@
 import './global.css'
 import { ThemeSwitch } from './components/themeSwitcher/ThemeSwitcher'
-import { Route, Routes } from 'react-router'
+import { NavLink, Route, Routes } from 'react-router'
 import { Dashboard } from './components/Dashboard'
 import { Statistic } from './components/Statistic'
 import { AddBill } from './components/AdBill'
@@ -9,12 +9,19 @@ import { LoginPopup } from './components/LoginPopup'
 import { useAuth } from './hooks/useAuth'
 import { Clock } from './components/Clock'
 
+const navItems = [
+  { href: '/dashboard', label: 'Dashboard' },
+  { href: '/add-bill', label: 'Thêm nợ' },
+  { href: '/statistic', label: 'Thống kê' },
+  { href: '/filter', label: 'Lọc nợ' },
+]
+
 function App() {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, userName } = useAuth();
 
   if (!isAuthenticated) {
     return (
-      <div className="w-screen min-h-screen bg-[var(--bg)]">
+      <div className="min-h-screen bg-(--bg)">
         <LoginPopup />
       </div>
     );
@@ -22,45 +29,55 @@ function App() {
 
   return (
     <>
-      <div className="w-screen min-h-screen bg-[var(--bg)]">
-        <div className="min-h-screen px-[10vw] py-[2.5vh] flex flex-col">
-          <div
-            className="bg-[var(--btn)] mb-4 p-4 rounded-xl grid sm:grid-cols-[1fr_1fr_1fr] sm:grid-rows-1 grid-cols-[1fr] grid-rows-2 items-center text-center min-h-20"
-          >
-            <p className="hidden sm:flex sm:flex-nowrap text-sm opacity-80 text-left overflow-visible">
-              Time: <Clock />
-            </p>
-
-
-            <h1 className="text-center text-xl block">
-              Sổ Thơ Nụ
-            </h1>
-
-
-            <div className="flex flex-row items-center justify-center sm:justify-end gap-3">
+      <div className="min-h-screen bg-(--bg)">
+        <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-5 px-4 py-4 sm:px-6 lg:px-8">
+          <header className="rounded-lg border border-(--border) bg-(--surface) px-4 py-3 shadow-[var(--shadow-soft)]">
+            <div className="flex flex-wrap items-center justify-end gap-2">
+                <div className="hidden rounded-md border border-(--border) bg-(--surface-raised) px-3 py-2 text-sm text-(--text-muted) sm:block">
+                  <Clock />
+                </div>
+                {userName && (
+                  <span className="rounded-md bg-(--ac-state) px-3 py-2 text-sm font-semibold text-(--text)">
+                    {userName}
+                  </span>
+                )}
+                <ThemeSwitch />
               <button
                 onClick={logout}
-                className="text-sm px-3 py-1.5 rounded-lg bg-(--clr) hover:scale-105 transition-all cursor-pointer"
+                  className="min-h-10 rounded-md border border-(--border) bg-(--surface-raised) px-3 py-2 text-sm font-semibold text-(--text) transition-colors hover:bg-(--clr) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus)"
               >
                 Đăng xuất
               </button>
-              <ThemeSwitch />
             </div>
-          </div>
+          </header>
 
-          <nav className="bg-[var(--btn)] mb-4 p-4 rounded-xl grid lg:grid-cols-4 lg:grid-rows-1 sm:grid-cols-1 sm:grid-rows-3 grid-cols-[1fr] grid-rows-3 gap-2.5 items-center text-center min-h-20">
-            <a className='pt-2.5 pb-2.5 rounded-xl bg-(--clr) hover:scale-105 transition-all' href="/dashboard">Dashboard</a>
-            <a className='pt-2.5 pb-2.5 rounded-xl bg-(--clr) hover:scale-105 transition-all' href="/add-bill">Thêm nợ</a>
-            <a className='pt-2.5 pb-2.5 rounded-xl bg-(--clr) hover:scale-105 transition-all' href="/statistic">Thống kê nợ</a>
-            <a className='pt-2.5 pb-2.5 rounded-xl bg-(--clr) hover:scale-105 transition-all' href="/filter">Filter</a>
+          <nav className="grid grid-cols-2 gap-2 rounded-lg border border-(--border) bg-(--surface) p-1.5 shadow-[var(--shadow-soft)] sm:grid-cols-4">
+            {navItems.map((item) => (
+              <NavLink
+                key={item.href}
+                to={item.href}
+                className={({ isActive }) =>
+                  `rounded-md px-3 py-2 text-center text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) ${
+                    isActive
+                      ? 'bg-(--btn) text-[oklch(0.98_0.006_214)]'
+                      : 'text-(--text-muted) hover:bg-(--clr) hover:text-(--text)'
+                  }`
+                }
+              >
+                {item.label}
+              </NavLink>
+            ))}
           </nav>
 
-          <Routes>
-            <Route path='/dashboard' element={<Dashboard linkQuery='' />}></Route>
-            <Route path="/add-bill" element={<AddBill />}></Route>
-            <Route path="/statistic" element={<Statistic />}></Route>
-            <Route path='/filter' element={<Filter />}></Route>
-          </Routes>
+          <main className="flex-1 pb-6">
+            <Routes>
+              <Route path="/" element={<Dashboard linkQuery="" />}></Route>
+              <Route path="/dashboard" element={<Dashboard linkQuery="" />}></Route>
+              <Route path="/add-bill" element={<AddBill />}></Route>
+              <Route path="/statistic" element={<Statistic />}></Route>
+              <Route path="/filter" element={<Filter />}></Route>
+            </Routes>
+          </main>
         </div>
       </div>
     </>)
