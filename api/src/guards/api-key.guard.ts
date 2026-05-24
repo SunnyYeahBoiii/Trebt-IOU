@@ -1,7 +1,9 @@
 import {
   CanActivate,
   ExecutionContext,
+  ForbiddenException,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -12,6 +14,8 @@ import bcrypt from 'bcrypt';
 
 @Injectable()
 export class ApiKeyGuard implements CanActivate {
+  private readonly logger = new Logger(ApiKeyGuard.name);
+
   constructor(
     private configService: ConfigService,
     private reflector: Reflector,
@@ -26,7 +30,10 @@ export class ApiKeyGuard implements CanActivate {
     if (isPublic) return true;
 
     const hashedKey = this.configService.get<string>('API_KEY');
-    if (!hashedKey) return true;
+    if (!hashedKey) {
+      this.logger.error('API_KEY not configured - rejecting request');
+      throw new ForbiddenException('API key not configured');
+    }
 
     const request = context.switchToHttp().getRequest();
     const apiKey: string | undefined = request.headers['x-api-key'];

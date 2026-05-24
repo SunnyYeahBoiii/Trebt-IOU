@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { AddDebtCommand } from './add-debt.command';
 import { Debt } from '@generated/prisma';
@@ -8,6 +8,8 @@ import { StatisticService } from '@/statistics/statistic.service';
 @Injectable()
 @CommandHandler(AddDebtCommand)
 export class AddDebtHandler implements ICommandHandler<AddDebtCommand> {
+  private readonly logger = new Logger(AddDebtHandler.name);
+
   constructor(
     private prisma: PrismaService,
     private statistics: StatisticService,
@@ -17,28 +19,33 @@ export class AddDebtHandler implements ICommandHandler<AddDebtCommand> {
     const newDebtDto = command.debtDto;
     const prisma = command.tx ?? this.prisma;
 
-    const newDebt = await prisma.debt.create({
-      data: {
-        amount: newDebtDto.amount,
-        creditorId: newDebtDto.creditorId,
-        debtorId: newDebtDto.debtorId,
-        billId: newDebtDto.billId,
-      },
-    });
+    try {
+      const newDebt = await prisma.debt.create({
+        data: {
+          amount: newDebtDto.amount,
+          creditorId: newDebtDto.creditorId,
+          debtorId: newDebtDto.debtorId,
+          billId: newDebtDto.billId,
+        },
+      });
 
-    await this.statistics.addLent(
-      newDebt.debtorId,
-      newDebt.creditorId,
-      newDebt.amount,
-      prisma,
-    );
-    await this.statistics.addOwed(
-      newDebt.creditorId,
-      newDebt.debtorId,
-      newDebt.amount,
-      prisma,
-    );
+      await this.statistics.addLent(
+        newDebt.debtorId,
+        newDebt.creditorId,
+        newDebt.amount,
+        prisma,
+      );
+      await this.statistics.addOwed(
+        newDebt.creditorId,
+        newDebt.debtorId,
+        newDebt.amount,
+        prisma,
+      );
 
-    return newDebt;
+      return newDebt;
+    } catch (error) {
+      this.logger.error('Failed to execute AddDebtCommand', error instanceof Error ? error.stack : String(error));
+      throw new InternalServerErrorException('Operation failed');
+    }
   }
 }

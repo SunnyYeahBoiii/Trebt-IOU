@@ -17,9 +17,7 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       port: env.PORT ? Number(env.PORT) : 5173,
-      allowedHosts: [
-        '236571cca288.ngrok-free.app'
-      ]
+      allowedHosts: [process.env.VITE_API_HOST ?? "localhost"],
     },
   }
 })

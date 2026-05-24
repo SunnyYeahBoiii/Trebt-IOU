@@ -9,7 +9,7 @@ import { PrismaService } from "@/prisma/prisma.service";
 
 @Injectable()
 @QueryHandler(QueryStatisticQuery)
-export class QueryStatisticQueryHandler implements IQueryHandler<number , StatisticDto[]>{
+export class QueryStatisticQueryHandler implements IQueryHandler<QueryStatisticQuery, StatisticDto[]>{
     constructor(private readonly prisma: PrismaService){
 
     }

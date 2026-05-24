@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { EditBillCommand } from './edit-bill.command';
 import { PrismaService } from '@/prisma/prisma.service';
@@ -9,6 +9,8 @@ import { DebtsService } from '@/debts/debts.service';
 @Injectable()
 @CommandHandler(EditBillCommand)
 export class EditBillHandler implements ICommandHandler<EditBillCommand, Bill> {
+  private readonly logger = new Logger(EditBillHandler.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly bill: BillService,
@@ -18,47 +20,52 @@ export class EditBillHandler implements ICommandHandler<EditBillCommand, Bill> {
   async execute(command: EditBillCommand): Promise<Bill> {
     const bill = command.bill;
 
-    const trans = this.prisma.$transaction(async (prisma) => {
-      const id = bill.id;
+    try {
+      const trans = this.prisma.$transaction(async (prisma) => {
+        const id = bill.id;
 
-      const newBill = await prisma.bill.update({
-        where: {
-          id: id,
-        },
-        data: {
-          billType: bill.billType,
-          creditorId: bill.creditorId,
-          debtorIDs: bill.debtorIDs,
-          totalAmount: bill.totalAmount,
-          updatedAt: new Date(),
-          description: bill.description,
-        },
+        const newBill = await prisma.bill.update({
+          where: {
+            id: id,
+          },
+          data: {
+            billType: bill.billType,
+            creditorId: bill.creditorId,
+            debtorIDs: bill.debtorIDs,
+            totalAmount: bill.totalAmount,
+            updatedAt: new Date(),
+            description: bill.description,
+          },
+        });
+
+        const debts = this.bill.createDebtDtoFromBill(newBill);
+        const debtors = [false, false, false, false, false];
+
+        for (const debt of debts) {
+          debtors[parseInt(debt.debtorId)] = true;
+          await this.debt.EditDebt(debt, prisma);
+        }
+
+        for (let i = 1; i <= 4; i++) {
+          if (debtors[i] === true) continue;
+
+          await this.debt.EditDebt(
+            {
+              creditorId: newBill.creditorId,
+              debtorId: `${i}`,
+              amount: 0,
+              billId: newBill.id,
+            },
+            prisma,
+          );
+        }
+        return newBill;
       });
 
-      const debts = this.bill.createDebtDtoFromBill(newBill);
-      const debtors = [false, false, false, false, false];
-
-      for (const debt of debts) {
-        debtors[parseInt(debt.debtorId)] = true;
-        await this.debt.EditDebt(debt, prisma);
-      }
-
-      for (let i = 1; i <= 4; i++) {
-        if (debtors[i] === true) continue;
-
-        await this.debt.EditDebt(
-          {
-            creditorId: newBill.creditorId,
-            debtorId: `${i}`,
-            amount: 0,
-            billId: newBill.id,
-          },
-          prisma,
-        );
-      }
-      return newBill;
-    });
-
-    return await trans;
+      return await trans;
+    } catch (error) {
+      this.logger.error('Failed to execute EditBillCommand', error instanceof Error ? error.stack : String(error));
+      throw new InternalServerErrorException('Operation failed');
+    }
   }
 }

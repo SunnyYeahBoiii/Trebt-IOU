@@ -1,6 +1,6 @@
 export interface StatisticDto{
-    totalLent: Number;
-    totalOwed: Number;
+    totalLent: number;
+    totalOwed: number;
     creditorId: string;
     debtorId: string;
     id: string;
