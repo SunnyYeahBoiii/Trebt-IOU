@@ -1,4 +1,5 @@
-import { HTMLAttributes, forwardRef } from "react";
+import { forwardRef } from "react";
+import type { HTMLAttributes } from "react";
 
 export interface StackProps extends HTMLAttributes<HTMLDivElement> {
   direction?: "horizontal" | "vertical";

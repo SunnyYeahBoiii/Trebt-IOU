@@ -1,5 +1,7 @@
-import { ReactNode, useId } from "react";
-import { Input, InputProps } from "../primitives/Input";
+import { useId } from "react";
+import type { ReactNode } from "react";
+import { Input } from "../primitives/Input";
+import type { InputProps } from "../primitives/Input";
 
 export interface FormFieldProps extends Omit<InputProps, "id"> {
   children?: ReactNode;
@@ -10,9 +12,9 @@ export function FormField({ label, error, children, ...inputProps }: FormFieldPr
 
   if (children) {
     return (
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1.5">
         {label && (
-          <label htmlFor={id} className="text-sm font-medium text-(--text)">
+          <label htmlFor={id} className="text-sm font-semibold text-(--text)">
             {label}
           </label>
         )}

@@ -1,15 +1,6 @@
-import { createContext, useState, useCallback, type ReactNode } from 'react';
+import { useState, useCallback, type ReactNode } from 'react';
 import { getUserName } from '../config/users';
-
-export interface AuthState {
-  isAuthenticated: boolean;
-  userId: string | null;
-  userName: string | null;
-  login: (userId: string, apiKey: string) => Promise<boolean>;
-  logout: () => void;
-}
-
-export const AuthContext = createContext<AuthState | null>(null);
+import { AuthContext } from './auth-context';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setAuthenticated] = useState(

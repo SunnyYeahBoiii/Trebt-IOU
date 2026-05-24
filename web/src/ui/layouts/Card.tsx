@@ -1,4 +1,5 @@
-import { HTMLAttributes, forwardRef } from "react";
+import { forwardRef } from "react";
+import type { HTMLAttributes } from "react";
 
 export interface CardProps extends HTMLAttributes<HTMLDivElement> {
   title?: string;
@@ -9,10 +10,10 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
     return (
       <div
         ref={ref}
-        className={`rounded-xl bg-(--btn) p-4 shadow-md ${className}`}
+        className={`rounded-lg border border-(--border) bg-(--surface) p-5 shadow-[var(--shadow-soft)] ${className}`}
         {...props}
       >
-        {title && <h2 className="mb-3 text-lg font-semibold text-white">{title}</h2>}
+        {title && <h2 className="mb-4 text-lg font-semibold text-(--text)">{title}</h2>}
         {children}
       </div>
     );

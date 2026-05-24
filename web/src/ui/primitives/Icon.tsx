@@ -1,4 +1,4 @@
-import { SVGAttributes } from "react";
+import type { SVGAttributes } from "react";
 
 export interface IconProps extends SVGAttributes<SVGSVGElement> {
   name: string;

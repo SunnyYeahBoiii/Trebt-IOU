@@ -1,4 +1,5 @@
-import { ButtonHTMLAttributes, forwardRef } from "react";
+import { forwardRef } from "react";
+import type { ButtonHTMLAttributes } from "react";
 import { Spinner } from "./Spinner";
 
 export type ButtonVariant = "primary" | "secondary" | "danger" | "ghost";
@@ -9,10 +10,10 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: "bg-(--btn) text-white hover:scale-105",
-  secondary: "bg-(--clr) text-(--text) hover:scale-105",
-  danger: "bg-(--err) text-white hover:scale-105",
-  ghost: "bg-transparent text-(--text) hover:bg-(--clr)",
+  primary: "bg-(--btn) text-[oklch(0.98_0.006_214)] hover:bg-(--btn-hover)",
+  secondary: "border border-(--border) bg-(--surface) text-(--text) hover:bg-(--clr)",
+  danger: "bg-(--err) text-[oklch(0.98_0.006_214)] hover:brightness-95",
+  ghost: "bg-transparent text-(--text-muted) hover:bg-(--clr) hover:text-(--text)",
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -20,7 +21,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         ref={ref}
-        className={`rounded-xl px-4 py-2 font-medium transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 ${variantClasses[variant]} ${className}`}
+        className={`inline-flex min-h-10 items-center justify-center rounded-md px-4 py-2 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg) disabled:cursor-not-allowed disabled:opacity-50 ${variantClasses[variant]} ${className}`}
         disabled={disabled || loading}
         {...props}
       >

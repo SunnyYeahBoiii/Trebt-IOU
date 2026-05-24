@@ -1,4 +1,5 @@
-import { useEffect, useRef, ReactNode, HTMLAttributes, forwardRef } from "react";
+import { useEffect, useRef, forwardRef } from "react";
+import type { HTMLAttributes, ReactNode } from "react";
 
 export interface DialogProps extends Omit<HTMLAttributes<HTMLDialogElement>, "title"> {
   open: boolean;
@@ -10,7 +11,15 @@ export interface DialogProps extends Omit<HTMLAttributes<HTMLDialogElement>, "ti
 export const Dialog = forwardRef<HTMLDialogElement, DialogProps>(
   ({ open, onClose, title, children, className = "", ...props }, ref) => {
     const dialogRef = useRef<HTMLDialogElement>(null);
-    const overlayRef = useRef<HTMLDivElement>(null);
+
+    const setDialogRef = (node: HTMLDialogElement | null) => {
+      dialogRef.current = node;
+      if (typeof ref === "function") {
+        ref(node);
+      } else if (ref) {
+        ref.current = node;
+      }
+    };
 
     // Sync open state
     useEffect(() => {
@@ -50,43 +59,43 @@ export const Dialog = forwardRef<HTMLDialogElement, DialogProps>(
       return () => el.removeEventListener("keydown", handleKeyDown);
     }, [open]);
 
-    // Close on overlay click
-    const handleOverlayClick = (e: React.MouseEvent) => {
-      if (e.target === overlayRef.current) {
+    const handleDialogClick = (e: React.MouseEvent<HTMLDialogElement>) => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const clickedBackdrop =
+        e.clientX < rect.left ||
+        e.clientX > rect.right ||
+        e.clientY < rect.top ||
+        e.clientY > rect.bottom;
+
+      if (clickedBackdrop) {
         onClose();
       }
     };
 
     return (
-      <div
-        ref={overlayRef}
-        className="fixed inset-0 z-40 flex items-center justify-center bg-black/50"
-        onClick={handleOverlayClick}
-        role="presentation"
+      <dialog
+        ref={setDialogRef}
+        className={`fixed left-1/2 top-1/2 z-40 m-0 max-h-[90vh] w-[calc(100vw-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-lg border border-(--border) bg-(--surface) p-5 text-(--text) shadow-[var(--shadow)] ${className}`}
+        aria-modal="true"
+        aria-labelledby="dialog-title"
+        onCancel={onClose}
+        onClick={handleDialogClick}
+        {...props}
       >
-        <dialog
-          ref={ref ?? dialogRef}
-          className={`rounded-2xl bg-(--btn) p-6 shadow-xl max-h-[90vh] w-full max-w-lg overflow-y-auto ${className}`}
-          aria-modal="true"
-          aria-labelledby="dialog-title"
-          onCancel={onClose}
-          {...props}
-        >
-          <div className="flex items-center justify-between mb-4">
-            <h2 id="dialog-title" className="text-lg font-semibold text-white">
-              {title}
-            </h2>
-            <button
-              onClick={onClose}
-              className="text-white/70 hover:text-white transition-colors text-xl leading-none"
-              aria-label="Close dialog"
-            >
-              ×
-            </button>
-          </div>
-          {children}
-        </dialog>
-      </div>
+        <div className="mb-4 flex items-center justify-between border-b border-(--border) pb-3">
+          <h2 id="dialog-title" className="text-lg font-semibold text-(--text)">
+            {title}
+          </h2>
+          <button
+            onClick={onClose}
+            className="rounded-md px-2 py-1 text-xl leading-none text-(--text-muted) transition-colors hover:bg-(--clr) hover:text-(--text)"
+            aria-label="Close dialog"
+          >
+            ×
+          </button>
+        </div>
+        {children}
+      </dialog>
     );
   }
 );

@@ -1,4 +1,4 @@
-import { HTMLAttributes } from "react";
+import type { HTMLAttributes } from "react";
 
 export interface AvatarProps extends HTMLAttributes<HTMLDivElement> {
   name: string;
@@ -20,7 +20,7 @@ export function Avatar({ name, size = "md", className = "", ...props }: AvatarPr
 
   return (
     <div
-      className={`flex items-center justify-center rounded-full bg-(--btn) text-white font-semibold ${className}`}
+      className={`flex items-center justify-center rounded-full bg-(--ac-state) text-(--text) font-semibold ring-1 ring-(--border) ${className}`}
       style={{ width: dimension, height: dimension, fontSize }}
       role="img"
       aria-label={name}

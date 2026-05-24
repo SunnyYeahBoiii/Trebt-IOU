@@ -1,21 +1,14 @@
-import { createContext, useContext, useState, useCallback, ReactNode } from "react";
+import { useEffect, useState, useCallback } from "react";
+import type { ReactNode } from "react";
 import { Button } from "./Button";
+import { registerToastHandler } from "@/lib/toast";
+import { ToastContext, type ToastType } from "./toast-context";
 
 interface Toast {
   id: string;
   message: string;
-  type: "info" | "success" | "error";
+  type: ToastType;
 }
-
-interface ToastContextType {
-  toast: (message: string, type?: Toast["type"]) => void;
-  success: (message: string) => void;
-  error: (message: string) => void;
-}
-
-const ToastContext = createContext<ToastContextType | null>(null);
-
-let globalToast: ((message: string, type: Toast["type"]) => void) | null = null;
 
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -32,17 +25,22 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   }, []);
 
-  // Expose global API
-  globalToast = addToast;
+  useEffect(() => registerToastHandler(addToast), [addToast]);
 
   const typeClasses: Record<Toast["type"], string> = {
-    info: "bg-(--btn) text-white",
-    success: "bg-(--ac) text-black",
-    error: "bg-(--err) text-white",
+    info: "bg-(--btn) text-[oklch(0.98_0.006_214)]",
+    success: "bg-(--ac-state) text-(--text)",
+    error: "bg-(--err-state) text-(--err)",
   };
 
   return (
-    <ToastContext.Provider value={{ toast: addToast, success: addToast, error: addToast }}>
+    <ToastContext.Provider
+      value={{
+        toast: addToast,
+        success: (message) => addToast(message, "success"),
+        error: (message) => addToast(message, "error"),
+      }}
+    >
       {children}
       <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2" aria-live="polite">
         {toasts.map((t) => (
@@ -60,15 +58,4 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       </div>
     </ToastContext.Provider>
   );
-}
-
-export function useToast(): ToastContextType {
-  const ctx = useContext(ToastContext);
-  if (!ctx) throw new Error("useToast must be used within ToastProvider");
-  return ctx;
-}
-
-// Imperative API for use outside React components
-export function showToast(message: string, type: Toast["type"] = "info") {
-  globalToast?.(message, type);
 }
