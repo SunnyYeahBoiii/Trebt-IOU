@@ -1,12 +1,8 @@
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
+import { getUserEntries } from '../config/users';
 
-const USERS = [
-  { id: '1', name: 'Phương' },
-  { id: '2', name: 'Pha' },
-  { id: '3', name: 'Thịnh' },
-  { id: '4', name: 'Tuấn' },
-];
+const USERS = getUserEntries().map(([id, name]) => ({ id, name }));
 
 export function LoginPopup() {
   const { login } = useAuth();

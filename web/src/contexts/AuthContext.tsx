@@ -1,4 +1,5 @@
 import { createContext, useState, useCallback, type ReactNode } from 'react';
+import { getUserName } from '../config/users';
 
 export interface AuthState {
   isAuthenticated: boolean;
@@ -7,13 +8,6 @@ export interface AuthState {
   login: (userId: string, apiKey: string) => Promise<boolean>;
   logout: () => void;
 }
-
-const USER_NAMES: Record<string, string> = {
-  '1': 'Phương',
-  '2': 'Pha',
-  '3': 'Thịnh',
-  '4': 'Tuấn',
-};
 
 export const AuthContext = createContext<AuthState | null>(null);
 
@@ -56,7 +50,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       value={{
         isAuthenticated,
         userId,
-        userName: userId ? USER_NAMES[userId] ?? null : null,
+        userName: userId ? getUserName(userId) : null,
         login,
         logout,
       }}

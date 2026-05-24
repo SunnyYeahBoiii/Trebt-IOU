@@ -1,5 +1,4 @@
-const userNames = ['' , 'Phương' , 'Pha' , 'Thịnh' , 'Tuấn'];
+import { getUserName } from "../config/users";
 
-export const idsToNames = (input : string): string => {
-    return input.split(',').map(id => userNames[parseInt(id)]).join(',');
-}
+/** @deprecated use getUserName from config/users instead */
+export const idToName = getUserName;
