@@ -1,6 +1,7 @@
 import type { BillDto } from "@/dtos/bill.dto";
 import { api } from "@/lib/api";
 import { useRef, useState } from "react";
+import { showToast } from "../../../lib/toast";
 
 interface DialogProps {
     setLoading: (state: boolean) => void;
@@ -15,7 +16,7 @@ export function EditDialog({  setLoading, closeEditBill , closeDialog , data } :
 
     const handleChangeAmount = (e : React.ChangeEvent<HTMLInputElement>) => {
         setTotalAmount(parseInt(e.target.value));
-    } 
+    }
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -37,7 +38,7 @@ export function EditDialog({  setLoading, closeEditBill , closeDialog , data } :
                 submitButtonRef.current.disabled = false;
             }
             const message = `${!creditorId ? "Chủ nợ không được phép rỗng!\n" : ""}${!debtorIDs ? "Người nợ bắt buộc phải có 1 người!\n" : ""}${!totalAmount || totalAmount === "0" ? "Bắt buộc phải có số tiền và khác không!\n" : ""}`;
-            alert(message);
+            showToast(message, "error");
             return;
         }
 
@@ -48,12 +49,12 @@ export function EditDialog({  setLoading, closeEditBill , closeDialog , data } :
             debtorIDs: debtorIDs,
             totalAmount: parseInt(totalAmount as string),
             billType: "SPLITTING",
-        }        
+        }
 
         setLoading(true);
         api.post('/bills/edit' , Bill)
             .then(() => {
-                alert('Cập nhật thành công!'); 
+                showToast('Cập nhật thành công!', 'success');
                 if(submitButtonRef.current){
                     submitButtonRef.current.disabled = false;
                 }
@@ -61,7 +62,7 @@ export function EditDialog({  setLoading, closeEditBill , closeDialog , data } :
                 closeDialog();
             })
             .catch(error => {
-                alert(error)
+                showToast(error?.message || 'Có lỗi xảy ra', 'error');
                 if(submitButtonRef.current){
                     submitButtonRef.current.disabled = false;
                 }
@@ -76,7 +77,7 @@ export function EditDialog({  setLoading, closeEditBill , closeDialog , data } :
                 <form className="h-full flex flex-col justify-between" onSubmit={(e) => handleSubmit(e)}>
                 <h2>Chỉnh sửa Bill</h2>
                 <ul className="wrap-break-word text-left h-[80%] flex flex-col justify-around">
-                    <li className="flex flex-row justify-between pb-1">Chủ nợ: 
+                    <li className="flex flex-row justify-between pb-1">Chủ nợ:
                         <span>
                             <input type="radio" id="creditor-Phuong" value="1" name = "creditor" />
                             <label htmlFor="creditor-Phuong">Phương</label>
@@ -86,7 +87,7 @@ export function EditDialog({  setLoading, closeEditBill , closeDialog , data } :
                             <input type="radio" id="creditor-Pha" value="2" name = "creditor" />
                             <label htmlFor="creditor-Pha">Pha</label>
                         </span>
-                            
+
                         <span>
                             <input type="radio" id="creditor-Thinh" value="3" name = "creditor" />
                             <label htmlFor="creditor-Thinh">Thịnh</label>
@@ -97,8 +98,8 @@ export function EditDialog({  setLoading, closeEditBill , closeDialog , data } :
                             <label htmlFor="creditor-Tuan">Tuấn</label>
                         </span>
                     </li>
-                    
-                    <li className="flex flex-row justify-between pb-1">Người nợ: 
+
+                    <li className="flex flex-row justify-between pb-1">Người nợ:
                         <span>
                             <input type="checkbox" id="debtor-Phuong" name="debtor" value="1"/>
                             <label htmlFor="debtor-Phuong">Phương</label>
@@ -108,7 +109,7 @@ export function EditDialog({  setLoading, closeEditBill , closeDialog , data } :
                             <input  type="checkbox" id="debtor-Pha" name="debtor" value="2"/>
                             <label htmlFor="debtor-Pha">Pha</label>
                         </span>
-                            
+
                         <span>
                             <input  type="checkbox" id="debtor-Thinh" name="debtor" value="3"/>
                             <label htmlFor="debtor-Thinh">Thịnh</label>
@@ -121,7 +122,7 @@ export function EditDialog({  setLoading, closeEditBill , closeDialog , data } :
                     </li>
 
                     <li className="flex flex-row justify-between pb-1">
-                        Số tiền: 
+                        Số tiền:
                         <input min={0} name="totalAmount" type="number" onChange={(e) => handleChangeAmount(e)}  className="text-right bg-(--clr) rounded-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" value={totalAmount} />
                     </li>
                     <li className="pb-1">
@@ -129,14 +130,14 @@ export function EditDialog({  setLoading, closeEditBill , closeDialog , data } :
                         <textarea name = "description" className="h-[100px] w-full bg-(--clr) rounded-sm resize-none" defaultValue={data?.description}></textarea>
                     </li>
                 </ul>
-                
+
                 <ul className = "flex flex-row justify-around">
                     <li><button ref={submitButtonRef} type="submit" className="pl-5 pr-5 pt-2 pb-2 bg-(--clr) rounded-xl hover:scale-105">Cập nhật</button></li>
                     <li><div className="pl-5 pr-5 pt-2 pb-2 bg-(--clr) rounded-xl hover:scale-105" onClick={() => closeEditBill()}>Quay lại</div></li>
                 </ul>
                 </form>
 
-                
+
             </div>
         </div>
     </>)

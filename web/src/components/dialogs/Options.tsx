@@ -2,9 +2,10 @@ import type { BillDto } from "@/dtos/bill.dto";
 import { addDotsToMoney } from "@/helper/amountDots.helper";
 import { idsToNames } from "@/helper/idToName.helper";
 import { api } from "@/lib/api";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { EditDialog } from "./EditDialog";
-import loadingGif from "@/assets/icons8-loading.png"
+import loadingGif from "@/assets/icons8-loading.png";
+import { showToast } from "../../../lib/toast";
 
 interface DialogProps {
     openEditBill: (data: BillDto) => void;
@@ -18,7 +19,6 @@ export function Options({closeDialog , data } : DialogProps){
     const [showingEditBil , toggleEditBill] = useState<boolean>(false);
     const [redeemDialog , toggleRedeem] = useState<boolean>(false);
     const deleteBillRef = useRef<HTMLButtonElement | null>(null);
-    const dialogRef = useRef<HTMLDivElement | null>(null);
 
     const deleteBill = async (id: string) => {
         if(deleteBillRef.current){
@@ -30,8 +30,13 @@ export function Options({closeDialog , data } : DialogProps){
 
         setLoading(true);
         api.post('/bills/remove' , data)
-            .then(() => {alert('Nợ đã được xóa'); closeDialog(); setLoading(false)})
-            .catch(err => {alert(err)
+            .then(() => {
+                showToast('Nợ đã được xóa', 'success');
+                closeDialog();
+                setLoading(false);
+            })
+            .catch(err => {
+                showToast(err?.message || 'Có lỗi xảy ra', 'error');
                 if(deleteBillRef.current){
                     deleteBillRef.current.disabled = false;
                 }
@@ -39,30 +44,24 @@ export function Options({closeDialog , data } : DialogProps){
             })
     }
 
-    useEffect(() => {
-        if(showingEditBil){
-            if(dialogRef.current) dialogRef.current.style.display = "none";
-        }else if(dialogRef.current) dialogRef.current.style.display = "flex";
-    } , [showingEditBil ])
-
     return (<>
         <div className="fixed top-0 left-0 w-screen h-screen bg-(--bg) opacity-70 backdrop-blur-3xl cursor-not-allowed "></div>
 {isLoading && (
   <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center">
     <div className="absolute inset-0 bg-(--bg) opacity-70 backdrop-blur-md"></div>
-    
+
         <div className="relative flex flex-col items-center z-[101]">
-        <img 
-            src={loadingGif} 
+        <img
+            src={loadingGif}
             alt="loading"
-            style={{ width: '50px', height: '50px' }} 
+            style={{ width: '50px', height: '50px' }}
             className="animate-spin mb-2"
         />
         <p className="font-medium text-white">Sending data to server</p>
         </div>
     </div>
     )}
-        <div ref={dialogRef} className="dialog-wrapper fixed bg-(--btn) max-w-[70vw] left-1/2 top-1/2 z-10 -translate-1/2 rounded-2xl">
+        <div className="dialog-wrapper fixed bg-(--btn) max-w-[70vw] left-1/2 top-1/2 z-10 -translate-1/2 rounded-2xl">
             <div className="dialog h-full w-full text-center p-[20px] flex flex-col justify-between">
                 <h2>More Options</h2>
 
@@ -80,11 +79,11 @@ export function Options({closeDialog , data } : DialogProps){
                     <li><div className="cursor-pointer pl-5 pr-5 pt-2 pb-2 ml-2 mr-2 bg-(--clr) rounded-xl hover:scale-105" onClick={() => toggleRedeem(true)}>Xóa nợ</div></li>
                     <li><div className="cursor-pointer pl-5 pr-5 pt-2 pb-2 bg-(--clr) rounded-xl hover:scale-105" onClick={() => {if(!redeemDialog){closeDialog()}}}>Tắt Dialog</div></li>
                 </ul>
-                
+
             </div>
         </div>
 
-        { showingEditBil && 
+        { showingEditBil &&
             <EditDialog setLoading={setLoading} closeEditBill={() => toggleEditBill(false)} closeDialog={closeDialog} data={data} />
         }
 

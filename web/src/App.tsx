@@ -4,24 +4,13 @@ import { Route, Routes } from 'react-router'
 import { Dashboard } from './components/Dashboard'
 import { Statistic } from './components/Statistic'
 import { AddBill } from './components/AdBill'
-import { useEffect, useState } from 'react'
 import { Filter } from './components/Filter'
 import { LoginPopup } from './components/LoginPopup'
 import { useAuth } from './hooks/useAuth'
+import { Clock } from './components/Clock'
 
 function App() {
   const { isAuthenticated, logout } = useAuth();
-  const [currentTime, setTime] = useState<Date>(new Date());
-
-  useEffect(() => {
-    const timeIntervalId = setInterval(() => {
-      setTime(new Date());
-    }, 1000)
-
-    return () => {
-      clearInterval(timeIntervalId);
-    }
-  }, [])
 
   if (!isAuthenticated) {
     return (
@@ -39,12 +28,7 @@ function App() {
             className="bg-[var(--btn)] mb-4 p-4 rounded-xl grid sm:grid-cols-[1fr_1fr_1fr] sm:grid-rows-1 grid-cols-[1fr] grid-rows-2 items-center text-center min-h-20"
           >
             <p className="hidden sm:flex sm:flex-nowrap text-sm opacity-80 text-left overflow-visible">
-              Time: {new Intl.DateTimeFormat('vi-VN', {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false,
-              }).format(currentTime)}
+              Time: <Clock />
             </p>
 
 
