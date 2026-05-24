@@ -24,8 +24,8 @@ export { Dialog } from "./layouts/Dialog";
 export type { DialogProps } from "./layouts/Dialog";
 export { Table, TableHeader, TableCell } from "./layouts/Table";
 
-// Forms — to be populated in Phase 5
-// export { FormField } from "./forms/FormField";
-// export type { FormFieldProps } from "./forms/FormField";
-// export { FormGroup } from "./forms/FormGroup";
-// export type { FormGroupProps } from "./forms/FormGroup";
+// Forms
+export { FormField } from "./forms/FormField";
+export type { FormFieldProps } from "./forms/FormField";
+export { FormGroup } from "./forms/FormGroup";
+export type { FormGroupProps } from "./forms/FormGroup";
